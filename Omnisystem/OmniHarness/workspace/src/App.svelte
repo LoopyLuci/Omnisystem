@@ -41,6 +41,7 @@
   let showExtensions   = false;
   let showSelfBuild    = false;
   let showSurvival     = false;
+  let showHelp          = false;
   let showResources    = false;
   let showAgentVision  = false;
   let showCanvas       = false;
@@ -417,6 +418,8 @@
         on:click={() => (showSelfBuild = !showSelfBuild)}>🛠 Self-Build</button>
       <button class="btn-icon" class:active={showSurvival} title="Survival System — bug discovery, knowledge base, sandbox nervous system"
         on:click={() => (showSurvival = !showSurvival)}>🩺 Survival</button>
+      <button class="btn-icon" class:active={showHelp} title="Help Manual — the 7 Omni-Languages and core Omnisystem subsystems"
+        on:click={() => (showHelp = !showHelp)}>📖 Help</button>
       <button class="btn-icon" class:active={showResources} title="Open Resources"
         on:click={() => (showResources = true)}>Resources</button>
       <button class="btn-icon" class:active={showPeers} title="P2P Peers"
@@ -578,6 +581,12 @@
     <div class="overlay-panel" role="dialog" aria-label="Survival System">
       <WidgetHost widgetId="survival" />
       <button class="overlay-close" on:click={() => showSurvival = false} aria-label="Close">✕</button>
+    </div>
+  {/if}
+  {#if showHelp}
+    <div class="overlay-panel" role="dialog" aria-label="Help Manual">
+      <WidgetHost widgetId="help" />
+      <button class="overlay-close" on:click={() => showHelp = false} aria-label="Close">✕</button>
     </div>
   {/if}
   {#if showResources}<ResourcesPanel on:close={() => (showResources = false)} />{/if}
