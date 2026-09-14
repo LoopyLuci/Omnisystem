@@ -6,7 +6,13 @@
 
 use crate::error::{CryptoError, CryptoResult};
 use ed25519_dalek::{Signature, Signer, SigningKey, Verifier, VerifyingKey};
-use rand_core::OsRng;
+// ed25519-dalek 3.x's `SigningKey::generate` requires an infallible
+// `rand_core::CryptoRng` (rand_core 0.10). rand_core 0.10 itself no longer
+// ships an RNG, only traits — the OS RNG now lives in `getrandom` 0.4 as
+// `getrandom::SysRng`, which is fallible, so it's wrapped in `UnwrapErr` to
+// satisfy `generate`'s infallible bound (this mirrors ed25519-dalek's own
+// doc example for `SigningKey::generate`).
+use getrandom::{rand_core::UnwrapErr, SysRng};
 use serde::{Deserialize, Serialize};
 use zeroize::Zeroize;
 
@@ -69,7 +75,7 @@ pub struct WorkspaceIdentity {
 impl WorkspaceIdentity {
     /// Generate a fresh random identity.
     pub fn generate() -> Self {
-        let signing_key = SigningKey::generate(&mut OsRng);
+        let signing_key = SigningKey::generate(&mut UnwrapErr(SysRng));
         let pk_bytes = signing_key.verifying_key().to_bytes();
         let public_key = IdentityPublicKey::from_bytes(pk_bytes);
         Self {

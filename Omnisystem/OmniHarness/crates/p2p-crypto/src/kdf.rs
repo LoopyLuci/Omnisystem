@@ -7,8 +7,11 @@ use crate::error::{CryptoError, CryptoResult};
 use crate::identity::WorkspaceIdentity;
 use argon2::{Algorithm, Argon2, Params, Version};
 use bip39::{Language, Mnemonic};
-use rand_core::OsRng;
-use rand_core::RngCore;
+// rand_core 0.10 no longer ships an RNG (only traits) — the OS RNG now lives
+// in `getrandom` 0.4 as `getrandom::SysRng`, wrapped in `UnwrapErr` to make
+// it infallible so `Rng::fill_bytes` (rand_core's infallible trait) applies.
+use getrandom::{rand_core::UnwrapErr, SysRng};
+use rand_core::Rng;
 
 // Argon2id parameters — balanced for desktop security vs. speed.
 // Production: memory=65536 KiB (64 MiB), t_cost=3, p_cost=4
@@ -26,7 +29,7 @@ pub const ARGON2_PARAMS_TEST: Params = match Params::new(1_024, 1, 1, Some(32)) 
 /// Generate a new 12-word BIP-39 recovery phrase.
 pub fn generate_phrase() -> CryptoResult<String> {
     let mut entropy = [0u8; 16]; // 128 bits → 12 words
-    OsRng.fill_bytes(&mut entropy);
+    UnwrapErr(SysRng).fill_bytes(&mut entropy);
     let mnemonic = Mnemonic::from_entropy(&entropy)
         .map_err(|e| CryptoError::InvalidMnemonic(e.to_string()))?;
     Ok(mnemonic.to_string())
