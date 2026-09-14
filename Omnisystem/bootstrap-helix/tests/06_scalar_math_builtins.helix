@@ -1,0 +1,16 @@
+// @ expect-stdout: 5.0000
+// @ expect-stdout: 10.0000
+// @ expect-stdout: 3.0000
+// @ expect-stdout: 7.0000
+// @ expect-stdout: 3.0000
+// @ expect-stdout: 0.7
+// @ expect-stdout: 256.0000
+// @ expect-stdout: 8.0000
+puts(mix(0.0, 10.0, 0.5))
+puts(clamp(15.0, 0.0, 10.0))
+puts(min(3.0, 7.0))
+puts(max(3.0, 7.0))
+puts(floor(3.7))
+puts(fract(3.7))
+puts(pow(2.0, 8.0))
+puts(sqrt(64.0))

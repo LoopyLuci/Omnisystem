@@ -1,0 +1,21 @@
+#@ expect-stdout: [1, 2, 3, 5, 8]
+#@ expect-stdout: [8, 5, 3, 2, 1]
+#@ expect-stdout: [2, 4, 6]
+#@ expect-stdout: 12
+#@ expect-stdout: True
+#@ expect-stdout: False
+def main():
+    nums = [5, 3, 8, 1, 2]
+    print(sorted(nums))
+    print(list(reversed(sorted(nums))))
+
+    doubled = list(map(lambda x: x * 2, [1, 2, 3]))
+    print(doubled)
+
+    total = sum([1, 2, 3, 6])
+    print(total)
+
+    print(any([False, False, True]))
+    print(all([True, False, True]))
+
+main()

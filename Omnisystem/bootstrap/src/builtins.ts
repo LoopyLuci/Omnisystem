@@ -71,6 +71,7 @@ export function callBuiltinMethod(recv: Value, name: string, args: Value[], intr
     case 'bool': return boolMethod(recv, name, args);
     case 'enum': return enumMethod(recv, name, args, intr, span);
     case 'range': return rangeMethod(recv, name, args, intr, span);
+    case 'struct': return recv.name === '__MapEntry' ? entryMethod(recv, name, args, intr, span) : undefined;
     case 'tuple': return undefined;
     default: return undefined;
   }
@@ -107,6 +108,7 @@ function vecMethod(recv: Extract<Value, { t: 'vec' }>, name: string, args: Value
     case 'sort_by': items.sort((a, b) => orderingToNum(intr.apply(args[0], [a, b], span))); return UNIT;
     case 'dedup': { for (let i = items.length - 1; i > 0; i--) if (valueEq(items[i], items[i - 1])) items.splice(i, 1); return UNIT; }
     case 'extend': case 'append': { const other = args[0]; if (other.t === 'vec') { for (const x of other.items) items.push(x); if (name === 'append') other.items.length = 0; } return UNIT; }
+    case 'extend_from_slice': { const other = args[0]; if (other.t === 'vec') for (const x of other.items) items.push(x); return UNIT; }
     case 'truncate': items.length = Math.min(items.length, intInt(args[0])); return UNIT;
     case 'swap': { const i = intInt(args[0]), j = intInt(args[1]); const t = items[i]; items[i] = items[j]; items[j] = t; return UNIT; }
     case 'iter': case 'into_iter': case 'iter_mut': case 'to_vec': case 'collect': case 'cloned': case 'as_slice':
@@ -152,8 +154,44 @@ function mapMethod(recv: Extract<Value, { t: 'map' }>, name: string, args: Value
     case 'keys': return mkVec([...m.values()].map(([k]) => k));
     case 'values': return mkVec([...m.values()].map(([, v]) => v));
     case 'iter': case 'into_iter': return mkVec([...m.values()].map(([k, v]) => ({ t: 'tuple', items: [k, v] } as Value)));
-    case 'entry': { const hit = m.get(valueKey(args[0])); return hit ? some(hit[1]) : NONE; }
+    // Live handle so or_insert/or_insert_with/or_default/and_modify mutate the
+    // underlying map in place, mirroring bootstrap-rs's `__MapEntry` struct.
+    case 'entry': {
+      const fields = new Map<string, Value>();
+      fields.set('__map', recv);
+      fields.set('__key', args[0]);
+      return { t: 'struct', name: '__MapEntry', fields };
+    }
     case 'get_or': { const hit = m.get(valueKey(args[0])); return hit ? hit[1] : args[1]; }
+    default: return undefined;
+  }
+}
+
+// Methods on the `entry(k)` handle returned by `mapMethod`'s `entry` case.
+function entryMethod(recv: Extract<Value, { t: 'struct' }>, name: string, args: Value[], intr: Intr, span: Span): Value | undefined {
+  const mapVal = recv.fields.get('__map');
+  const key = recv.fields.get('__key');
+  if (!mapVal || mapVal.t !== 'map' || !key) return undefined;
+  const m = mapVal.entries;
+  const k = valueKey(key);
+  const existing = m.get(k);
+  switch (name) {
+    case 'or_insert': case 'or_default': {
+      if (existing) return existing[1];
+      const v = args[0] ?? mkInt(0);
+      m.set(k, [key, v]);
+      return v;
+    }
+    case 'or_insert_with': {
+      if (existing) return existing[1];
+      const v = intr.apply(args[0], [], span);
+      m.set(k, [key, v]);
+      return v;
+    }
+    case 'and_modify': {
+      if (existing) intr.apply(args[0], [existing[1]], span);
+      return recv;
+    }
     default: return undefined;
   }
 }
@@ -202,6 +240,8 @@ function strMethod(recv: Extract<Value, { t: 'str' }>, name: string, args: Value
     case 'substring': case 'slice': return mkStr(s.slice(intInt(args[0]), args[1] ? intInt(args[1]) : undefined));
     case 'reverse': return mkStr([...s].reverse().join(''));
     case 'count': return mkInt(s.length);
+    case 'strip_prefix': { const p = display(args[0]); return s.startsWith(p) ? some(mkStr(s.slice(p.length))) : NONE; }
+    case 'strip_suffix': { const suf = display(args[0]); return s.endsWith(suf) ? some(mkStr(s.slice(0, s.length - suf.length))) : NONE; }
     default: return undefined;
   }
 }
@@ -228,6 +268,11 @@ function numMethod(recv: Extract<Value, { t: 'int' | 'float' }>, name: string, a
     case 'to_f64': case 'as_f64': return mkFloat(n);
     case 'to_i64': case 'as_i64': case 'trunc': return mkInt(Math.trunc(n));
     case 'checked_add': return some(wrap(n + num(args[0])));
+    // No true i64 wraparound in this f64-backed bootstrap (documented
+    // limitation, see bootstrap/README.md); behaves like plain `+` for the
+    // in-range values real programs use.
+    case 'wrapping_add': return wrap(n + num(args[0]));
+    case 'wrapping_mul': return wrap(n * num(args[0]));
     case 'saturating_sub': return wrap(Math.max(0, n - num(args[0])));
     case 'count_ones': return mkInt(n.toString(2).split('').filter((c) => c === '1').length);
     case 'clone': return recv;

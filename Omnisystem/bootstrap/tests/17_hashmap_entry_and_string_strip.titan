@@ -1,0 +1,39 @@
+//@ expect-stdout: 1
+//@ expect-stdout: 1
+//@ expect-stdout: 7
+//@ expect-stdout: 2
+//@ expect-stdout: llo
+//@ expect-stdout: no match
+//@ expect-stdout: [1, 2, 3, 4]
+//@ expect-stdout: 15
+//@ expect-stdout: 30
+fn main() {
+    let mut m: HashMap<String, i32> = HashMap::new();
+    let a = m.entry(String::from("a")).or_insert(1);
+    println!("{}", a);
+    // Second entry() call on the same key must see the already-inserted
+    // value, not overwrite it with the new default.
+    let a2 = m.entry(String::from("a")).or_insert(99);
+    println!("{}", a2);
+    let b = m.entry(String::from("b")).or_insert_with(|| 7);
+    println!("{}", b);
+    println!("{}", m.len());
+
+    let s = "  hello  ";
+    match s.trim().strip_prefix("he") {
+        Some(rest) => println!("{}", rest),
+        None => println!("no"),
+    }
+    match "hello".strip_suffix("zz") {
+        Some(rest) => println!("{}", rest),
+        None => println!("no match"),
+    }
+
+    let mut v = vec![1, 2];
+    v.extend_from_slice(&vec![3, 4]);
+    println!("{:?}", v);
+
+    let n: i32 = 10;
+    println!("{}", n.wrapping_add(5));
+    println!("{}", n.wrapping_mul(3));
+}

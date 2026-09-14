@@ -1,0 +1,24 @@
+// @ expect-stdout: theorem NotEqualAdjacent -> PROVEN (exhaustively verified over 5 cases)
+// @ expect-stdout: theorem AndOrCombo -> PROVEN (exhaustively verified over 10 cases)
+// @ expect-stdout: theorem ModuloParity -> PROVEN (exhaustively verified over 8 cases)
+// @ expect-stdout: invariant CounterStaysNonNegative -> HOLDS (checked 3 states)
+// @ expect-exit: 0
+theorem NotEqualAdjacent forall x in 0..5 {
+  x != x + 1
+}
+
+theorem AndOrCombo forall x in 0..10 {
+  (x >= 0 && x < 10) || x == 100
+}
+
+theorem ModuloParity forall x in 0..8 {
+  x % 2 == 0 || x % 2 == 1
+}
+
+invariant CounterStaysNonNegative over states (
+  { count: 0 },
+  { count: 3 },
+  { count: 7 }
+) {
+  count >= 0
+}

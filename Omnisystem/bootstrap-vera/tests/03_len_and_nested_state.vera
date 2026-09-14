@@ -1,0 +1,52 @@
+// @ expect-stdout: <div class=cart>
+// @ expect-stdout:   <span>
+// @ expect-stdout:     3
+// @ expect-stdout:   </span>
+// @ expect-stdout:   <p>
+// @ expect-stdout:     closed
+// @ expect-stdout:   </p>
+// @ expect-stdout: </div>
+// @ expect-stdout: <div class=cart>
+// @ expect-stdout:   <span>
+// @ expect-stdout:     3
+// @ expect-stdout:   </span>
+// @ expect-stdout:   <ul>
+// @ expect-stdout:     <li>
+// @ expect-stdout:       apple
+// @ expect-stdout:     </li>
+// @ expect-stdout:     <li>
+// @ expect-stdout:       banana
+// @ expect-stdout:     </li>
+// @ expect-stdout:     <li>
+// @ expect-stdout:       cherry
+// @ expect-stdout:     </li>
+// @ expect-stdout:   </ul>
+// @ expect-stdout: </div>
+component Cart(items, count) {
+  state open = false
+
+  fn toggleOpen() {
+    open = not open
+  }
+
+  render {
+    <div class="cart">
+      <span>{count}</span>
+      {if open {
+        <ul>
+          {for item in items {
+            <li>{item}</li>
+          }}
+        </ul>
+      } else {
+        <p>"closed"</p>
+      }}
+    </div>
+  }
+}
+
+items = ["apple", "banana", "cherry"]
+c = mount(Cart, items, len(items))
+puts(render(c))
+c.toggleOpen()
+puts(render(c))

@@ -1,0 +1,20 @@
+// @ expect-stdout: 1
+// @ expect-stdout: [2, 3, 4]
+// @ expect-stdout: 30
+// @ expect-stdout: b
+// @ expect-stdout: true
+// @ expect-stdout: true
+// @ expect-stdout: false
+xs = [1, 2, 3, 4]
+puts(hd(xs))
+puts(tl(xs))
+
+total = reduce([5, 10, 15], 0, fn(acc, n) -> acc + n end)
+puts(total)
+
+pair = {:a, "b", :c}
+puts(elem(pair, 1))
+
+puts(is_list(xs))
+puts(is_tuple(pair))
+puts(is_atom("not an atom"))

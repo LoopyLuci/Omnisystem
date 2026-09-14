@@ -1,0 +1,12 @@
+// @ expect-stdout: [2, 4, 6, 8]
+// @ expect-stdout: [2, 4]
+// @ expect-stdout: 10
+// @ expect-stdout: [4, 3, 2, 1]
+doubled = map(fn(n) -> n * 2 end, [1, 2, 3, 4])
+puts(doubled)
+
+evens = filter(fn(n) -> n % 2 == 0 end, [1, 2, 3, 4])
+puts(evens)
+
+puts(sum([1, 2, 3, 4]))
+puts(reverse([1, 2, 3, 4]))

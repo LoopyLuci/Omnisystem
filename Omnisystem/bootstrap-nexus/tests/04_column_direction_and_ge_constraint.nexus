@@ -1,0 +1,23 @@
+// @ expect-stdout: constrain Main.height >= Header.height -> OK (500.0 >= 100.0)
+// @ expect-stdout: constrain Header.height + Body.height == Main.height -> OK (500.0 == 500.0)
+// @ expect-stdout: Header { x=0.0 y=0.0 width=400.0 height=100.0 }
+// @ expect-stdout: Body { x=0.0 y=100.0 width=400.0 height=400.0 }
+// @ expect-stdout: Main { width=400.0 height=500.0 }
+// @ expect-exit: 0
+box Header {
+  height: 100
+}
+
+box Body {
+  height: Main.height - Header.height
+}
+
+layout Main {
+  width: 400
+  height: 500
+  direction: column
+  children: [Header, Body]
+}
+
+constrain Main.height >= Header.height
+constrain Header.height + Body.height == Main.height

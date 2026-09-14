@@ -1,0 +1,18 @@
+#@ expect-stdout: HELLO WORLD
+#@ expect-stdout: hello world
+#@ expect-stdout: hi there
+#@ expect-stdout: True
+#@ expect-stdout: False
+#@ expect-stdout: Hello
+#@ expect-stdout: 3
+def main():
+    s = "  Hello World  "
+    print(s.strip().upper())
+    print(s.strip().lower())
+    print(s.strip().replace("Hello World", "hi there"))
+    print(s.strip().startswith("Hello"))
+    print(s.strip().endswith("!"))
+    print(s.strip().split(" ")[0])
+    print(s.count("l"))
+
+main()
