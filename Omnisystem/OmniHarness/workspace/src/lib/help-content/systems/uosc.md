@@ -1,46 +1,77 @@
 # UOSC — Universal Operating System Core
 
-## A note before anything else
+## A note on how this page was corrected
 
-This manual was asked to point at UOSC's own README as "an unusually honest
-model to follow for tone." Having read it directly
-(`src/systems/desktop/docs/production-docs/UOSC_README.md`), that's not
-actually the document this page can recommend as a model — it's written in
-the same grandiose register this manual is explicitly trying to avoid: a
-"build: passing" badge with no CI behind it, a "Formal Verification"
-badge, a claim of "~10,000 LOC of core kernel," and a `git clone` URL
-pointing at `github.com/your-org/uosc` — a placeholder that was never
-filled in. Rather than transcribe those claims, this page reports what's
-actually on disk.
+An earlier draft of this page said UOSC "does not currently exist in this
+repo in a buildable, tested form." That was wrong, and it's worth
+explaining why the mistake happened, because the underlying cause is a
+real, separate bug worth knowing about.
 
-## What's actually on disk
+`Omnisystem/src/systems/UOSC` is tracked in git as a **gitlink**
+(submodule-style commit pointer, mode `160000`) with **no `.gitmodules`
+file** registering it anywhere in the repo. That means: in the long-lived
+checkout this project has actually been developed in, the directory has
+real content, checked out once and left in place — but in a **fresh
+clone, or any fresh `git worktree add`**, that directory checks out
+completely empty, with no error or warning. Two independent passes at
+writing this manual were run from fresh worktrees, saw an empty
+directory, and reasonably (but incorrectly) concluded the code doesn't
+exist. It does — it just doesn't travel with the repo the way normal
+tracked files do. That's a real packaging bug in this repo, separate from
+UOSC's own content, and it should be fixed by registering a proper
+`.gitmodules` entry.
 
-- **`src/systems/UOSC/`** — the directory this manual was originally
-  pointed at — is empty and untracked; there is no code there.
-- **`_Archive/src-crates-dead/uosc-core/`** — a real Rust crate (Cargo.toml
-  + `src/` with `capability.rs`, `core.rs`, `hypervisor.rs`, `ipc.rs`,
-  `memory.rs`, `process.rs`, `scheduler.rs`, `security.rs`, `types.rs`,
-  `error.rs`) — but it lives under this repo's own `_Archive/` /
-  `-dead` naming convention, which this codebase uses to mark code that
-  isn't part of the active, maintained build. Its presence confirms real
-  design work happened here at some point; its location confirms it is not
-  currently wired into anything.
-- **`src/compiler/languages/titan/uosc/uosc-core/`** — a `module.ti`
-  (Titan-language) stub plus a test file, under the *inert*
-  `src/compiler/frontend`-adjacent tree that the language capability map
-  itself warns is a parallel, non-executing effort (see the Languages
-  Overview page) — not the real, runnable Titan substrate.
+## What's actually there, verified directly, right now
+
+Re-run in this session, in the checkout that has the content:
+
+```
+cd Omnisystem/src/systems/UOSC/reference-rs
+cargo test --release
+```
+&rarr; **64 passed, 0 failed, 0 ignored.**
+
+`Omnisystem/src/systems/UOSC/` is itself a real, independent nested git
+repository (its own `README.md`, `CONTRIBUTING.md`, `LICENSE`, and
+directories: `docs/`, `drivers/`, `future-work/`, `hypercalls/`,
+`kernel/`, `kernel-x86_64/`, `kernel-x86_64-builder/`, plus the
+`reference-rs/` crate the test above lives in). Its own README is
+unusually candid for this project — it explicitly separates what's real
+and verified from what's still specification, and documents a prior
+version of itself that made unbacked "production ready" claims it no
+longer stands behind. That real README is the one to trust for this
+subsystem, not the one described below.
+
+## A decoy document — do not confuse this with the real README
+
+`Omnisystem/src/systems/desktop/docs/production-docs/UOSC_README.md` is a
+**different file**, unrelated to the nested repo above, that describes an
+aspirational UOSC: badges for "build: passing" and "Formal Verification"
+with nothing behind them, a claim of "~10,000 LOC of core kernel," and a
+`git clone` URL pointing at the placeholder `github.com/your-org/uosc`. It
+was never filled in and doesn't reflect anything real. If you find it
+while exploring the repo, treat it the same way this whole manual treats
+every other unverified "complete" doc: as a claim to check, not a fact.
+
+## Also worth knowing about
+
+- `Omnisystem/_Archive/src-crates-dead/uosc-core/` — a separate, earlier
+  Rust crate attempt (capability/core/hypervisor/ipc/memory/process/
+  scheduler/security modules) that predates the current
+  `src/systems/UOSC/reference-rs` work and was archived as dead/unwired.
+  It's not the current implementation; the real one is the nested repo
+  above.
+- `src/compiler/languages/titan/uosc/uosc-core/` — a `module.ti` stub
+  under the inert Titan frontend tree (see the Languages Overview page
+  for why that tree doesn't execute) — also not the real implementation.
 
 ## Honest summary
 
-UOSC as a *working* microkernel does not currently exist in this repo in a
-buildable, tested form. What exists is: an aspirational README with
-unverifiable claims and a placeholder repo URL, an archived (dead,
-unwired) Rust crate with real module-level design work, and a stub in the
-inert Titan frontend tree. If you're looking for UOSC to actually boot,
-verify a capability proof, or run under QEMU as its README's Quick Start
-section describes — none of that was reproducible from this repo as
-checked out for this manual.
-
-This is exactly the kind of gap this whole manual was written to be honest
-about, rather than repeat.
+UOSC's real, working microkernel code exists, is tested, and passes
+64/64 real tests in this checkout today. The catch isn't that it's fake
+— it's that it currently can't be reliably obtained by cloning this
+repository fresh, because of a missing `.gitmodules` registration. That's
+a real, fixable infrastructure gap, not a false claim about the code
+itself, and it's worth fixing so the next person who clones this repo
+doesn't lose 64 passing tests' worth of real kernel work without so much
+as an error message.
