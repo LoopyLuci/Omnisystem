@@ -180,7 +180,13 @@ export function getLang(id: string): LanguageDef | undefined {
 }
 
 export function getLangByExtension(ext: string): LanguageDef | undefined {
-    return BY_EXT.get(ext.startsWith('.') ? ext.toLowerCase() : '.' + ext.toLowerCase());
+    // Most entries key on a dotted extension ('.py'), but a few special
+    // filenames are stored bare ('Makefile', matched against a full
+    // filename rather than a suffix) — try the dotted form first, then
+    // fall back to the raw lowercased input so those still resolve.
+    const lower = ext.toLowerCase();
+    const dotted = ext.startsWith('.') ? lower : '.' + lower;
+    return BY_EXT.get(dotted) ?? BY_EXT.get(lower);
 }
 
 export function getLangsByFamily(family: LanguageFamily): LanguageDef[] {

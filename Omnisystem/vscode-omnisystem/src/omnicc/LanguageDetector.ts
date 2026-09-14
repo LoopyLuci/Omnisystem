@@ -121,6 +121,11 @@ function scoreByKeywords(src: string, lang: LanguageDef): ScoredLang {
     const sample = src.slice(0, 8000); // score on first 8KB for speed
 
     for (const kw of lang.keywords) {
+        // A keyword that is pure whitespace (e.g. Whitespace-the-esolang's
+        // literal ' ' / '\t' / '\n' "keywords") is a substring of virtually
+        // every source file and would otherwise dominate scoring for every
+        // language; such entries carry no real signal, so skip them.
+        if (kw.trim().length === 0) { continue; }
         if (sample.includes(kw)) {
             score += 8;
             if (signals.length < 3) { signals.push(`keyword: ${kw}`); }

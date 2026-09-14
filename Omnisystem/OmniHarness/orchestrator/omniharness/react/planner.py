@@ -125,11 +125,10 @@ class HTNPlanner:
         ))
 
         # llm_query (calls model via state["model_fn"] if provided)
-        def llm_execute(s: dict, p: dict) -> str:
+        async def llm_execute(s: dict, p: dict) -> str:
             model_fn = s.get("model_fn")
             if model_fn:
-                import asyncio
-                return asyncio.get_event_loop().run_until_complete(model_fn(p.get("prompt", "")))
+                return await model_fn(p.get("prompt", ""))
             return f"[LLM would respond to: {p.get('prompt', '')}]"
 
         self.register_operator(Operator(
@@ -137,6 +136,21 @@ class HTNPlanner:
             preconditions=lambda s: True,
             effects=lambda s, p: {},
             execute_fn=llm_execute,
+        ))
+
+        # http_get (used by the "research" method below; real network I/O)
+        async def http_get_execute(s: dict, p: dict) -> str:
+            import httpx
+            async with httpx.AsyncClient(timeout=15) as client:
+                resp = await client.get(p["url"])
+                resp.raise_for_status()
+                return resp.text[:4000]
+
+        self.register_operator(Operator(
+            name="http_get",
+            preconditions=lambda s: "url" in s or True,
+            effects=lambda s, p: {"last_http_get": p.get("url")},
+            execute_fn=http_get_execute,
         ))
 
         # Methods

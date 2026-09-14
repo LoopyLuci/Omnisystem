@@ -1,12 +1,13 @@
 .vscode/**
 src/**
-.eslintrc.json
+eslint.config.mjs
 .gitignore
 tsconfig.json
 **/*.map
 **/*.ts
 !out/**
 !media/**
+out/**/__tests__/**
 node_modules/**
 !node_modules/vscode-languageclient/**
 !node_modules/vscode-languageserver-protocol/**

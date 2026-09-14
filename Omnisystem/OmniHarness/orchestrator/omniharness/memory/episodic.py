@@ -82,7 +82,7 @@ class EpisodicMemory:
 
     async def get_all_sessions(self) -> list[str]:
         async with self._db.execute(
-            "SELECT DISTINCT session_id FROM turns ORDER BY MAX(created_at) DESC"
+            "SELECT session_id FROM turns GROUP BY session_id ORDER BY MAX(created_at) DESC"
         ) as cur:
             rows = await cur.fetchall()
         return [r[0] for r in rows]
