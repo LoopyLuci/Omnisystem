@@ -4,6 +4,28 @@
 **Date:** 2026-06-25  
 **Total Code:** 11,100+ LOC across 7 Omnisystem languages
 
+## ⚠️ CORRECTION — added 2026-09-14, do not delete
+
+An audit on 2026-09-14 checked this document against the repo's other
+already-corrected compiler-ecosystem doc
+(`Omnisystem/COMPILER_ECOSYSTEM_COMPLETE.md`, root), which established that
+**nothing in this repository compiles to machine code** — the "x86-64
+instruction encoding", "ARM64 instruction encoding", "ELF/PE/Mach-O binary
+format support", and "full machine code generation pipeline complete"
+claims in the Phase 5 section below are the same claims already shown
+false there. The real, working compiler path is the separate `omnicc` /
+`UniIR` Rust crate (`Omnisystem/OmniHarness/crates/ir`), which lowers a
+partial Titan/Sylva subset to Rust source, not machine code.
+
+Two file-level checks on this document, for what it's worth: unlike most
+status docs audited in this repo, `TitanFrontend.titan` and
+`TitanBackend.titan` actually *undercount* here — the doc claims 800 LOC
+each, but the real files are 1,745 and 1,906 lines respectively. So the
+files these two claims point to do exist and are substantial; it is the
+"complete compiler pipeline / machine code generation" framing around them
+that is false, not their raw existence.
+
+
 ---
 
 ## 🎉 OMNISYSTEM COMPILER ECOSYSTEM - FULLY FUNCTIONAL

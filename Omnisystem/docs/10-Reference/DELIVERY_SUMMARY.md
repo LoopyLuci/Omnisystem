@@ -2,6 +2,19 @@
 
 **Date Delivered**: 2026-06-28  
 **Status**: ✅ **COMPREHENSIVE PLAN COMPLETE - READY FOR EXECUTION**  
+
+## ⚠️ CORRECTION — added 2026-09-14, do not delete
+
+An audit on 2026-09-14 checked the one concrete, checkable number in this
+document: "Document 1: Master Plan (OMNI_ASSETS_MASTER_PLAN.md), Size:
+8,000+ lines." The actual file
+(`Omnisystem/docs/10-Reference/OMNI_ASSETS_MASTER_PLAN.md`) is **1,523
+lines** — inflated roughly 5.2x. Note also that everything this document
+describes ("delivered") is a planning/specification document, not
+implemented code — "12 weeks to production v1.0" is a proposed schedule,
+not a report of anything built. Same LOC-inflation pattern already
+established across this repo's status docs.
+
 **Scope**: Enterprise-grade GUI/UX framework for next-generation applications  
 **Documents Delivered**: 4 comprehensive guides + examples  
 **Implementation Timeline**: 12 weeks to production v1.0  

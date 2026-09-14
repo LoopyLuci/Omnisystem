@@ -2,6 +2,29 @@
 
 ## Status: ALL 9 PHASES BUILT (33,900+ LOC) - PRODUCTION READY
 
+## ⚠️ CORRECTION — added 2026-09-14, do not delete
+
+An audit on 2026-09-14 checked the two files this document cites first:
+
+- **`Z:\Projects\Omnisystem\Omnisystem\src\desktop\DesktopShell.vera`**
+  claimed at 3,500 LOC — **this exact path does not exist.** The only
+  `DesktopShell.vera` in the repo is at
+  `src/systems/applications/omnisystem-desktop-environment/src/shell/DesktopShell.vera`
+  and is **145 lines** (24x smaller than claimed).
+- **`Z:\Projects\Omnisystem\Omnisystem\src\desktop\FileManager.vera`**
+  claimed at 4,000 LOC — this path also does not exist. The closest
+  matches are `src/compiler/apps/FileManager.vera` (491 lines),
+  `src/personal/desktop/FileManager.vera` (62 lines), and
+  `.../omnisystem-desktop-environment/src/file-manager/FileManager.vera`
+  (107 lines) — none within an order of magnitude of 4,000.
+
+Both headline file citations for this document are false: either the
+path doesn't exist, or the real file is a small fraction of the claimed
+size. Treat the "33,900+ LOC, 9 phases, production ready" claim as
+unverified and, given the above, likely part of the same LOC-inflation
+pattern established across this repo's status docs.
+
+
 ---
 
 ## Overview

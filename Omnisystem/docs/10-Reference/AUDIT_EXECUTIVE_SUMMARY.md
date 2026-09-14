@@ -5,6 +5,28 @@
 **Audit Scope:** 14,500+ LOC across 12 Enterprise Systems  
 **Result:** ✅ **PASS - ALL SYSTEMS COMPLETE, FULLY FUNCTIONAL, PRODUCTION-READY**
 
+## ⚠️ CORRECTION — added 2026-09-14, do not delete
+
+An audit on 2026-09-14 spot-checked the per-file LOC claims in the "12
+SYSTEMS AUDITED" table against the actual files on disk:
+
+| File | Claimed | Actual | Ratio |
+|---|---|---|---|
+| `OmniREPL.titan` | 1,200 | 480 | 2.5x |
+| `InteractiveDebugger.titan` | 1,000 | 458 | 2.2x |
+| `AdvancedProfiler.titan` | 1,200 | 449 | 2.7x |
+| `SLOManagement.titan` | 900 | 403 | 2.2x |
+| `CanaryDeployment.titan` | 1,100 | 351 | 3.1x |
+
+Every sampled file is inflated 2.2x-3.1x over its real line count, the
+same pattern already established across most status docs in this repo.
+Given that, the more sweeping claims in this document — "0 Stubs, 0
+Placeholders, 0 Dead Code, 19/19 Integration Tests Passed" — should not be
+taken at face value; they were not independently re-verified line-by-line
+here, but the one concrete, checkable number this document supplies (LOC)
+turned out false in every sample, which undermines confidence in the rest.
+
+
 ---
 
 ## AUDIT RESULTS AT A GLANCE

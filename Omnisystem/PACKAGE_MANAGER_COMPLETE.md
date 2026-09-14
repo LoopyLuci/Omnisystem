@@ -5,6 +5,28 @@
 **Total Implementation:** 8,500+ LOC  
 **Languages:** 1 (TITAN)  
 
+## ⚠️ CORRECTION — added 2026-09-14, do not delete
+
+An audit on 2026-09-14 checked this file's two headline claims:
+
+- **"8,500+ LOC"** — the three files this document describes
+  (`src/package_manager/OmniPM.titan`, `OmniPMCLI.titan`,
+  `RegistryServer.titan`) total **1,513 lines**, not 8,500+ — inflated by
+  roughly 5.6x.
+- **"PRODUCTION READY"** — these are `.titan` source files. Per the
+  correction already added to `COMPILER_ECOSYSTEM_COMPLETE.md`, nothing in
+  this repository compiles Titan to a running binary (the real, working
+  compiler path that exists, `omnicc`, covers a partial Titan/Sylva subset
+  lowered to Rust source — package-manager-style code with structs,
+  HashMaps, and CLI parsing has not been shown to run through it). So while
+  the `.titan` source text described here does exist on disk, "production
+  ready" package manager that can actually resolve and install a
+  dependency has not been demonstrated.
+
+Same inflation/false-completeness pattern already established for the
+majority of this repo's status docs.
+
+
 ---
 
 ## EXECUTIVE SUMMARY

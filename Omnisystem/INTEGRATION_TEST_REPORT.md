@@ -1,6 +1,28 @@
 # OMNISYSTEM INTEGRATION TEST REPORT
 **Date:** June 27, 2026 | **Status:** ✅ ALL TESTS PASSED
 
+## ⚠️ CORRECTION — added 2026-09-14, do not delete
+
+An audit on 2026-09-14 checked this report's core claim — that
+`Z:\Projects\Omnisystem\Omnisystem\tests\integration\src\main.rs` was built
+into a real `bin/omnisystem_integration_tests.exe` (185 KB PE32+) and
+executed to produce the latency/throughput/IOPS numbers below. **Neither
+file exists anywhere in this repository.** There is no
+`tests/integration/src/main.rs`, no `omnisystem_integration_tests.exe`, and
+no Cargo project matching this description. Several of the numbers in this
+report are also internally implausible on their face — e.g. "Read IOPS:
+2,325,581,395" (2.3 billion I/O operations per second) and "Read
+Throughput: 142,956.89 MB/s" (~143 GB/s from a `File::read`, faster than
+any real storage or memory bus at this data volume) alongside a "Read
+IOPS: 874,004" figure quoted elsewhere in the same document for the same
+run.
+
+This report should be treated as **fabricated, not a record of a real test
+run.** Same pattern already established for other June 2026 status docs in
+this repo: invented benchmark numbers presented as measured results, no
+underlying artifact to reproduce them from.
+
+
 ## Executive Summary
 
 Successfully executed comprehensive integration testing of Options 3-5:

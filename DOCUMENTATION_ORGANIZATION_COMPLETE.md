@@ -1,5 +1,23 @@
 # 🎉 OMNISYSTEM - DOCUMENTATION ORGANIZATION COMPLETE
 
+## ⚠️ CORRECTION — added 2026-09-14, do not delete
+
+An audit on 2026-09-14 checked this document's file-count claims against
+the actual repository. This document claims 822 total documentation files
+(662 active + 160 archived). As of this correction, `Omnisystem/docs/`
+contains **528** `.md` files total (active plus its own `_Archive/`
+subtree) — well short of 822, and the gap has widened further since this
+correction batch itself just archived another ~126 status/completion docs
+out of active use. The 9-category structure this document describes
+(`1-Getting-Started`, `3-Architecture`, `4-Languages`, `5-Core-Systems`,
+`6-APIs`, `7-Deployment`, `8-Project-Status`, `9-Development`,
+`10-Reference`, plus `_Archive`) does genuinely exist on disk, so the
+reorganization itself was real — but the specific counts below are stale
+and/or inflated, consistent with the LOC/file-count inflation pattern
+found across most other status docs in this repo. Treat the per-folder
+file counts and the "822/662/160" totals as unreliable; treat the
+directory names/structure as accurate.
+
 ## What Was Done
 
 Comprehensively reorganized **822 documentation files** into a flawless, professional structure with clear navigation and logical hierarchy.

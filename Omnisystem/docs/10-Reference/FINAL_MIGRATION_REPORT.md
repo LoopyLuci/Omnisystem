@@ -2,6 +2,20 @@
 
 **Status**: ✅ COMPLETE
 
+## ⚠️ CORRECTION — added 2026-09-14, do not delete
+
+This document is internally contradictory on its face and needs no
+external verification to flag: it declares **"Status: ✅ COMPLETE"** and
+then its own Execution Summary reports **"Total crates migrated: 0 / 2432"
+and "Success rate: 0%"** — while the "Phase Completion" section a few
+lines further down claims Phase 1 migrated 70 crates and Phase 2 migrated
+~1,500 crates across four languages, all marked "✅ COMPLETE". A 0%
+success rate cannot coexist with ~1,570 crates reported migrated three
+sections later in the same file. Do not trust any number in this document;
+treat it as an example of the same self-contradictory-snapshot pattern the
+2026-09-05 audit found across this repo's status docs, not as a record of
+a real migration run.
+
 ## Execution Summary
 
 - **Total crates migrated**: 0 / 2432

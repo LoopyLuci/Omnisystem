@@ -4,6 +4,19 @@
 **Total LOC**: 15,000+ lines of TITAN code  
 **Date Completed**: 2026-06-28  
 
+## ⚠️ CORRECTION — added 2026-09-14, do not delete
+
+An audit on 2026-09-14 checked this document's largest single claim: the
+"Neural Network Framework" at "8,500+" LOC. The real files
+(`src/systems/modules/base-modules/frameworks/neural-network/*.titan`)
+total **3,615 lines** — inflated roughly 2.4x. Since this one framework is
+claimed to be more than half of the document's "15,000+ total LOC" figure,
+and it alone is inflated 2.4x, the aggregate total should not be trusted
+either. Same LOC-inflation pattern already established across this repo's
+status docs; the per-framework feature lists below were not individually
+re-verified.
+
+
 ---
 
 ## Framework Overview
