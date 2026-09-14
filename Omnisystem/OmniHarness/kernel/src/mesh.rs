@@ -1,4 +1,5 @@
 use anyhow::Result;
+use dashmap::DashMap;
 use futures::StreamExt;   // provides Swarm::select_next_some
 use libp2p::{
     gossipsub::{self, IdentTopic as Topic, MessageAuthenticity},
@@ -6,9 +7,61 @@ use libp2p::{
     swarm::{NetworkBehaviour, SwarmEvent},
     PeerId, SwarmBuilder,
 };
+use std::sync::Arc;
 use std::time::Duration;
 use tokio::sync::mpsc;
 use tracing::{error, info, warn};
+
+/// peer_id -> (multiaddr, discovered_at_ms). Shared between the mesh task
+/// (which owns the swarm and is the only thing that can see live peers) and
+/// `MeshHandle` (cloned into gRPC handlers), so `MeshService::ListPeers` can
+/// report real, currently-known peers without needing swarm access itself.
+type PeerTable = Arc<DashMap<String, (String, i64)>>;
+
+/// Handle other parts of the kernel (gRPC handlers) use to talk to the mesh
+/// task without owning the `Swarm` themselves — the swarm only lives inside
+/// `MeshNode::run`'s task, so outbound broadcasts go through a channel and
+/// peer info is read from the shared `PeerTable` the run loop maintains.
+#[derive(Clone)]
+pub struct MeshHandle {
+    broadcast_tx: mpsc::Sender<Vec<u8>>,
+    peers: PeerTable,
+}
+
+impl MeshHandle {
+    /// Publish `data` to the gossipsub topic. Returns once the mesh task has
+    /// accepted the payload for publishing (fire-and-forget past that point,
+    /// same as libp2p gossipsub itself).
+    pub async fn broadcast(&self, data: Vec<u8>) -> Result<()> {
+        self.broadcast_tx
+            .send(data)
+            .await
+            .map_err(|_| anyhow::anyhow!("mesh task is not running"))
+    }
+
+    pub fn peer_count(&self) -> usize {
+        self.peers.len()
+    }
+
+    pub fn list_peers(&self) -> Vec<(String, String, i64)> {
+        self.peers
+            .iter()
+            .map(|e| (e.key().clone(), e.value().0.clone(), e.value().1))
+            .collect()
+    }
+}
+
+/// Build a `MeshNode`, wire it up, and spawn its run loop. Returns the task
+/// handle (so callers can `abort()` it on shutdown) plus a `MeshHandle` for
+/// issuing broadcasts / reading peers from gRPC handlers.
+pub fn spawn(event_tx: mpsc::Sender<Vec<u8>>) -> Result<(tokio::task::JoinHandle<()>, MeshHandle)> {
+    let node = MeshNode::new(event_tx)?;
+    let (broadcast_tx, broadcast_rx) = mpsc::channel::<Vec<u8>>(256);
+    let peers: PeerTable = Arc::new(DashMap::new());
+    let handle = MeshHandle { broadcast_tx, peers: Arc::clone(&peers) };
+    let join = tokio::spawn(async move { node.run(broadcast_rx, peers).await });
+    Ok((join, handle))
+}
 
 #[derive(NetworkBehaviour)]
 pub struct HarnessBehaviour {
@@ -78,7 +131,12 @@ impl MeshNode {
         self.swarm.behaviour().gossipsub.all_peers().count()
     }
 
-    pub async fn run(mut self) {
+    /// Drive the swarm event loop AND service outbound broadcast requests
+    /// coming from `MeshHandle::broadcast` (i.e. from `MeshService::BroadcastEvent`
+    /// gRPC calls) — the swarm can only be driven from inside this task, so
+    /// outbound publishes have to come in over `broadcast_rx` rather than a
+    /// direct method call from the gRPC handler's task.
+    pub async fn run(mut self, mut broadcast_rx: mpsc::Receiver<Vec<u8>>, peers: PeerTable) {
         if let Err(e) = self.swarm.behaviour_mut().gossipsub.subscribe(&self.topic) {
             error!("[Mesh] Subscribe failed: {}", e);
             return;
@@ -89,34 +147,54 @@ impl MeshNode {
         }
 
         loop {
-            match self.swarm.select_next_some().await {
-                SwarmEvent::Behaviour(HarnessBehaviourEvent::Gossipsub(
-                    gossipsub::Event::Message { message, .. }
-                )) => {
-                    if self.event_sender.send(message.data).await.is_err() {
-                        warn!("[Mesh] Channel closed — shutting down mesh.");
-                        return;
+            tokio::select! {
+                outbound = broadcast_rx.recv() => {
+                    match outbound {
+                        Some(data) => {
+                            if let Err(e) = self.broadcast(data) {
+                                warn!("[Mesh] Broadcast failed: {}", e);
+                            }
+                        }
+                        None => {
+                            warn!("[Mesh] Broadcast channel closed — outbound publishing disabled.");
+                            // Keep servicing inbound swarm events even if every
+                            // MeshHandle has been dropped.
+                        }
                     }
                 }
-                SwarmEvent::Behaviour(HarnessBehaviourEvent::Mdns(
-                    mdns::Event::Discovered(list)
-                )) => {
-                    for (peer_id, addr) in list {
-                        info!("[Mesh] Discovered peer {} at {}", peer_id, addr);
-                        self.swarm.dial(peer_id).ok();
+                event = self.swarm.select_next_some() => {
+                    match event {
+                        SwarmEvent::Behaviour(HarnessBehaviourEvent::Gossipsub(
+                            gossipsub::Event::Message { message, .. }
+                        )) => {
+                            if self.event_sender.send(message.data).await.is_err() {
+                                warn!("[Mesh] Channel closed — shutting down mesh.");
+                                return;
+                            }
+                        }
+                        SwarmEvent::Behaviour(HarnessBehaviourEvent::Mdns(
+                            mdns::Event::Discovered(list)
+                        )) => {
+                            for (peer_id, addr) in list {
+                                info!("[Mesh] Discovered peer {} at {}", peer_id, addr);
+                                peers.insert(peer_id.to_string(), (addr.to_string(), chrono::Utc::now().timestamp_millis()));
+                                self.swarm.dial(peer_id).ok();
+                            }
+                        }
+                        SwarmEvent::Behaviour(HarnessBehaviourEvent::Mdns(
+                            mdns::Event::Expired(list)
+                        )) => {
+                            for (peer_id, _) in list {
+                                info!("[Mesh] Peer {} expired.", peer_id);
+                                peers.remove(&peer_id.to_string());
+                            }
+                        }
+                        SwarmEvent::NewListenAddr { address, .. } => {
+                            info!("[Mesh] Listening on {}", address);
+                        }
+                        _ => {}
                     }
                 }
-                SwarmEvent::Behaviour(HarnessBehaviourEvent::Mdns(
-                    mdns::Event::Expired(list)
-                )) => {
-                    for (peer_id, _) in list {
-                        info!("[Mesh] Peer {} expired.", peer_id);
-                    }
-                }
-                SwarmEvent::NewListenAddr { address, .. } => {
-                    info!("[Mesh] Listening on {}", address);
-                }
-                _ => {}
             }
         }
     }

@@ -8,9 +8,11 @@ use tonic::{transport::Server, Request, Response, Status};
 use crate::{
     auth::AuthStore,
     event_store::{PersistentEventStore, SystemEvent},
+    mesh::MeshHandle,
     model_router::ModelRegistry,
     sandbox::Sandbox,
     session_store::SessionStore,
+    substrate::SharedGovernor,
     tool_registry::ToolRegistry,
     vector_store::VectorStore,
 };
@@ -24,6 +26,7 @@ use proto::{
     event_store_service_server::{EventStoreService, EventStoreServiceServer},
     harness_service_server::{HarnessService, HarnessServiceServer},
     memory_service_server::{MemoryService, MemoryServiceServer},
+    mesh_service_server::{MeshService, MeshServiceServer},
     model_service_server::{ModelService, ModelServiceServer},
     session_service_server::{SessionService, SessionServiceServer},
     tool_service_server::{ToolService, ToolServiceServer},
@@ -41,6 +44,10 @@ pub struct HarnessState {
     pub tool_registry:  Arc<ToolRegistry>,
     pub auth_store:     Arc<AuthStore>,
     pub sandbox:        Arc<Sandbox>,
+    pub governor:       SharedGovernor,
+    /// `None` when mesh init failed at boot (non-fatal — see main.rs) or
+    /// during a unit test that doesn't need P2P.
+    pub mesh:           Option<MeshHandle>,
     pub start_time:     Instant,
 }
 
@@ -121,6 +128,15 @@ struct ModelSvc(Arc<HarnessState>);
 impl ModelService for ModelSvc {
     async fn chat(&self, req: Request<ChatRequest>) -> Result<Response<ChatResponse>, Status> {
         let r = req.into_inner();
+
+        // Governance: enforce model allow-list, call budget, and step/wallclock
+        // limits before dispatching to a real model backend.
+        {
+            let mut gov = self.0.governor.write().await;
+            gov.checkpoint("chat").map_err(|e| Status::resource_exhausted(e.to_string()))?;
+            gov.check_model(&r.model_id).map_err(|e| Status::permission_denied(e.to_string()))?;
+        }
+
         let chat_req = crate::model_router::ChatRequest {
             model_id:    r.model_id.clone(),
             messages:    r.messages.iter().map(|m| crate::model_router::ChatMessage {
@@ -145,6 +161,17 @@ impl ModelService for ModelSvc {
                     &format!(r#"{{"model":"{}","tokens_out":{}}}"#, resp.model_used, resp.output_tokens),
                     "",
                 ).await.ok();
+
+                // Record real usage against the budget; a call that pushes usage
+                // over budget still returns its (already-incurred) response but
+                // future calls will be rejected by the checkpoint/check_model
+                // above — same "hard stop only takes effect on the next call"
+                // tradeoff any post-hoc usage meter has.
+                let total_tokens = (resp.input_tokens.max(0) + resp.output_tokens.max(0)) as u64;
+                if let Err(e) = self.0.governor.write().await.record_call(&resp.model_used, total_tokens) {
+                    tracing::warn!("[Governance] Budget exceeded after call: {}", e);
+                }
+
                 Ok(Response::new(ChatResponse {
                     content:       resp.content,
                     model_used:    resp.model_used,
@@ -302,6 +329,61 @@ struct ToolSvc(Arc<HarnessState>);
 impl ToolService for ToolSvc {
     async fn execute(&self, req: Request<ToolExecuteRequest>) -> Result<Response<ToolExecuteResponse>, Status> {
         let r = req.into_inner();
+
+        // Governance: capability policy (denied/allowed tool lists) is
+        // enforced here, before anything — including the sandbox below —
+        // actually runs.
+        if let Err(e) = self.0.governor.write().await.check_tool(&r.name) {
+            return Ok(Response::new(ToolExecuteResponse {
+                result: String::new(), success: false, error: e.to_string(), latency_ms: 0.0,
+            }));
+        }
+
+        // `run_wasm` is a builtin that executes inside the WASM sandbox
+        // (sandbox.rs) rather than through ToolRegistry — the sandbox is
+        // process-wide state living in HarnessState, not the tool registry.
+        // Args: {"wasm_base64": "<base64 wasm bytes>", "args": ["..."], "fuel": <u64, optional>}
+        if r.name == "run_wasm" {
+            let t0 = Instant::now();
+            let args: serde_json::Value = serde_json::from_str(&r.arguments).unwrap_or_default();
+            let wasm_b64 = args.get("wasm_base64").and_then(|v| v.as_str()).unwrap_or_default();
+            let wasm_args: Vec<String> = args.get("args")
+                .and_then(|v| v.as_array())
+                .map(|a| a.iter().filter_map(|v| v.as_str().map(str::to_string)).collect())
+                .unwrap_or_default();
+            let fuel = args.get("fuel").and_then(|v| v.as_u64());
+
+            use base64::Engine;
+            let wasm_bytes = match base64::engine::general_purpose::STANDARD.decode(wasm_b64) {
+                Ok(b) => b,
+                Err(e) => {
+                    return Ok(Response::new(ToolExecuteResponse {
+                        result: String::new(), success: false,
+                        error: format!("invalid wasm_base64: {e}"), latency_ms: 0.0,
+                    }));
+                }
+            };
+
+            let sandbox = Arc::clone(&self.0.sandbox);
+            // wasmtime execution is synchronous/blocking — run it off the
+            // async reactor thread.
+            let outcome = tokio::task::spawn_blocking(move || sandbox.run(&wasm_bytes, wasm_args, fuel)).await;
+            return Ok(match outcome {
+                Ok(Ok(output)) => Response::new(ToolExecuteResponse {
+                    result: output, success: true, error: String::new(),
+                    latency_ms: t0.elapsed().as_secs_f64() * 1000.0,
+                }),
+                Ok(Err(e)) => Response::new(ToolExecuteResponse {
+                    result: String::new(), success: false, error: e.to_string(),
+                    latency_ms: t0.elapsed().as_secs_f64() * 1000.0,
+                }),
+                Err(join_err) => Response::new(ToolExecuteResponse {
+                    result: String::new(), success: false,
+                    error: format!("sandbox task panicked: {join_err}"), latency_ms: 0.0,
+                }),
+            });
+        }
+
         match self.0.tool_registry.execute(&r.name, &r.arguments, r.timeout_ms as u32).await {
             Ok(tr) => Ok(Response::new(ToolExecuteResponse {
                 result: tr.result, success: tr.success, error: String::new(), latency_ms: tr.latency_ms,
@@ -437,6 +519,44 @@ impl HarnessService for HarnessSvc {
     }
 }
 
+// ── Mesh Service ───────────────────────────────────────────────────────────────
+//
+// Wires the previously-dormant `MeshNode` (mesh.rs) into a live gRPC path: a
+// client calls `BroadcastEvent` to publish onto the libp2p gossipsub topic
+// (picked up by every other kernel on the mesh, replicated into their event
+// stores by the consumer loop in main.rs), and `ListPeers` to see who's
+// currently discovered via mDNS.
+
+struct MeshSvc(Arc<HarnessState>);
+
+#[tonic::async_trait]
+impl MeshService for MeshSvc {
+    async fn broadcast_event(&self, req: Request<BroadcastRequest>) -> Result<Response<BroadcastResponse>, Status> {
+        let data = req.into_inner().data;
+        match &self.0.mesh {
+            Some(mesh) => match mesh.broadcast(data).await {
+                Ok(_) => Ok(Response::new(BroadcastResponse {
+                    peers: mesh.peer_count() as u32,
+                    success: true,
+                })),
+                Err(e) => Err(Status::unavailable(e.to_string())),
+            },
+            None => Err(Status::unavailable("mesh not initialized on this kernel")),
+        }
+    }
+
+    async fn list_peers(&self, _: Request<ListPeersRequest>) -> Result<Response<ListPeersResponse>, Status> {
+        let peers = match &self.0.mesh {
+            Some(mesh) => mesh.list_peers()
+                .into_iter()
+                .map(|(peer_id, addr, connected_at)| proto::Peer { peer_id, addr, connected_at })
+                .collect(),
+            None => vec![],
+        };
+        Ok(Response::new(ListPeersResponse { peers }))
+    }
+}
+
 // ── Auth interceptor ────────────────────────────────────────────────────────
 //
 // `AuthStore` (auth.rs) has always generated and persisted an admin key on
@@ -490,8 +610,219 @@ pub async fn serve(addr: SocketAddr, state: HarnessState) -> Result<()> {
         .add_service(MemoryServiceServer::with_interceptor(MemorySvc(Arc::clone(&state)), interceptor.clone()))
         .add_service(ToolServiceServer::with_interceptor(ToolSvc(Arc::clone(&state)), interceptor.clone()))
         .add_service(SessionServiceServer::with_interceptor(SessionSvc(Arc::clone(&state)), interceptor.clone()))
-        .add_service(HarnessServiceServer::with_interceptor(HarnessSvc(Arc::clone(&state)), interceptor))
+        .add_service(HarnessServiceServer::with_interceptor(HarnessSvc(Arc::clone(&state)), interceptor.clone()))
+        .add_service(MeshServiceServer::with_interceptor(MeshSvc(Arc::clone(&state)), interceptor))
         .serve(addr)
         .await?;
     Ok(())
+}
+
+// ── Integration tests: real gRPC over a real socket ────────────────────────────
+//
+// Phase 5: governance, sandbox, and mesh-publish were all real, tested-in-
+// isolation code that no live gRPC handler ever called. This module proves
+// the wiring above by driving a real `Server` bound to a real TCP port with a
+// real tonic client — not by calling the `*Svc` structs' methods directly —
+// so a regression in service registration, the interceptor chain, or codec
+// setup would fail this test the same way it'd fail a real client.
+#[cfg(test)]
+mod live_wiring_tests {
+    use super::*;
+    use proto::mesh_service_client::MeshServiceClient;
+    use proto::model_service_client::ModelServiceClient;
+    use proto::tool_service_client::ToolServiceClient;
+    use tempfile::tempdir;
+
+    async fn build_state(dir: &std::path::Path) -> HarnessState {
+        let event_store = Arc::new(
+            crate::event_store::PersistentEventStore::new(dir.join("events.jsonl").to_str().unwrap())
+                .await
+                .unwrap(),
+        );
+        let vector_store = Arc::new(
+            crate::vector_store::VectorStore::new(dir.join("vectors.jsonl").to_str().unwrap())
+                .await
+                .unwrap(),
+        );
+        let session_store = Arc::new(
+            crate::session_store::SessionStore::new(dir.join("sessions.jsonl").to_str().unwrap())
+                .await
+                .unwrap(),
+        );
+        let tool_registry = Arc::new(crate::tool_registry::ToolRegistry::new());
+        tool_registry.register_builtins();
+        let auth_store = Arc::new(
+            crate::auth::AuthStore::new(dir.join("auth.json").to_str().unwrap()).unwrap(),
+        );
+        let sandbox = Arc::new(crate::sandbox::Sandbox::new().unwrap());
+        let governor = crate::substrate::shared(
+            crate::substrate::Budget::from_env(),
+            crate::substrate::CapabilityPolicy::from_env(),
+        );
+        let (mesh_tx, _mesh_rx) = tokio::sync::mpsc::channel::<Vec<u8>>(16);
+        let mesh = crate::mesh::spawn(mesh_tx).ok().map(|(_join, handle)| handle);
+
+        HarnessState {
+            event_store,
+            model_registry: Arc::new(crate::model_router::ModelRegistry::new()),
+            vector_store,
+            session_store,
+            tool_registry,
+            auth_store,
+            sandbox,
+            governor,
+            mesh,
+            start_time: Instant::now(),
+        }
+    }
+
+    /// Bind an OS-assigned loopback port and hand back the address, freeing
+    /// the port immediately so `grpc_server::serve` (which does its own
+    /// bind-by-address) can use it. Small theoretical reuse race; acceptable
+    /// for a single-process test run.
+    fn pick_addr() -> SocketAddr {
+        let listener = std::net::TcpListener::bind("127.0.0.1:0").unwrap();
+        let addr = listener.local_addr().unwrap();
+        drop(listener);
+        addr
+    }
+
+    #[tokio::test]
+    async fn governance_sandbox_and_mesh_fire_over_real_grpc() {
+        // Isolated per-run policy: deny the "calculator" tool and restrict
+        // chat to a model that will never be requested, so both governance
+        // checks have something real to reject.
+        std::env::set_var("OMNIHARNESS_DENIED_TOOLS", "calculator");
+        std::env::set_var("OMNIHARNESS_ALLOWED_MODELS", "only-this-model-is-allowed");
+
+        let dir = tempdir().unwrap();
+        let state = build_state(dir.path()).await;
+        let addr = pick_addr();
+
+        let server = tokio::spawn(async move {
+            serve(addr, state).await.ok();
+        });
+        // Give the listener a moment to come up.
+        tokio::time::sleep(std::time::Duration::from_millis(200)).await;
+
+        let endpoint = format!("http://{addr}");
+
+        // ── Governance: ToolService::Execute rejects a denied tool for real ──
+        let mut tool_client = ToolServiceClient::connect(endpoint.clone()).await.unwrap();
+        let denied = tool_client
+            .execute(ToolExecuteRequest {
+                name: "calculator".into(),
+                arguments: r#"{"expression":"1+1"}"#.into(),
+                session_id: String::new(),
+                timeout_ms: 5000,
+            })
+            .await
+            .unwrap()
+            .into_inner();
+        assert!(!denied.success, "denied tool should not have executed");
+        assert!(
+            denied.error.contains("policy violation"),
+            "expected a governance policy_violation error, got: {}",
+            denied.error
+        );
+
+        // A tool that isn't denied still runs normally through the same
+        // governance-gated path, proving check_tool doesn't just reject
+        // everything.
+        let readable = dir.path().join("readable.txt");
+        std::fs::write(&readable, "governance test fixture").unwrap();
+        let allowed = tool_client
+            .execute(ToolExecuteRequest {
+                name: "read_file".into(),
+                arguments: format!(r#"{{"path":"{}"}}"#, readable.to_str().unwrap().replace('\\', "\\\\")),
+                session_id: String::new(),
+                timeout_ms: 5000,
+            })
+            .await
+            .unwrap()
+            .into_inner();
+        assert!(allowed.success, "non-denied tool should run: {}", allowed.error);
+        assert_eq!(allowed.result, "governance test fixture");
+
+        // ── Sandbox: run_wasm actually executes inside wasmtime ──────────────
+        use base64::Engine;
+        let wat = br#"(module (func $_start) (export "_start" (func $_start)))"#;
+        let wasm_b64 = base64::engine::general_purpose::STANDARD.encode(wat);
+        let wasm_result = tool_client
+            .execute(ToolExecuteRequest {
+                name: "run_wasm".into(),
+                arguments: format!(r#"{{"wasm_base64":"{wasm_b64}","args":[]}}"#),
+                session_id: String::new(),
+                timeout_ms: 5000,
+            })
+            .await
+            .unwrap()
+            .into_inner();
+        assert!(wasm_result.success, "run_wasm should execute the module: {}", wasm_result.error);
+
+        // A trapping module proves the sandbox is running real wasmtime
+        // semantics (traps/fuel), not a stub that always reports success.
+        let trapping_wat = br#"(module (func $_start unreachable) (export "_start" (func $_start)))"#;
+        let trapping_b64 = base64::engine::general_purpose::STANDARD.encode(trapping_wat);
+        let trap_result = tool_client
+            .execute(ToolExecuteRequest {
+                name: "run_wasm".into(),
+                arguments: format!(r#"{{"wasm_base64":"{trapping_b64}","args":[]}}"#),
+                session_id: String::new(),
+                timeout_ms: 5000,
+            })
+            .await
+            .unwrap()
+            .into_inner();
+        assert!(!trap_result.success, "a trapping module must not report success");
+        assert!(
+            trap_result.error.contains("trap") || trap_result.error.to_lowercase().contains("unreachable"),
+            "expected a WASM trap error, got: {}",
+            trap_result.error
+        );
+
+        // ── Governance: ModelService::Chat rejects a non-allow-listed model ──
+        let mut model_client = ModelServiceClient::connect(endpoint.clone()).await.unwrap();
+        let chat_status = model_client
+            .chat(ChatRequest {
+                model_id: "some-other-model".into(),
+                messages: vec![],
+                temperature: 0.0,
+                max_tokens: 16,
+                stop: vec![],
+                stream: false,
+                system: String::new(),
+                tools: vec![],
+                session_id: String::new(),
+                metadata: Default::default(),
+            })
+            .await
+            .unwrap_err();
+        assert_eq!(chat_status.code(), tonic::Code::PermissionDenied);
+        assert!(chat_status.message().contains("policy violation"));
+
+        // ── Mesh: BroadcastEvent/ListPeers actually hit the live mesh handle ──
+        let mut mesh_client = MeshServiceClient::connect(endpoint.clone()).await.unwrap();
+        let broadcast = mesh_client
+            .broadcast_event(BroadcastRequest { data: b"hello-mesh".to_vec() })
+            .await
+            .unwrap()
+            .into_inner();
+        assert!(broadcast.success, "broadcast should be accepted by the live mesh task");
+
+        let peers = mesh_client
+            .list_peers(ListPeersRequest {})
+            .await
+            .unwrap()
+            .into_inner();
+        // No other kernel is on the network in a test sandbox, so the only
+        // real assertion is that the call executes against the live mesh
+        // handle and returns a well-formed (possibly empty) list rather than
+        // erroring out as "mesh not initialized".
+        assert!(peers.peers.len() < 1000);
+
+        server.abort();
+        std::env::remove_var("OMNIHARNESS_DENIED_TOOLS");
+        std::env::remove_var("OMNIHARNESS_ALLOWED_MODELS");
+    }
 }

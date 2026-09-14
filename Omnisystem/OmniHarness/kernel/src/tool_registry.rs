@@ -76,6 +76,13 @@ impl ToolRegistry {
                 handler_url: None,
                 builtin: true,
             },
+            ToolDef {
+                name: "run_wasm".to_string(),
+                description: "Execute a WASM module inside the kernel's resource-limited sandbox (sandbox.rs: 64MB memory cap, fuel-metered). Listed here for discovery; actually dispatched by grpc_server.rs's ToolService::Execute, not ToolRegistry, since the sandbox is process-wide kernel state.".to_string(),
+                schema: r#"{"type":"object","properties":{"wasm_base64":{"type":"string","description":"Base64-encoded WASM module bytes"},"args":{"type":"array","items":{"type":"string"}},"fuel":{"type":"integer","description":"Optional fuel limit (default 100,000,000)"}},"required":["wasm_base64"]}"#.to_string(),
+                handler_url: None,
+                builtin: true,
+            },
         ];
         for t in builtins {
             info!("[Tools] Registered builtin: {}", t.name);

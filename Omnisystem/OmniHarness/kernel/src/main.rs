@@ -67,10 +67,43 @@ async fn main() -> Result<()> {
     let sandbox = Arc::new(sandbox::Sandbox::new()?);
     info!("[BOOT] WASM sandbox primed.");
 
+    // ── Governor ──────────────────────────────────────────────────
+    // Process-wide budget/policy enforcement (see substrate.rs doc comment
+    // for why this is one governor rather than per-session for now).
+    let governor = substrate::shared(substrate::Budget::from_env(), substrate::CapabilityPolicy::from_env());
+    info!("[BOOT] Governor ready (budget/policy enforcement live).");
+
     // ── Record boot event ─────────────────────────────────────────
     event_store
         .append_event("kernel", "KernelBoot", r#"{"version":"1.0.0"}"#, "system")
         .await?;
+
+    // ── Mesh node (spawned before the gRPC server so its handle can be
+    //    shared into HarnessState for MeshService::BroadcastEvent/ListPeers) ──
+    let (mesh_tx, mut mesh_rx) = tokio::sync::mpsc::channel::<Vec<u8>>(1024);
+    let mesh = match mesh::spawn(mesh_tx) {
+        Ok((join, handle)) => {
+            info!("[MESH] P2P node initialized.");
+            let es2 = Arc::clone(&event_store);
+            tokio::spawn(async move {
+                while let Some(data) = mesh_rx.recv().await {
+                    if let Ok(ev) = serde_json::from_slice::<event_store::SystemEvent>(&data) {
+                        match es2.append_external_event(ev.clone()).await {
+                            Ok(_)  => info!("[MESH] Replicated event {}", ev.id),
+                            Err(e) => error!("[MESH] Rejected: {}", e),
+                        }
+                    }
+                }
+            });
+            Some((join, handle))
+        }
+        Err(e) => {
+            error!("[MESH] Init failed (non-fatal): {}", e);
+            None
+        }
+    };
+    let mesh_handle = mesh.as_ref().map(|(_, h)| h.clone());
+    let mesh_join = mesh.map(|(j, _)| j);
 
     // ── gRPC server ───────────────────────────────────────────────
     let grpc_state = grpc_server::HarnessState {
@@ -81,6 +114,8 @@ async fn main() -> Result<()> {
         tool_registry:  Arc::clone(&tool_registry),
         auth_store:     Arc::clone(&auth_store),
         sandbox:        Arc::clone(&sandbox),
+        governor:       Arc::clone(&governor),
+        mesh:           mesh_handle,
         start_time:     std::time::Instant::now(),
     };
 
@@ -107,33 +142,6 @@ async fn main() -> Result<()> {
         }));
     }
 
-    // ── Mesh node ─────────────────────────────────────────────────
-    let (mesh_tx, mut mesh_rx) = tokio::sync::mpsc::channel::<Vec<u8>>(1024);
-    let mesh_handle = match mesh::MeshNode::new(mesh_tx) {
-        Ok(node) => {
-            info!("[MESH] P2P node initialized.");
-            let es = Arc::clone(&event_store);
-            let mh = tokio::spawn(async move { node.run().await });
-            // consumer
-            let es2 = Arc::clone(&es);
-            tokio::spawn(async move {
-                while let Some(data) = mesh_rx.recv().await {
-                    if let Ok(ev) = serde_json::from_slice::<event_store::SystemEvent>(&data) {
-                        match es2.append_external_event(ev.clone()).await {
-                            Ok(_)  => info!("[MESH] Replicated event {}", ev.id),
-                            Err(e) => error!("[MESH] Rejected: {}", e),
-                        }
-                    }
-                }
-            });
-            Some(mh)
-        }
-        Err(e) => {
-            error!("[MESH] Init failed (non-fatal): {}", e);
-            None
-        }
-    };
-
     // ── Shutdown ──────────────────────────────────────────────────
     match signal::ctrl_c().await {
         Ok(())  => info!("[SHUTDOWN] Ctrl+C received — shutting down."),
@@ -141,7 +149,7 @@ async fn main() -> Result<()> {
     }
 
     for h in grpc_handles { h.abort(); }
-    if let Some(h) = mesh_handle { h.abort(); }
+    if let Some(h) = mesh_join { h.abort(); }
 
     event_store
         .append_event("kernel", "KernelShutdown", r#"{"clean":true}"#, "system")

@@ -2,6 +2,30 @@
 // The trust anchor for autonomous runs: enforces resource budgets, capability
 // policy, a SHA-256 hash-chained audit log, and a live kill switch — in the
 // kernel, so no orchestrator bug can let a swarm/evolution run exceed its bounds.
+//
+// Wired live (Phase 5): `main.rs` builds one process-wide `SharedGovernor` from
+// `Budget::from_env()` / `CapabilityPolicy::from_env()` and hands it to
+// `grpc_server::HarnessState`. `ModelService::Chat` calls `check_model` before
+// dispatch and `record_call` after (budget/cost tracking); `ToolService::Execute`
+// calls `check_tool` before running anything, `run_wasm` included. A single
+// process-wide governor (rather than one per session) is a deliberate scope
+// choice for this phase — it already stops any client from blowing through the
+// kernel's aggregate limits, which is the property the doc comment above
+// describes. Per-session/per-run governors are a natural follow-up once the
+// orchestrator has a stable way to correlate a session_id across every RPC it
+// makes (Chat carries one; ToolService::Execute's session_id field is currently
+// unused by any client), and are left dormant on purpose rather than being
+// half-wired against inconsistent session data — this file's own audit chain
+// and kill switch already work per-Governor whenever that split happens.
+//
+// The kernel intentionally does not depend on `Omnisystem/src/crates/audit-logging`
+// (the canonical crate after Phase 4's audit-system merge): that crate's
+// Cargo.toml inherits versions via `.workspace = true`, which requires joining
+// the root Cargo workspace this kernel crate deliberately detached from (see
+// the `[workspace]` comment in Cargo.toml — most of `src/crates/*` doesn't
+// resolve together). The `AuditChain` below is a small, self-contained,
+// already-tested SHA-256 hash chain that covers the kernel's own audit needs
+// without reintroducing that dependency.
 
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -28,6 +52,60 @@ impl Default for Budget {
             max_steps: 500,
             max_wallclock_ms: 1_800_000,
             max_parallel: 16,
+        }
+    }
+}
+
+fn env_u32(key: &str, default: u32) -> u32 {
+    std::env::var(key).ok().and_then(|v| v.parse().ok()).unwrap_or(default)
+}
+fn env_u64(key: &str, default: u64) -> u64 {
+    std::env::var(key).ok().and_then(|v| v.parse().ok()).unwrap_or(default)
+}
+fn env_f64(key: &str, default: f64) -> f64 {
+    std::env::var(key).ok().and_then(|v| v.parse().ok()).unwrap_or(default)
+}
+fn env_bool(key: &str, default: bool) -> bool {
+    std::env::var(key)
+        .ok()
+        .map(|v| v == "1" || v.eq_ignore_ascii_case("true"))
+        .unwrap_or(default)
+}
+fn env_set(key: &str) -> HashSet<String> {
+    std::env::var(key)
+        .ok()
+        .map(|v| v.split(',').map(str::trim).filter(|s| !s.is_empty()).map(String::from).collect())
+        .unwrap_or_default()
+}
+
+impl Budget {
+    /// Read run limits from the environment, falling back to `Default` for
+    /// anything unset or unparseable. Lets an operator (or a test) tighten the
+    /// kernel-enforced bounds without a rebuild.
+    pub fn from_env() -> Self {
+        let d = Budget::default();
+        Budget {
+            max_model_calls:  env_u32("OMNIHARNESS_MAX_MODEL_CALLS", d.max_model_calls),
+            max_tokens:       env_u64("OMNIHARNESS_MAX_TOKENS", d.max_tokens),
+            max_cost_usd:     env_f64("OMNIHARNESS_MAX_COST_USD", d.max_cost_usd),
+            max_steps:        env_u32("OMNIHARNESS_MAX_STEPS", d.max_steps),
+            max_wallclock_ms: env_u64("OMNIHARNESS_MAX_WALLCLOCK_MS", d.max_wallclock_ms),
+            max_parallel:     env_u32("OMNIHARNESS_MAX_PARALLEL", d.max_parallel),
+        }
+    }
+}
+
+impl CapabilityPolicy {
+    /// Read capability policy from the environment. Empty allow-lists mean
+    /// "any" (matches `Default`), so an unconfigured kernel stays permissive.
+    pub fn from_env() -> Self {
+        CapabilityPolicy {
+            allowed_models: env_set("OMNIHARNESS_ALLOWED_MODELS"),
+            allowed_tools:  env_set("OMNIHARNESS_ALLOWED_TOOLS"),
+            denied_tools:   env_set("OMNIHARNESS_DENIED_TOOLS"),
+            allow_network:  env_bool("OMNIHARNESS_ALLOW_NETWORK", true),
+            allow_fs_write: env_bool("OMNIHARNESS_ALLOW_FS_WRITE", true),
+            max_agents:     env_u32("OMNIHARNESS_MAX_AGENTS", 0),
         }
     }
 }
