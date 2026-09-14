@@ -45,7 +45,6 @@ members = [
     "Omnisystem/src/crates/infrastructure-storage",
     "Omnisystem/src/crates/universal-language-layer",
     "Omnisystem/src/crates/adaptive-protocols",
-    "Omnisystem/src/crates/audit-system",
     "Omnisystem/src/crates/clustering-analysis-engine",
     "Omnisystem/src/crates/deployment-lifecycle",
     "Omnisystem/src/crates/intelligent-automation-engine",

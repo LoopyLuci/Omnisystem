@@ -1204,18 +1204,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "audit-system"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "dashmap 5.5.3",
- "serde",
- "thiserror 1.0.69",
- "tokio",
- "uuid",
-]
-
-[[package]]
 name = "auth-system"
 version = "0.1.0"
 dependencies = [
