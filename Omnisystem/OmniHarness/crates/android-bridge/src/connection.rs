@@ -7,6 +7,12 @@ use crate::input::InputInjector;
 use crate::security::{DeviceIdentity, SessionKey};
 use crate::streaming::ScreenStreamer;
 use crate::telemetry::{TelemetryCollector, TelemetryEvent, TelemetryEventType};
+// ed25519-dalek 3.x's `SigningKey::generate` requires an infallible
+// `rand_core::CryptoRng` (rand_core 0.10). rand_core 0.10 no longer ships an
+// RNG, only traits — the OS RNG now lives in `getrandom` 0.4 as
+// `getrandom::SysRng`, which is fallible, so it's wrapped in `UnwrapErr`
+// (matching ed25519-dalek's own doc example for `SigningKey::generate`).
+use getrandom::{rand_core::UnwrapErr, SysRng};
 use std::net::SocketAddr;
 use std::sync::Arc;
 use tokio::sync::RwLock;
@@ -174,7 +180,7 @@ impl AndroidBridge {
         );
 
         // In production, would sign with proper key infrastructure
-        let signing_key = ed25519_dalek::SigningKey::generate(&mut rand_core::OsRng);
+        let signing_key = ed25519_dalek::SigningKey::generate(&mut UnwrapErr(SysRng));
         token.sign(signing_key)?;
 
         self.capability_registry.issue_token(token.clone())?;

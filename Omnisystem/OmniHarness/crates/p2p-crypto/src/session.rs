@@ -10,7 +10,10 @@
 //! API stabilises. X25519 alone provides 128-bit classical security.
 
 use crate::error::CryptoResult;
-use rand_core::OsRng;
+// x25519-dalek 3.x needs an infallible `rand_core::CryptoRng` (rand_core
+// 0.10); wrap the fallible OS RNG accordingly (see identity.rs for the full
+// explanation).
+use getrandom::{rand_core::UnwrapErr, SysRng};
 use serde::{Deserialize, Serialize};
 use x25519_dalek::{EphemeralSecret, PublicKey as X25519PublicKey};
 use zeroize::Zeroize;
@@ -57,7 +60,7 @@ pub struct HybridHandshake;
 impl HybridHandshake {
     /// **Initiator side**: generate `InitiatorHello` and return the pending state.
     pub fn initiate() -> CryptoResult<(InitiatorHello, InitiatorPending)> {
-        let secret = EphemeralSecret::random_from_rng(OsRng);
+        let secret = EphemeralSecret::random_from_rng(&mut UnwrapErr(SysRng));
         let pk = X25519PublicKey::from(&secret);
         let hello = InitiatorHello {
             x25519_pk: pk.to_bytes(),
@@ -67,7 +70,7 @@ impl HybridHandshake {
 
     /// **Responder side**: receive `InitiatorHello`, produce `ResponderHello` + session key.
     pub fn respond(hello: &InitiatorHello) -> CryptoResult<(ResponderHello, SessionKey)> {
-        let secret = EphemeralSecret::random_from_rng(OsRng);
+        let secret = EphemeralSecret::random_from_rng(&mut UnwrapErr(SysRng));
         let pk = X25519PublicKey::from(&secret);
         let their_pk = X25519PublicKey::from(hello.x25519_pk);
         let shared = secret.diffie_hellman(&their_pk);
