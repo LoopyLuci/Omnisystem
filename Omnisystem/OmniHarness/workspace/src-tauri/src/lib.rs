@@ -614,6 +614,19 @@ pub fn run() {
         }
     }));
 
+    // Updater — desktop-only (the plugin has no Android/iOS implementation).
+    // `dialog: false` in tauri.conf.json's `plugins.updater` config means we
+    // never show the plugin's built-in OS-native update prompt; the Svelte
+    // frontend (`$lib/panels/UpdatePanel.svelte`) drives `check()` /
+    // `downloadAndInstall()` itself so we can show version/changelog/progress
+    // inline instead of a blocking native dialog.
+    #[cfg(not(any(target_os = "android", target_os = "ios")))]
+    let builder = builder.plugin(tauri_plugin_updater::Builder::new().build());
+    // Process plugin — gives the frontend `relaunch()` for the "Restart to
+    // apply" button after `downloadAndInstall()` finishes.
+    #[cfg(not(any(target_os = "android", target_os = "ios")))]
+    let builder = builder.plugin(tauri_plugin_process::init());
+
     #[cfg(any(target_os = "android", target_os = "ios"))]
     let builder = builder.plugin(tauri_plugin_barcode_scanner::init());
 

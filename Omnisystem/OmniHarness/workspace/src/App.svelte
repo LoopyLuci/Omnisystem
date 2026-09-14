@@ -29,6 +29,7 @@
   import { onboardingDone, showOnboarding, restartOnboarding } from '$lib/stores/onboarding';
   import { instrumentAll } from '$lib/activity';
   import { addToast } from '$lib/stores/toast';
+  import { updateState, runUpdateCheck } from '$lib/stores/updater';
   import Toasts from '$lib/components/Toast.svelte';
 
   // ── Layout toggles ────────────────────────────────────────────────────────
@@ -54,6 +55,7 @@
   let showVerification  = false;
   let showHealthPanel    = false;
   let showModelBuilder   = false;
+  let showUpdates        = false;
   let showPackageImport  = false;
   let packageImportPath  = '';
   let sidebarWidth  = 280;
@@ -275,6 +277,21 @@
     if (!isMobile && !$onboardingDone) {
       showOnboarding.set(true);
     }
+
+    // Background update check — silent on failure/up-to-date, toasts once
+    // if a newer build is published to GitHub Releases. Desktop only; the
+    // updater plugin has no mobile implementation (see lib.rs).
+    if (!isMobile) {
+      void runUpdateCheck().then(() => {
+        if ($updateState.status === 'available') {
+          addToast(
+            `Update available: v${$updateState.availableVersion} (you have v${$updateState.currentVersion}). Open Updates to install.`,
+            'info',
+            8000
+          );
+        }
+      });
+    }
   }
 
   (onMount as (fn: () => Promise<() => void>) => void)(async () => {
@@ -432,6 +449,8 @@
         on:click={() => (showHealthPanel = !showHealthPanel)}>Health</button>
       <button class="btn-icon" class:active={showModelBuilder} title="Model Builder — combine base models with knowledge modules"
         on:click={() => (showModelBuilder = !showModelBuilder)}>🧠 Builder</button>
+      <button class="btn-icon" class:active={showUpdates} title="Check for Updates"
+        on:click={() => (showUpdates = !showUpdates)}>🔄 Updates</button>
       <button class="btn-icon" title="Settings"
         on:click={() => (showSettings = !showSettings)}>⚙</button>
 
@@ -587,6 +606,12 @@
     <div class="overlay-panel" role="dialog" aria-label="Help Manual">
       <WidgetHost widgetId="help" />
       <button class="overlay-close" on:click={() => showHelp = false} aria-label="Close">✕</button>
+    </div>
+  {/if}
+  {#if showUpdates}
+    <div class="overlay-panel" role="dialog" aria-label="Updates">
+      <WidgetHost widgetId="updates" />
+      <button class="overlay-close" on:click={() => showUpdates = false} aria-label="Close">✕</button>
     </div>
   {/if}
   {#if showResources}<ResourcesPanel on:close={() => (showResources = false)} />{/if}

@@ -62,6 +62,12 @@ export const widgets: Record<string, WidgetManifest> = {
     icon: '📖',
     entry: () => import('$lib/panels/HelpPanel.svelte'),
   },
+  updates: {
+    id: 'updates',
+    title: 'Updates',
+    icon: '🔄',
+    entry: () => import('$lib/panels/UpdatePanel.svelte'),
+  },
 };
 
 export function getWidget(id: string): WidgetManifest | undefined {

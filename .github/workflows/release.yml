@@ -7,6 +7,12 @@ name: Release
 # only ever been built and verified on Windows in this project's history —
 # publishing untested macOS/Linux installers would be a false promise, not
 # "enterprise grade."
+#
+# The Workspace build also produces signed updater artifacts (`latest.json`
+# + `.sig` files next to the installer) so `tauri-plugin-updater` in the app
+# can find and verify new releases — see workspace/RELEASING.md for the two
+# repo secrets this requires (TAURI_SIGNING_PRIVATE_KEY(_PASSWORD)) and what
+# happens if they're missing.
 
 on:
   push:
@@ -49,14 +55,23 @@ jobs:
         working-directory: Omnisystem/OmniHarness/workspace/src
         run: npm ci
 
-      - name: Build Tauri app (release installer)
+      - name: Build Tauri app (release installer + signed updater artifacts)
         uses: tauri-apps/tauri-action@v1
+        env:
+          # Ed25519 updater signing key. Required for the updater to produce
+          # `latest.json` + `.sig` files — see RELEASING.md for how these two
+          # secrets are generated/rotated. Absent secrets make tauri-action
+          # skip signing, which would silently ship an unsigned (non-updating)
+          # release, so this is a hard requirement, not an optional extra.
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           projectPath: Omnisystem/OmniHarness/workspace
           tagName: ${{ github.ref_name }}
           releaseName: "Workspace ${{ github.ref_name }}"
           releaseDraft: true
           prerelease: false
+          includeUpdaterJson: true
 
   package-vscode-extension:
     name: Package VS Code extension (.vsix)

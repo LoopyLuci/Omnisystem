@@ -27,6 +27,12 @@
     "notification:default",
     "notification:allow-notify",
     "notification:allow-request-permission",
-    "notification:allow-check-permissions"
+    "notification:allow-check-permissions",
+    "updater:default",
+    "updater:allow-check",
+    "updater:allow-download",
+    "updater:allow-install",
+    "updater:allow-download-and-install",
+    "process:allow-restart"
   ]
 }
