@@ -157,6 +157,22 @@ pub enum IrOp {
         expr: Box<IrOp>,
         index: Box<IrOp>,
     },
+    /// Construct a named struct value: `Name { field: value, ... }`.
+    /// `name` refers to an `IrTypeDef` with `IrTypeDefKind::Struct` in the
+    /// same `IrModule`.
+    StructLit {
+        name: String,
+        fields: Vec<(String, IrOp)>,
+    },
+    /// Construct a named enum variant: `EnumName::Variant` (unit, `args`
+    /// empty) or `EnumName::Variant(a, b, ..)` (tuple-style, `args`
+    /// non-empty). `enum_name` refers to an `IrTypeDef` with
+    /// `IrTypeDefKind::Enum` in the same `IrModule`.
+    EnumVariant {
+        enum_name: String,
+        variant: String,
+        args: Vec<IrOp>,
+    },
 
     // ── Primitives ────────────────────────────────────────────────────────────
     BinOp {
@@ -360,8 +376,13 @@ pub enum IrTypeDefKind {
     Struct {
         fields: Vec<(String, IrType)>,
     },
+    /// Each variant carries zero or more positional payload types —
+    /// `[]` is a unit (C-like) variant, `[T]`/`[T, U, ..]` a tuple-style
+    /// variant carrying data. Named-field ("struct-style") variants are not
+    /// represented — the two lowering passes that build this (`titan_lower`,
+    /// `parser`) reject them explicitly rather than dropping fields.
     Enum {
-        variants: Vec<(String, Option<IrType>)>,
+        variants: Vec<(String, Vec<IrType>)>,
     },
     Alias(IrType),
 }

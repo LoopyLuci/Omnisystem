@@ -1,0 +1,27 @@
+struct Point {
+    x: i32,
+    y: i32,
+}
+
+enum Shape {
+    Circle(i32),
+    Rectangle(i32, i32),
+    Empty,
+}
+
+fn make_point(a: i32, b: i32) -> i32 {
+    let p = Point { x: a, y: b };
+    p.x + p.y
+}
+
+fn shape_area(tag: i32) -> i32 {
+    let c = Circle(7);
+    let r = Rectangle(3, 4);
+    let e = Empty;
+    tag
+}
+
+pub fn main() {
+    println!("point sum = {}", make_point(3, 4));
+    println!("shape tag = {}", shape_area(1))
+}

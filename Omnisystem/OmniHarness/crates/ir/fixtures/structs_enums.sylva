@@ -1,0 +1,22 @@
+struct Point {
+    x: Int,
+    y: Int,
+}
+
+enum Shape {
+    Circle(Int),
+    Rectangle(Int, Int),
+    Empty,
+}
+
+fn make_point(a: Int, b: Int) -> Int {
+    let p = Point { x: a, y: b };
+    p.x + p.y
+}
+
+fn shape_area(tag: Int) -> Int {
+    let c = Circle(7);
+    let r = Rectangle(3, 4);
+    let e = Empty;
+    tag
+}

@@ -3,9 +3,12 @@
 //! Grammar (simplified):
 //!
 //! ```text
-//! module   ::= fn_def*
+//! module   ::= (fn_def | struct_def | enum_def)*
 //! fn_def   ::= ["@" device] "fn" IDENT "(" params ")" ["->" type] "{" expr "}"
 //! params   ::= (IDENT ":" type ("," IDENT ":" type)*)?
+//! struct_def ::= "struct" IDENT "{" (IDENT ":" type ("," IDENT ":" type)* ","?)? "}"
+//! enum_def   ::= "enum" IDENT "{" enum_variant ("," enum_variant)* ","? "}"
+//! enum_variant ::= IDENT ["(" type ("," type)* ")"]
 //! type     ::= "Unit" | "Bool" | "Int" | "Float" | "Str" | "Bytes"
 //!            | "[" type "]"          -- Array
 //!            | "(" type ")"          -- parens
@@ -13,7 +16,7 @@
 //!            | "ActorRef" "<" type ">"
 //!            | "DataFrame"
 //!            | "NDArray" "<" type ">"
-//!            | IDENT                  -- Named
+//!            | IDENT                  -- Named (includes struct/enum names)
 //! expr     ::= let_expr | if_expr | lambda | spawn | send | receive
 //!            | "@" device expr        -- device annotation
 //!            | "@sql" "(" STR ")"    -- sql query
@@ -27,8 +30,39 @@
 //! bin_expr ::= un_expr (BIN_OP un_expr)*
 //! un_expr  ::= [UN_OP] call_expr
 //! call_expr::= atom ("(" args ")")?  ("." IDENT)*
-//! atom     ::= INT | FLOAT | BOOL | STR | IDENT | "(" expr ")" | "[" args "]" | "(" args ")"
+//! atom     ::= INT | FLOAT | BOOL | STR | IDENT | IDENT "{" struct_lit_fields "}"
+//!            | "(" expr ")" | "[" args "]" | "(" args ")"
 //! ```
+//!
+//! ## Struct and enum support
+//!
+//! This DSL is not real Sylva surface syntax anywhere (real Sylva has no
+//! required type annotations at all — see `bootstrap-sylva-rs/src/ast.rs`);
+//! it is an already-invented statically-typed subset that borrows Sylva/Rust
+//! keywords where convenient, matching the pattern the rest of this file
+//! already follows for `fn`/`let`/`spawn`/`match`. Struct/enum support
+//! follows the same approach, chosen from what real Sylva actually has:
+//!
+//! - `struct Name { field: Type, .. }` matches real Sylva's own Rust-dialect
+//!   struct syntax exactly (`bootstrap-sylva-rs/src/parser.rs`,
+//!   `parse_rust_struct` — real Sylva accepts `struct Name { field: Type }`
+//!   as sugar for a class with those fields, because Sylva is designed to
+//!   absorb Rust-shaped syntax as well as Python-shaped syntax). This subset
+//!   requires the field types real Sylva discards, since UniIR needs them.
+//! - `enum Name { A, B(T1, T2), .. }` has **no** equivalent in real Sylva —
+//!   grepping `bootstrap-sylva-rs/src/parser.rs` finds no `enum` keyword at
+//!   all; Sylva's own `Match` expression comment even notes it "has no such
+//!   [enum/variant] value". This is a deliberate typed-IR-subset extension
+//!   with no real-Sylva grounding, unlike `struct` above — flagged here so
+//!   it isn't mistaken for verified real syntax.
+//!
+//! Struct literals (`Name { field: expr, .. }`) and field access (`.field`,
+//! already supported by `call_expr` before this change) lower to
+//! `IrOp::StructLit` / `IrOp::FieldAccess`. Enum variant construction reuses
+//! ordinary call syntax (`Variant(args)`) and bare identifiers (`Variant`
+//! for a unit variant); `parse_module` rewrites those into `IrOp::EnumVariant`
+//! once every declared variant's name and arity is known — see
+//! `rewrite_enum_ctors` below.
 
 use crate::ops::*;
 
@@ -59,6 +93,8 @@ pub enum Token {
     Ask,
     Match,
     Sql, // @sql
+    Struct,
+    Enum,
 
     // Operators
     Plus,
@@ -358,6 +394,8 @@ pub fn tokenize(src: &str) -> ParseResult<Vec<Token>> {
                     "receive" => Token::Receive,
                     "ask" => Token::Ask,
                     "match" => Token::Match,
+                    "struct" => Token::Struct,
+                    "enum" => Token::Enum,
                     "true" => Token::Bool(true),
                     "false" => Token::Bool(false),
                     "unit" => Token::Unit,
@@ -484,6 +522,14 @@ impl Parser {
     pub fn parse_module(&mut self, name: &str) -> ParseResult<IrModule> {
         let mut module = IrModule::new(name);
         while self.peek() != &Token::Eof {
+            if self.peek() == &Token::Struct {
+                module.types.push(self.parse_struct_def()?);
+                continue;
+            }
+            if self.peek() == &Token::Enum {
+                module.types.push(self.parse_enum_def()?);
+                continue;
+            }
             // optional device annotation on fn
             // peek2() disambiguates: only consume the device token when the next
             // token is `fn`, avoiding false positives for bare @-identifiers.
@@ -505,7 +551,67 @@ impl Parser {
             module.exports.push(name);
             module.functions.push(func);
         }
+        rewrite_enum_ctors(&mut module);
         Ok(module)
+    }
+
+    // ── Struct / enum declarations ───────────────────────────────────────────
+
+    fn parse_struct_def(&mut self) -> ParseResult<IrTypeDef> {
+        self.expect(&Token::Struct)?;
+        let name = self.expect_ident()?;
+        self.expect(&Token::LBrace)?;
+        let mut fields = Vec::new();
+        while self.peek() != &Token::RBrace {
+            let fname = self.expect_ident()?;
+            self.expect(&Token::Colon)?;
+            let fty = self.parse_type()?;
+            fields.push((fname, fty));
+            if self.peek() == &Token::Comma {
+                self.advance();
+            } else {
+                break;
+            }
+        }
+        self.expect(&Token::RBrace)?;
+        Ok(IrTypeDef {
+            name,
+            kind: IrTypeDefKind::Struct { fields },
+        })
+    }
+
+    fn parse_enum_def(&mut self) -> ParseResult<IrTypeDef> {
+        self.expect(&Token::Enum)?;
+        let name = self.expect_ident()?;
+        self.expect(&Token::LBrace)?;
+        let mut variants = Vec::new();
+        while self.peek() != &Token::RBrace {
+            let vname = self.expect_ident()?;
+            let mut tys = Vec::new();
+            if self.peek() == &Token::LParen {
+                self.advance();
+                while self.peek() != &Token::RParen {
+                    tys.push(self.parse_type()?);
+                    if self.peek() == &Token::Comma {
+                        self.advance();
+                    } else {
+                        break;
+                    }
+                }
+                self.expect(&Token::RParen)?;
+            }
+            variants.push((vname, tys));
+            if self.peek() == &Token::Comma {
+                self.advance();
+            } else {
+                break;
+            }
+        }
+        self.expect(&Token::RBrace)?;
+        Ok(IrTypeDef {
+            name,
+            kind: IrTypeDefKind::Enum { variants },
+        })
     }
 
     fn parse_device(&mut self) -> DeviceTarget {
@@ -1007,6 +1113,19 @@ impl Parser {
             Token::Ident(name) => {
                 let name = name.clone();
                 self.advance();
+                // Struct literal: `Name { field: expr, .. }`. Disambiguated
+                // from a following block by requiring either an empty `{}`
+                // or a `field :` shape immediately inside — no other
+                // production in this grammar puts `{` right after a bare
+                // identifier atom, so this never shadows a real block.
+                if self.peek() == &Token::LBrace
+                    && matches!(
+                        (self.peek2(), self.tokens.get(self.pos + 2)),
+                        (Some(&Token::RBrace), _) | (Some(&Token::Ident(_)), Some(&Token::Colon))
+                    )
+                {
+                    return self.parse_struct_lit(name);
+                }
                 Ok(IrOp::var(name))
             }
             Token::LParen => {
@@ -1053,6 +1172,179 @@ impl Parser {
             }
             other => Err(err(format!("unexpected token in expression: {:?}", other))),
         }
+    }
+
+    fn parse_struct_lit(&mut self, name: String) -> ParseResult<IrOp> {
+        self.expect(&Token::LBrace)?;
+        let mut fields = Vec::new();
+        while self.peek() != &Token::RBrace {
+            let fname = self.expect_ident()?;
+            self.expect(&Token::Colon)?;
+            let fe = self.parse_expr()?;
+            fields.push((fname, fe));
+            if self.peek() == &Token::Comma {
+                self.advance();
+            } else {
+                break;
+            }
+        }
+        self.expect(&Token::RBrace)?;
+        Ok(IrOp::StructLit { name, fields })
+    }
+}
+
+// ── Enum-constructor rewrite pass ────────────────────────────────────────────
+//
+// Struct literals are unambiguous at parse time (see `parse_struct_lit`), but
+// enum variant construction reuses ordinary call/identifier syntax
+// (`Variant(args)`, bare `Variant`) — indistinguishable from a function call
+// or a variable reference until the full set of declared enum variants is
+// known. So `parse_module` parses every function body first, then this pass
+// walks the finished `IrModule` and rewrites `Apply(Var(name), args)` /
+// `Var(name)` into `IrOp::EnumVariant` wherever `name` matches a declared
+// variant with the same arity — a plain function call or variable of the
+// same name is left untouched.
+
+fn rewrite_enum_ctors(module: &mut IrModule) {
+    let mut variants: std::collections::HashMap<String, (String, usize)> =
+        std::collections::HashMap::new();
+    for t in &module.types {
+        if let IrTypeDefKind::Enum { variants: vs } = &t.kind {
+            for (vname, tys) in vs {
+                variants.insert(vname.clone(), (t.name.clone(), tys.len()));
+            }
+        }
+    }
+    if variants.is_empty() {
+        return;
+    }
+    for f in &mut module.functions {
+        rewrite_op(&mut f.body, &variants);
+    }
+}
+
+fn rewrite_op(op: &mut IrOp, variants: &std::collections::HashMap<String, (String, usize)>) {
+    // Rewrite children first, then check whether this node itself is a
+    // disguised variant constructor.
+    match op {
+        IrOp::Let { value, rest, .. } => {
+            rewrite_op(value, variants);
+            rewrite_op(rest, variants);
+        }
+        IrOp::Lambda { body, .. } => rewrite_op(body, variants),
+        IrOp::Apply { func, args } => {
+            rewrite_op(func, variants);
+            for a in args.iter_mut() {
+                rewrite_op(a, variants);
+            }
+        }
+        IrOp::If { cond, then, else_ } => {
+            rewrite_op(cond, variants);
+            rewrite_op(then, variants);
+            rewrite_op(else_, variants);
+        }
+        IrOp::Match { scrutinee, arms } => {
+            rewrite_op(scrutinee, variants);
+            for (_, body) in arms.iter_mut() {
+                rewrite_op(body, variants);
+            }
+        }
+        IrOp::Loop(b) | IrOp::Break(b) | IrOp::Return(b) => rewrite_op(b, variants),
+        IrOp::Block(ops) => {
+            for o in ops.iter_mut() {
+                rewrite_op(o, variants);
+            }
+        }
+        IrOp::Tuple(es) | IrOp::Array(es) => {
+            for e in es.iter_mut() {
+                rewrite_op(e, variants);
+            }
+        }
+        IrOp::FieldAccess { expr, .. } => rewrite_op(expr, variants),
+        IrOp::IndexAccess { expr, index } => {
+            rewrite_op(expr, variants);
+            rewrite_op(index, variants);
+        }
+        IrOp::StructLit { fields, .. } => {
+            for (_, fe) in fields.iter_mut() {
+                rewrite_op(fe, variants);
+            }
+        }
+        IrOp::EnumVariant { args, .. } => {
+            for a in args.iter_mut() {
+                rewrite_op(a, variants);
+            }
+        }
+        IrOp::BinOp { lhs, rhs, .. } => {
+            rewrite_op(lhs, variants);
+            rewrite_op(rhs, variants);
+        }
+        IrOp::UnOp { expr, .. } => rewrite_op(expr, variants),
+        IrOp::Handle { expr, handlers } => {
+            rewrite_op(expr, variants);
+            for h in handlers.iter_mut() {
+                rewrite_op(&mut h.body, variants);
+            }
+        }
+        IrOp::ToolCall { args, .. } => rewrite_op(args, variants),
+        IrOp::Spawn { init_msg, .. } => rewrite_op(init_msg, variants),
+        IrOp::Send { actor_ref, msg } => {
+            rewrite_op(actor_ref, variants);
+            rewrite_op(msg, variants);
+        }
+        IrOp::Ask { actor_ref, msg, .. } => {
+            rewrite_op(actor_ref, variants);
+            rewrite_op(msg, variants);
+        }
+        IrOp::DeviceAnnotation { expr, .. } => rewrite_op(expr, variants),
+        IrOp::SqlQuery { params, .. } => {
+            for p in params.iter_mut() {
+                rewrite_op(p, variants);
+            }
+        }
+        IrOp::DataFrameOp { args, .. } | IrOp::ArrayOp { args, .. } => {
+            for a in args.iter_mut() {
+                rewrite_op(a, variants);
+            }
+        }
+        IrOp::Macro { args, .. } => {
+            for a in args.iter_mut() {
+                rewrite_op(a, variants);
+            }
+        }
+        IrOp::Lit(_) | IrOp::Var(_) | IrOp::Continue | IrOp::Receive { .. } | IrOp::Perform(_) => {}
+    }
+
+    // Now check whether this node itself is a disguised variant constructor.
+    match op {
+        IrOp::Apply { func, args } => {
+            if let IrOp::Var(name) = func.as_ref() {
+                if let Some((enum_name, arity)) = variants.get(name) {
+                    if *arity == args.len() {
+                        let enum_name = enum_name.clone();
+                        let variant = name.clone();
+                        let args = std::mem::take(args);
+                        *op = IrOp::EnumVariant {
+                            enum_name,
+                            variant,
+                            args,
+                        };
+                    }
+                }
+            }
+        }
+        IrOp::Var(name) => {
+            if let Some((enum_name, arity)) = variants.get(name) {
+                if *arity == 0 {
+                    *op = IrOp::EnumVariant {
+                        enum_name: enum_name.clone(),
+                        variant: name.clone(),
+                        args: vec![],
+                    };
+                }
+            }
+        }
+        _ => {}
     }
 }
 
@@ -1135,6 +1427,45 @@ mod tests {
         let toks = tokenize("a + b * c").unwrap();
         assert!(toks.contains(&Token::Plus));
         assert!(toks.contains(&Token::Star));
+    }
+
+    #[test]
+    fn parse_struct_def_and_literal() {
+        let src = r#"
+struct Point { x: Int, y: Int }
+fn make(a: Int, b: Int) -> Point { Point { x: a, y: b } }
+"#;
+        let m = parse(src, "test").unwrap();
+        assert_eq!(m.types.len(), 1);
+        assert_eq!(m.types[0].name, "Point");
+        assert!(matches!(
+            &m.types[0].kind,
+            IrTypeDefKind::Struct { fields } if fields.len() == 2
+        ));
+        assert!(matches!(m.functions[0].body, IrOp::StructLit { .. }));
+    }
+
+    #[test]
+    fn parse_enum_def_and_variant_ctor_rewrite() {
+        let src = r#"
+enum Shape { Circle(Int), Empty }
+fn describe(r: Int) -> Shape {
+    let e = Empty;
+    Circle(r)
+}
+"#;
+        let m = parse(src, "test").unwrap();
+        assert_eq!(m.types.len(), 1);
+        assert!(matches!(&m.types[0].kind, IrTypeDefKind::Enum { .. }));
+        let body = &m.functions[0].body;
+        // `let e = Empty; Circle(r)` — both the `let` value and the tail
+        // expression should have been rewritten into EnumVariant.
+        if let IrOp::Let { value, rest, .. } = body {
+            assert!(matches!(**value, IrOp::EnumVariant { .. }), "{value:?}");
+            assert!(matches!(**rest, IrOp::EnumVariant { .. }), "{rest:?}");
+        } else {
+            panic!("expected Let, got {body:?}");
+        }
     }
 
     #[test]

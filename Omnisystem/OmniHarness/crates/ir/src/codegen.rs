@@ -233,6 +233,38 @@ impl RustCodegen {
                 )
             }
 
+            IrOp::StructLit { name, fields } => {
+                if fields.is_empty() {
+                    format!("{name} {{}}")
+                } else {
+                    let fs = fields
+                        .iter()
+                        .map(|(fname, fe)| -> Result<String, CodegenError> {
+                            Ok(format!("{fname}: {}", self.emit_op(fe, depth)?))
+                        })
+                        .collect::<Result<Vec<_>, _>>()?
+                        .join(", ");
+                    format!("{name} {{ {fs} }}")
+                }
+            }
+
+            IrOp::EnumVariant {
+                enum_name,
+                variant,
+                args,
+            } => {
+                if args.is_empty() {
+                    format!("{enum_name}::{variant}")
+                } else {
+                    let a = args
+                        .iter()
+                        .map(|a| self.emit_op(a, depth))
+                        .collect::<Result<Vec<_>, _>>()?
+                        .join(", ");
+                    format!("{enum_name}::{variant}({a})")
+                }
+            }
+
             IrOp::BinOp { op, lhs, rhs } => {
                 let l = self.emit_op(lhs, depth)?;
                 let r = self.emit_op(rhs, depth)?;
@@ -436,11 +468,16 @@ impl RustCodegen {
             IrTypeDefKind::Enum { variants } => {
                 let vs = variants
                     .iter()
-                    .map(|(n, ty)| -> Result<String, CodegenError> {
-                        if let Some(t) = ty {
-                            Ok(format!("    {n}({}),", self.emit_type(t)?))
-                        } else {
+                    .map(|(n, tys)| -> Result<String, CodegenError> {
+                        if tys.is_empty() {
                             Ok(format!("    {n},"))
+                        } else {
+                            let ts = tys
+                                .iter()
+                                .map(|t| self.emit_type(t))
+                                .collect::<Result<Vec<_>, _>>()?
+                                .join(", ");
+                            Ok(format!("    {n}({ts}),"))
                         }
                     })
                     .collect::<Result<Vec<_>, _>>()?
@@ -591,6 +628,8 @@ fn contains_tool_call(op: &IrOp) -> bool {
         IrOp::Match { scrutinee, arms } => {
             contains_tool_call(scrutinee) || arms.iter().any(|(_, b)| contains_tool_call(b))
         }
+        IrOp::StructLit { fields, .. } => fields.iter().any(|(_, e)| contains_tool_call(e)),
+        IrOp::EnumVariant { args, .. } => args.iter().any(contains_tool_call),
         _ => false,
     }
 }
