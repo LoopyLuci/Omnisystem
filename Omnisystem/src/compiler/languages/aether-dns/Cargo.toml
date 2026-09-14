@@ -1,0 +1,33 @@
+[workspace]
+members = [
+    "crates/aether-dns-core",
+    "crates/aether-dns-udp",
+    "crates/aether-dns-https",
+    "crates/aether-dns-tls",
+    "crates/aether-dns-quic",
+    "crates/aether-dns-processor",
+    "crates/aether-anonymity",
+    "crates/aether-relay-network",
+    "crates/aether-threat-detection",
+    "crates/aether-analytics",
+    "crates/aether-integration",
+    "crates/aether-deployment",
+]
+
+resolver = "2"
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+authors = ["AETHER DNS Team"]
+license = "Apache-2.0"
+repository = "https://github.com/omnisystem/aether-dns"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+
+[profile.bench]
+opt-level = 3
+lto = true

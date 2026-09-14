@@ -1,0 +1,20 @@
+[package]
+name = "omnisystem-workers-integration"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+omnisystem-workers-core = { path = "../core" }
+omnisystem-workers-io = { path = "../io" }
+omnisystem-workers-network = { path = "../network" }
+omnisystem-workers-compute = { path = "../compute" }
+omnisystem-workers-device = { path = "../device" }
+omnisystem-workers-advanced = { path = "../advanced" }
+tokio = { version = "1.35", features = ["full"] }
+async-trait = "0.1"
+anyhow = "1.0"
+tracing = "0.1"
+uuid = { version = "1.6", features = ["v4"] }
+dashmap = "5.5"

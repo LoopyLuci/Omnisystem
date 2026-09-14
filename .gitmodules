@@ -1,0 +1,3 @@
+[submodule "Omnisystem/src/systems/UOSC"]
+	path = Omnisystem/src/systems/UOSC
+	url = https://github.com/LoopyLuci/UOSC

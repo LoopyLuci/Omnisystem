@@ -1,0 +1,21 @@
+[package]
+name = "aether-dns-quic"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+tokio = { version = "1.35", features = ["net", "rt", "sync", "macros"] }
+quinn = "0.10"
+quinn-proto = "0.10"
+aether-dns-core = { path = "../aether-dns-core" }
+aether-dns-processor = { path = "../aether-dns-processor" }
+tracing = "0.1"
+tracing-subscriber = "0.3"
+anyhow = "1.0"
+bytes = "1.5"
+uuid = { version = "1.6", features = ["v4"] }
+rustls = { version = "0.21", features = ["dangerous_configuration"] }
+dashmap = "5.5"
+serde = { version = "1.0", features = ["derive"] }

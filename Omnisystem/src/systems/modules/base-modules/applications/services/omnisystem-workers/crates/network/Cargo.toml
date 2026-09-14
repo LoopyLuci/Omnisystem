@@ -1,0 +1,15 @@
+[package]
+name = "omnisystem-workers-network"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+omnisystem-workers-core = { path = "../core" }
+tokio = { version = "1.35", features = ["full"] }
+async-trait = "0.1"
+anyhow = "1.0"
+tracing = "0.1"
+reqwest = { version = "0.11", features = ["json"] }
+uuid = { version = "1.6", features = ["v4"] }

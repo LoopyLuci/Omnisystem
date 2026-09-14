@@ -1,0 +1,16 @@
+[package]
+name = "omnisystem-workers-advanced"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+omnisystem-workers-core = { path = "../core" }
+omnisystem-workers-io = { path = "../io" }
+tokio = { version = "1.35", features = ["full"] }
+async-trait = "0.1"
+anyhow = "1.0"
+tracing = "0.1"
+dashmap = "5.5"
+uuid = { version = "1.6", features = ["v4"] }
