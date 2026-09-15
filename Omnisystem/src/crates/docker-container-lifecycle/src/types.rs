@@ -1,38 +1,39 @@
-//! Data types for this component
+//! Data types
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
-use chrono::{DateTime, Utc};
 
-/// Base entity trait
-pub trait Entity {
-    fn id(&self) -> Uuid;
-    fn created_at(&self) -> DateTime<Utc>;
+/// Container lifecycle state, following the real Docker container states.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum ContainerState {
+    /// Container created but never started.
+    Created,
+    /// Container is running.
+    Running,
+    /// Container is running but paused (process frozen).
+    Paused,
+    /// Container process exited (or was stopped) but the container still exists.
+    Stopped,
+    /// Container has been removed and no longer exists.
+    Removed,
 }
 
-/// Generic metadata structure
+impl std::fmt::Display for ContainerState {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = match self {
+            ContainerState::Created => "created",
+            ContainerState::Running => "running",
+            ContainerState::Paused => "paused",
+            ContainerState::Stopped => "stopped",
+            ContainerState::Removed => "removed",
+        };
+        write!(f, "{s}")
+    }
+}
+
+/// A tracked container and its current lifecycle state.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Metadata {
-    pub id: Uuid,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-    pub version: u32,
-}
-
-impl Metadata {
-    /// Create new metadata
-    pub fn new() -> Self {
-        let now = Utc::now();
-        Self {
-            id: Uuid::new_v4(),
-            created_at: now,
-            updated_at: now,
-            version: 1,
-        }
-    }
-}
-
-impl Default for Metadata {
-    fn default() -> Self {
-        Self::new()
-    }
+pub struct Container {
+    /// Container id/name.
+    pub id: String,
+    /// Current lifecycle state.
+    pub state: ContainerState,
 }

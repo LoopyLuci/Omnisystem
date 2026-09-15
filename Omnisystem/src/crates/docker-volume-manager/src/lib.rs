@@ -1,28 +1,15 @@
-//! OmniDocker component: Auto-generated implementation
+//! docker-volume-manager: real volume lifecycle tracking
+//! (create/mount/unmount/remove) with host mount-point conflict detection.
+
 #![warn(missing_docs)]
 
 /// Module-specific error types
 pub mod error;
-
+/// Volume lifecycle and mount tracking
+pub mod manager;
 /// Core types and data structures
 pub mod types;
 
 pub use error::{Error, Result};
-pub use types::*;
-
-/// Component initialization
-pub async fn init() -> Result<()> {
-    tracing::info!("Initializing component");
-    Ok(())
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[tokio::test]
-    async fn test_initialization() {
-        let result = init().await;
-        assert!(result.is_ok());
-    }
-}
+pub use manager::Manager;
+pub use types::{Volume, VolumeState};

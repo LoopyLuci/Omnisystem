@@ -1,18 +1,14 @@
 //! CLI for docker-network-manager.
-//!
-//! This crate is currently a thin scaffold: its only real logic is the
-//! init() bootstrap and the shared Metadata type. This CLI exercises both
-//! honestly rather than pretending a richer API exists.
 
-use docker_network_manager::Metadata;
+use docker_network_manager::{Manager, NetworkMode};
 
-#[tokio::main]
-async fn main() -> docker_network_manager::Result<()> {
-    docker_network_manager::init().await?;
-    println!("docker-network-manager initialized");
+fn main() -> docker_network_manager::Result<()> {
+    let manager = Manager::new();
+    manager.create_network("app-net", NetworkMode::Bridge, Some("172.18.0.0/24"))?;
 
-    let meta = Metadata::new();
-    println!("metadata id: {}, version: {}, created_at: {}", meta.id, meta.version, meta.created_at);
+    let ip = manager.attach("app-net", "web-1")?;
+    println!("web-1 attached with ip: {:?}", ip);
+    println!("containers attached: {}", manager.attached_count("app-net")?);
 
     Ok(())
 }

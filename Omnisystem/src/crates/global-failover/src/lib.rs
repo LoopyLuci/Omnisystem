@@ -1,96 +1,22 @@
+//! global-failover: multi-region primary/secondary failover with automatic
+//! failover and (optional) automatic failback.
+//!
+//! Regions join a failover group and heartbeat on a caller-driven logical
+//! tick. `evaluate` recomputes which regions are alive (heartbeated within
+//! the configured timeout) and which region is currently serving as active
+//! primary -- failing over to another alive region when the active primary
+//! goes stale, and failing back to the originally-designated primary once it
+//! recovers, if auto-failback is enabled.
+
+#![warn(missing_docs)]
+
+/// Module-specific error types
 pub mod error;
-pub mod types;
+/// Region membership, failover and failback logic
 pub mod manager;
-pub mod database;
-pub mod api;
+/// Core types and data structures
+pub mod types;
 
 pub use error::{Error, Result};
-pub use types::*;
 pub use manager::Manager;
-pub use database::*;
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn test_manager_create() {
-        let manager = Manager::new();
-        let req = CreateRequest {
-            created_by: "test".to_string(),
-        };
-        let result = manager.create(req);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_manager_get() {
-        let manager = Manager::new();
-        let req = CreateRequest {
-            created_by: "test".to_string(),
-        };
-        let record = manager.create(req).unwrap();
-        let result = manager.get(record.id);
-        assert!(result.is_ok());
-        assert!(result.unwrap().is_some());
-    }
-
-    #[test]
-    fn test_manager_get_not_found() {
-        let manager = Manager::new();
-        let id = uuid::Uuid::new_v4();
-        let result = manager.get(id);
-        assert!(result.is_ok());
-        assert!(result.unwrap().is_none());
-    }
-
-    #[test]
-    fn test_manager_update() {
-        let manager = Manager::new();
-        let req = CreateRequest {
-            created_by: "test".to_string(),
-        };
-        let record = manager.create(req).unwrap();
-        let update_req = UpdateRequest {
-            updated_by: "updated".to_string(),
-        };
-        let result = manager.update(record.id, update_req);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_manager_delete() {
-        let manager = Manager::new();
-        let req = CreateRequest {
-            created_by: "test".to_string(),
-        };
-        let record = manager.create(req).unwrap();
-        let result = manager.delete(record.id);
-        assert!(result.is_ok());
-    }
-
-    #[test]
-    fn test_manager_list() {
-        let manager = Manager::new();
-        for i in 0..5 {
-            let req = CreateRequest {
-                created_by: format!("user{}", i),
-            };
-            manager.create(req).unwrap();
-        }
-        let items = manager.list();
-        assert_eq!(items.len(), 5);
-    }
-
-    #[test]
-    fn test_manager_count() {
-        let manager = Manager::new();
-        for i in 0..3 {
-            let req = CreateRequest {
-                created_by: format!("user{}", i),
-            };
-            manager.create(req).unwrap();
-        }
-        assert_eq!(manager.count(), 3);
-    }
-}
+pub use types::*;

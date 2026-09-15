@@ -7,10 +7,6 @@ license.workspace = true
 
 [dependencies]
 serde = { workspace = true }
-uuid = { workspace = true }
-chrono = { workspace = true }
-tracing = { workspace = true }
-tokio = { workspace = true }
 
 [lib]
 name = "docker_volume_manager"

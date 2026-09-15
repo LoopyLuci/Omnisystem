@@ -1,14 +1,27 @@
-//! CLI for docker-compose-advanced — exercises the crate's real Enterprise processing API.
+//! CLI for docker-compose-advanced.
 
-use docker_compose_advanced::Enterprise;
+use docker_compose_advanced::{validate, ComposeFile, Service};
+use std::collections::HashMap;
 
-#[tokio::main]
-async fn main() -> docker_compose_advanced::Result<()> {
-    let module = Enterprise::new();
-    let input = std::env::args().nth(1).unwrap_or_else(|| "sample payload".to_string());
+fn main() {
+    let mut services = HashMap::new();
+    services.insert(
+        "web".to_string(),
+        Service { image: Some("nginx:latest".to_string()), depends_on: vec!["api".to_string()], ..Default::default() },
+    );
+    services.insert(
+        "api".to_string(),
+        Service { image: Some("myorg/api:1.0".to_string()), depends_on: vec!["web".to_string()], ..Default::default() },
+    );
 
-    let processed = module.process(&input).await?;
-    println!("processed: {processed}");
-
-    Ok(())
+    let compose = ComposeFile { services, networks: vec![], volumes: vec![] };
+    let issues = validate(&compose);
+    if issues.is_empty() {
+        println!("compose file is valid");
+    } else {
+        println!("found {} issue(s):", issues.len());
+        for issue in issues {
+            println!("  {:?}", issue);
+        }
+    }
 }

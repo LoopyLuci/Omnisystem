@@ -1,67 +1,48 @@
-use global_failover::*;
+use global_failover::Manager;
 
 #[test]
-fn test_integration_crud() {
-    let manager = Manager::new();
+fn end_to_end_failover_and_failback() {
+    let manager = Manager::new("us-east", 5, true);
+    manager.register_region("us-east", 0);
+    manager.register_region("us-west", 0);
+    manager.register_region("eu-central", 0);
 
-    // Create
-    let req = CreateRequest {
-        created_by: "integration_test".to_string(),
-    };
-    let record = manager.create(req).expect("Failed to create");
-    let id = record.id;
+    let initial = manager.evaluate(0);
+    assert_eq!(initial.active_primary.as_deref(), Some("us-east"));
+    assert!(!initial.failed_over);
 
-    // Read
-    let result = manager.get(id).expect("Failed to get");
-    assert!(result.is_some());
+    // us-east goes dark; the others keep heartbeating.
+    manager.heartbeat("us-west", 10).unwrap();
+    manager.heartbeat("eu-central", 10).unwrap();
+    let failed_over = manager.evaluate(12);
+    assert_eq!(failed_over.active_primary.as_deref(), Some("eu-central"));
+    assert!(failed_over.failed_over);
+    assert_eq!(failed_over.failover_count, 1);
+    assert_eq!(manager.current_active_primary().as_deref(), Some("eu-central"));
 
-    // Update
-    let update_req = UpdateRequest {
-        updated_by: "updated".to_string(),
-    };
-    let updated = manager.update(id, update_req).expect("Failed to update");
-    assert_eq!(updated.updated_by, "updated");
-
-    // Delete
-    manager.delete(id).expect("Failed to delete");
-    let result = manager.get(id).expect("Failed to get after delete");
-    assert!(result.is_none());
+    // us-east recovers; auto-failback returns traffic to it.
+    manager.heartbeat("us-east", 20).unwrap();
+    manager.heartbeat("us-west", 20).unwrap();
+    manager.heartbeat("eu-central", 20).unwrap();
+    let failed_back = manager.evaluate(20);
+    assert_eq!(failed_back.active_primary.as_deref(), Some("us-east"));
+    assert!(!failed_back.failed_over);
 }
 
 #[test]
-fn test_integration_list() {
-    let manager = Manager::new();
+fn total_outage_leaves_no_active_primary() {
+    let manager = Manager::new("us-east", 5, false);
+    manager.register_region("us-east", 0);
+    manager.register_region("us-west", 0);
+    manager.evaluate(0);
 
-    for i in 0..10 {
-        let req = CreateRequest {
-            created_by: format!("user{}", i),
-        };
-        manager.create(req).expect("Failed to create");
-    }
-
-    let items = manager.list();
-    assert_eq!(items.len(), 10);
+    let status = manager.evaluate(1000);
+    assert_eq!(status.active_primary, None);
+    assert_eq!(status.alive_regions, 0);
 }
 
 #[test]
-fn test_integration_concurrent() {
-    let manager = std::sync::Arc::new(Manager::new());
-    let mut handles = vec![];
-
-    for i in 0..5 {
-        let manager_clone = manager.clone();
-        let handle = std::thread::spawn(move || {
-            let req = CreateRequest {
-                created_by: format!("thread{}", i),
-            };
-            manager_clone.create(req).expect("Failed to create in thread");
-        });
-        handles.push(handle);
-    }
-
-    for handle in handles {
-        handle.join().expect("Thread panicked");
-    }
-
-    assert_eq!(manager.count(), 5);
+fn heartbeat_on_unregistered_region_is_an_error() {
+    let manager = Manager::new("us-east", 5, false);
+    assert!(manager.heartbeat("atlantis", 0).is_err());
 }

@@ -1,9 +1,10 @@
 //! Error types
 
+/// Errors produced by failover-group operations.
 #[derive(Debug, Clone)]
 pub enum Error {
-    /// Record not found
-    NotFound(String),
+    /// The region is not a member of the failover group.
+    UnknownRegion(String),
     /// Other error
     Other(String),
 }
@@ -11,7 +12,7 @@ pub enum Error {
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Error::NotFound(id) => write!(f, "record not found: {}", id),
+            Error::UnknownRegion(id) => write!(f, "region '{}' is not a member of the failover group", id),
             Error::Other(msg) => write!(f, "Error: {}", msg),
         }
     }

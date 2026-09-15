@@ -7,10 +7,6 @@ license.workspace = true
 
 [dependencies]
 serde = { workspace = true }
-chrono = { workspace = true }
-tracing = { workspace = true }
-tokio = { workspace = true }
-uuid = { workspace = true }
 
 [lib]
 name = "omnidocker_state_manager"
@@ -19,7 +15,6 @@ path = "src/lib.rs"
 [[bin]]
 name = "omnidocker_state_manager_cli"
 path = "src/bin/cli.rs"
-test = false
 
 [dev-dependencies]
 

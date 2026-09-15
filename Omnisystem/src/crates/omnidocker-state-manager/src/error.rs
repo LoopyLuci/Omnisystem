@@ -1,5 +1,6 @@
 //! Error types
 
+/// Errors produced by state-bridge operations.
 #[derive(Debug, Clone)]
 pub enum Error {
     /// Other error

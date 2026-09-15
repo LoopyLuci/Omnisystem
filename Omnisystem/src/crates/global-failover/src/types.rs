@@ -1,41 +1,25 @@
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
-use chrono::{DateTime, Utc};
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct Record {
-    pub id: Uuid,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-    pub created_by: String,
-    pub updated_by: String,
+/// Per-region bookkeeping: the tick at which it last sent a heartbeat.
+#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+pub struct RegionState {
+    /// Logical tick of the region's most recent heartbeat.
+    pub last_heartbeat_tick: u64,
 }
 
-impl Record {
-    pub fn new(created_by: String) -> Self {
-        let now = Utc::now();
-        Self {
-            id: Uuid::new_v4(),
-            created_at: now,
-            updated_at: now,
-            created_by: created_by.clone(),
-            updated_by: created_by,
-        }
-    }
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct CreateRequest {
-    pub created_by: String,
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct UpdateRequest {
-    pub updated_by: String,
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct ListResponse {
-    pub items: Vec<Record>,
-    pub count: usize,
+/// Snapshot of global failover status at a given tick.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct FailoverStatus {
+    /// The region currently serving as active primary, if any region is alive.
+    pub active_primary: Option<String>,
+    /// The region designated as primary at cluster configuration time.
+    pub original_primary: String,
+    /// True once the active primary has failed over away from the original.
+    pub failed_over: bool,
+    /// Total number of regions failovers performed so far (monotonic counter).
+    pub failover_count: u32,
+    /// Number of regions currently considered alive.
+    pub alive_regions: usize,
+    /// Total number of regions registered in the failover group.
+    pub total_regions: usize,
 }

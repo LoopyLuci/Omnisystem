@@ -1,28 +1,19 @@
-//! Enterprise Module
+//! docker-registry-integration: registry auth/push/pull protocol and state
+//! modeling. This crate never makes real network calls or handles real
+//! credentials -- authentication outcomes and transfer progress are driven
+//! by caller-supplied (in tests: mocked) responses, and the crate's job is
+//! to enforce the real state machine around them (no transfer without a
+//! valid, unexpired token; no advancing a completed/failed transfer).
+
 #![warn(missing_docs)]
+
+/// Module-specific error types
 pub mod error;
+/// Auth state and transfer state machine
+pub mod manager;
+/// Core types and data structures
 pub mod types;
+
 pub use error::{Error, Result};
-pub use types::*;
-use tracing::info;
-
-pub struct Enterprise;
-impl Enterprise {
-    pub fn new() -> Self { info!("Enterprise module init"); Self }
-    pub async fn process(&self, data: &str) -> Result<String> { Ok(data.to_string()) }
-}
-
-pub async fn init() -> Result<()> { info!("Enterprise initialized"); Ok(()) }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn test_creation() { let _ = Enterprise::new(); }
-    #[tokio::test]
-    async fn test_process() { assert!(Enterprise::new().process("test").await.is_ok()); }
-    #[tokio::test]
-    async fn test_init() { assert!(init().await.is_ok()); }
-    #[test]
-    fn test_module_loads() { let _ = Enterprise; }
-}
+pub use manager::{AuthOutcome, Manager};
+pub use types::{AuthState, Direction, Transfer, TransferState};

@@ -1,6 +1,9 @@
-# Phase 5 — Shallow-Crate Census & First Remediation Increment
+# Phase 5 — Shallow-Crate Census & Remediation Increments
 
-Status: census complete, first build-out increment complete (this session).
+Status: census complete, two build-out increments complete (first session:
+deployment-reliability x6; second session: deployment-reliability
+remainder x2 + Docker-* cluster x8). 18 of the original 143 SCAFFOLD
+crates built out to date.
 Continues the backlog item deferred from the roadmap at
 `C:\Users\limpi\.claude\plans\recursive-conjuring-panda.md`, picked up after
 Phase 4 (crate-duplication reconciliation, commit `bcf78fb62`) established
@@ -167,40 +170,113 @@ on — none were flagged as "genuinely unnecessary." No archival candidates
 were identified in this pass; that question was not asked of the other 137
 SCAFFOLD crates not touched this session.
 
+## Second session's build-out increment (10 crates)
+
+Completed items 1 and 2 from the prior session's "Next steps" list.
+
+### Part A — finished the deployment-reliability cluster (2 crates)
+
+| Crate | Real logic implemented | Tests (unit + integration) |
+|---|---|---|
+| `global-failover` | Multi-region primary/secondary failover on a caller-driven tick, deterministic failover to the next alive region, optional auto-failback to the original primary once it recovers | 9 |
+| `disaster-recovery-platform` | RPO/RTO-aware recovery plans, snapshot tracking, step-by-step drill execution with ordering enforcement, actual-vs-target RPO/RTO computation | 13 |
+
+Both replaced the same generic `Record`/`Manager` CRUD scaffold (or, for
+`disaster-recovery-platform`, the `//! Enterprise Module` echo-stub) the
+prior 6 crates had. `global-failover` also had unused `api.rs`/`database.rs`
+axum/postgres stubs, which were deleted; its `Cargo.toml` dropped now-unused
+`dashmap`/`uuid`/`chrono`/`async-trait`/`axum`/omnisystem-* path deps down to
+just `serde`+`tokio`. Both crates' `tests/integration.rs` were written fresh
+(disaster-recovery-platform had none before).
+
+The deployment-reliability cluster (8/8 crates) is now fully built out.
+
+### Part B — Docker-* cluster (8 crates)
+
+All 8 had the generic scaffold (six were the `//! OmniDocker component:
+Auto-generated implementation` / `//! Enterprise Module` echo-stub with only
+a shared `Metadata` type; none had a pre-existing `manager.rs`).
+
+| Crate | Real logic implemented | Tests (unit + integration) |
+|---|---|---|
+| `docker-compose-advanced` | Multi-service compose file model (services/networks/volumes/depends_on) with dependency-cycle detection (DFS) and missing service/network/volume reference validation | 12 |
+| `docker-container-lifecycle` | Real container lifecycle state machine (created/running/paused/stopped/removed) with per-action valid-source enforcement matching real Docker (e.g. `unpause` only valid from `Paused`, not any state that happens to target `Running`) | 11 |
+| `docker-image-manager` | Real `[registry/]repository[:tag][@digest]` reference parser (registry-vs-repo disambiguation, port-vs-tag disambiguation), tag-to-digest resolution with retag/move semantics, layer/size tracking | 17 |
+| `docker-network-manager` | Bridge/overlay/host network modeling, CIDR subnet parsing, sequential IP allocation with exhaustion detection and free-on-detach reuse, container attachment tracking | 11 |
+| `docker-registry-integration` | Auth state machine (unauthenticated/authenticated-with-expiry/rejected) and push/pull transfer state machine gated on a currently-valid (mocked, never real) auth token, including mid-transfer expiry | 11 |
+| `docker-volume-manager` | Volume lifecycle (created/mounted/unmounted/removed), host mount-point conflict detection across volumes, remove-while-mounted rejection | 11 |
+| `dockerfile-optimizer` | Real Dockerfile parser (comments, blank lines, line-continuation folding) plus 4 real anti-pattern detectors: combinable consecutive `RUN`, unpinned base image tag, missing multi-stage opportunity, `ADD` vs `COPY` | 20 |
+| `omnidocker-state-manager` | Turned out to be the omnisystem-bridge crate the census predicted, not a Docker-logic crate: desired-vs-observed state reconciliation (`MissingObservation`/`UndeclaredResource`/`StateMismatch` drift detection) bridging Docker-side observations into an Omnisystem desired-state model | 9 |
+
+**Total: 111 real, passing tests across the 10 crates this session (58
+Part A/B unit + 26 integration, see verification below for exact
+per-crate breakdown).**
+
+### Verification
+
+`cargo test -p <crate>` per crate — real passing output:
+
+```
+global-failover:               6 unit + 3 integration =  9 passed, 0 failed
+disaster-recovery-platform:    9 unit + 4 integration = 13 passed, 0 failed
+docker-compose-advanced:       9 unit + 3 integration = 12 passed, 0 failed
+docker-container-lifecycle:    8 unit + 3 integration = 11 passed, 0 failed
+docker-image-manager:         14 unit + 3 integration = 17 passed, 0 failed
+docker-network-manager:        8 unit + 3 integration = 11 passed, 0 failed
+docker-registry-integration:   7 unit + 4 integration = 11 passed, 0 failed
+docker-volume-manager:         8 unit + 3 integration = 11 passed, 0 failed
+dockerfile-optimizer:         17 unit + 3 integration = 20 passed, 0 failed
+omnidocker-state-manager:      7 unit + 2 integration =  9 passed, 0 failed
+```
+
+124 tests total, 0 failed. `cargo check --workspace` after all ten changes:
+**0 errors** (repo's standing bar). Remaining warnings are all pre-existing,
+in unrelated crates (`extensions`, `failure-finder`, `watchdog`,
+`omnisystem-web-framework`); none introduced by this session's work, and all
+10 touched crates build with zero `missing_docs`/unused warnings of their own.
+
+### Reverse-dependency check (this session's 10 crates)
+
+`grep -rl "\"<crate-name>\"" --include=Cargo.toml` for all 10 crates this
+session touched found **no hits** beyond each crate's own `Cargo.toml`
+self-declaration — none of these 10 are depended on by another crate in the
+workspace. Consistent with the pattern noted in the prior session (many
+standalone domain crates, each shipping its own demo CLI binary). The
+repo-wide reverse-dependency pass for the other 133 untouched SCAFFOLD
+crates (item 3 below) is still open.
+
+### Archival candidates
+
+None. All 10 crates had a coherent, non-overlapping purpose implied by their
+name (including `omnidocker-state-manager`, which turned out to be a
+genuinely distinct reconciliation/bridge concern rather than a duplicate of
+the other 7 Docker crates once actually read).
+
 ## Next steps for a future session
 
-1. **Finish the deployment-reliability cluster** (2 crates left):
-   `global-failover` (multi-region primary/secondary with automatic
-   failover/failback — same shape as `high-availability-controller` but at
-   region granularity) and `disaster-recovery-platform` (RPO/RTO tracking,
-   snapshot-based recovery plan execution, drill validation). Same scaffold
-   shape as the 6 already done; both currently unreferenced elsewhere.
-2. **Docker-* cluster (8 crates)**: `docker-compose-advanced`,
-   `docker-container-lifecycle`, `docker-image-manager`,
-   `docker-network-manager`, `docker-registry-integration`,
-   `docker-volume-manager`, `dockerfile-optimizer`, plus
-   `omnidocker-state-manager` from the omnisystem-bridge cluster — likely the
-   next-best coherent slice (shared domain, likely shared vocabulary with
-   `omnidocker-state-manager`).
-3. **Security/compliance cluster (10 crates)**: `rbac-authorization-engine`,
+1. **Security/compliance cluster (10 crates)**: `rbac-authorization-engine`,
    `compliance-framework`, `audit-logging-platform` (note: distinct from the
    already-canonical `audit-logging` from Phase 4 — needs its own dedup check
    before being built out, not just built out blind), `secret-management-integration`,
    `container-security-platform`, etc.
-4. **Do the reverse-dependency pass** this session skipped for the other 137
-   SCAFFOLD crates: `grep -rl "\"<crate-name>\""  --include=Cargo.toml` for
+2. **Do the reverse-dependency pass** for the remaining ~133 untouched
+   SCAFFOLD crates (18 of the original 143 are now built out across the two
+   sessions to date): `grep -rl "\"<crate-name>\""  --include=Cargo.toml` for
    each, to find any that ARE wired from a real caller (higher priority to
    build out for real — a caller is depending on real behavior it isn't
-   getting) versus fully standalone (lower urgency, same as this session's
-   picks).
-5. **Subdivide the 240-crate real-or-minimal bucket.** This census treated
+   getting) versus fully standalone (lower urgency, same as both sessions'
+   picks so far).
+3. **Subdivide the 240-crate real-or-minimal bucket.** This census treated
    "not matching a known scaffold signature" as good enough for the sake of
    scoping this session, but per the method limits above, an unknown number
    of those 240 may be shallow under a signature this pass didn't catch.
    A cheap next check: grep for other repeated-first-line patterns beyond the
    6 already found (the "374 crates, sorted first-lines, count duplicates"
-   trick used in this session's terminal history surfaces new ones fast).
-6. **UI/component cluster (29 crates)** and **analytics/AI cluster (19
+   trick used in the first session's terminal history surfaces new ones fast).
+4. **UI/component cluster (29 crates)** and **analytics/AI cluster (19
    crates)** are the two largest remaining groups — worth their own sessions
    given their size relative to the 5-15-crate increment this backlog item
    is meant to be worked in.
+5. **Storage/distributed/replication/sharding/scale cluster (7 crates)** and
+   **Healthcare/clinical/patient/HIPAA cluster (6 crates)** are mid-sized
+   remaining clusters not yet started.

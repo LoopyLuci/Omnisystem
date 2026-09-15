@@ -1,14 +1,16 @@
-//! CLI for docker-registry-integration — exercises the crate's real Enterprise processing API.
+//! CLI for docker-registry-integration. Uses a fake mocked auth outcome --
+//! this crate never talks to a real registry.
 
-use docker_registry_integration::Enterprise;
+use docker_registry_integration::{AuthOutcome, Direction, Manager};
 
-#[tokio::main]
-async fn main() -> docker_registry_integration::Result<()> {
-    let module = Enterprise::new();
-    let input = std::env::args().nth(1).unwrap_or_else(|| "sample payload".to_string());
+fn main() -> docker_registry_integration::Result<()> {
+    let manager = Manager::new();
+    manager.authenticate(AuthOutcome::Granted { token: "fake-token".to_string(), ttl_ticks: 100 }, 0);
 
-    let processed = module.process(&input).await?;
-    println!("processed: {processed}");
+    manager.start_transfer("t1", "myorg/app:1.0", Direction::Push, 0)?;
+    manager.advance_transfer("t1", 1)?;
+    let final_state = manager.advance_transfer("t1", 2)?;
+    println!("transfer t1 finished in state: {:?}", final_state);
 
     Ok(())
 }

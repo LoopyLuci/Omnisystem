@@ -1,38 +1,35 @@
-//! Data types for this component
+//! Data types
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
-use chrono::{DateTime, Utc};
+use std::net::Ipv4Addr;
 
-/// Base entity trait
-pub trait Entity {
-    fn id(&self) -> Uuid;
-    fn created_at(&self) -> DateTime<Utc>;
+/// Docker network driver mode.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum NetworkMode {
+    /// Local, single-host bridge network (Docker's default).
+    Bridge,
+    /// Multi-host overlay network (Swarm/Compose multi-node).
+    Overlay,
+    /// Container shares the host's network namespace directly (no isolation).
+    Host,
 }
 
-/// Generic metadata structure
+/// A tracked network: its driver mode and IPv4 subnet.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Metadata {
-    pub id: Uuid,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-    pub version: u32,
+pub struct Network {
+    /// Network name, unique within the manager.
+    pub name: String,
+    /// Driver mode.
+    pub mode: NetworkMode,
+    /// CIDR subnet, e.g. `172.18.0.0/24`. `None` for `Host` mode, which has
+    /// no subnet of its own.
+    pub subnet: Option<Subnet>,
 }
 
-impl Metadata {
-    /// Create new metadata
-    pub fn new() -> Self {
-        let now = Utc::now();
-        Self {
-            id: Uuid::new_v4(),
-            created_at: now,
-            updated_at: now,
-            version: 1,
-        }
-    }
-}
-
-impl Default for Metadata {
-    fn default() -> Self {
-        Self::new()
-    }
+/// A parsed IPv4 CIDR subnet.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct Subnet {
+    /// Network base address.
+    pub base: Ipv4Addr,
+    /// Prefix length, e.g. 24 for a /24.
+    pub prefix_len: u8,
 }

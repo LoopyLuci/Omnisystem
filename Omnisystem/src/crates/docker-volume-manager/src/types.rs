@@ -1,38 +1,24 @@
-//! Data types for this component
+//! Data types
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
-use chrono::{DateTime, Utc};
 
-/// Base entity trait
-pub trait Entity {
-    fn id(&self) -> Uuid;
-    fn created_at(&self) -> DateTime<Utc>;
+/// Volume lifecycle state.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum VolumeState {
+    /// Volume created but not mounted anywhere.
+    Created,
+    /// Volume mounted into at least one container.
+    Mounted,
+    /// Volume unmounted from all containers but still exists.
+    Unmounted,
+    /// Volume removed and no longer exists.
+    Removed,
 }
 
-/// Generic metadata structure
+/// A tracked volume and the containers/mount-points using it.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Metadata {
-    pub id: Uuid,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-    pub version: u32,
-}
-
-impl Metadata {
-    /// Create new metadata
-    pub fn new() -> Self {
-        let now = Utc::now();
-        Self {
-            id: Uuid::new_v4(),
-            created_at: now,
-            updated_at: now,
-            version: 1,
-        }
-    }
-}
-
-impl Default for Metadata {
-    fn default() -> Self {
-        Self::new()
-    }
+pub struct Volume {
+    /// Volume name, unique within the manager.
+    pub name: String,
+    /// Current lifecycle state.
+    pub state: VolumeState,
 }
