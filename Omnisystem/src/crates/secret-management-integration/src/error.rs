@@ -1,20 +1,24 @@
 //! Error types
 
-#[derive(Debug, Clone)]
+use thiserror::Error as ThisError;
+
+#[derive(Debug, Clone, ThisError)]
 pub enum Error {
-    /// Other error
+    /// A secret name was referenced that has not been registered.
+    #[error("unknown secret: {0}")]
+    UnknownSecret(String),
+    /// A grant was referenced that does not exist for the given secret.
+    #[error("no such access grant for {secret}: principal {principal}")]
+    UnknownGrant {
+        /// Secret name.
+        secret: String,
+        /// Principal (user/service) name.
+        principal: String,
+    },
+    /// Generic catch-all.
+    #[error("{0}")]
     Other(String),
 }
-
-impl std::fmt::Display for Error {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Error::Other(msg) => write!(f, "Error: {}", msg),
-        }
-    }
-}
-
-impl std::error::Error for Error {}
 
 /// Result type
 pub type Result<T> = std::result::Result<T, Error>;

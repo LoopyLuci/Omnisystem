@@ -1,9 +1,11 @@
 # Phase 5 — Shallow-Crate Census & Remediation Increments
 
-Status: census complete, two build-out increments complete (first session:
-deployment-reliability x6; second session: deployment-reliability
-remainder x2 + Docker-* cluster x8). 18 of the original 143 SCAFFOLD
-crates built out to date.
+Status: census complete, three build-out increments complete (first
+session: deployment-reliability x6; second session: deployment-reliability
+remainder x2 + Docker-* cluster x8; third session: security/compliance
+cluster x8, with 2 of the cluster's 10 crates flagged as dedup candidates
+rather than built out — see below). 24 of the original 143 SCAFFOLD
+crates built out to date, plus 2 flagged for future reconciliation.
 Continues the backlog item deferred from the roadmap at
 `C:\Users\limpi\.claude\plans\recursive-conjuring-panda.md`, picked up after
 Phase 4 (crate-duplication reconciliation, commit `bcf78fb62`) established
@@ -252,20 +254,117 @@ name (including `omnidocker-state-manager`, which turned out to be a
 genuinely distinct reconciliation/bridge concern rather than a duplicate of
 the other 7 Docker crates once actually read).
 
+## Third session's build-out increment (8 crates built, 2 flagged as dedup)
+
+Completed item 1 from the prior session's "Next steps" list: the
+security/compliance cluster. All 10 crates' pre-existing scaffolds were read
+individually first, per the task's instruction not to assume they're
+identical.
+
+| Crate | Real logic implemented | Tests (unit + integration) |
+|---|---|---|
+| `rbac-authorization-engine` | Real RBAC model: roles as named permission sets (`action`/`resource` grants with `*` wildcard), transitive role-hierarchy inheritance (parent roles) with cycle detection, user-role assignment/revocation, `RbacEngine::can(user, action, resource)` walking a user's full effective (direct + inherited) role set | 10 |
+| `compliance-framework` | Real control/evidence model: `Control` definitions with required-evidence-type lists, `Evidence` submission, `ComplianceEngine::evaluate` producing per-control Pass/Partial/Fail `ControlResult`s and a `ComplianceReport` with summary counts | 9 |
+| `container-security-platform` | Real container image vuln-scan model: `Finding` (CVE id/severity/affected package/fixed version), `ScanResult` aggregation (severity counts, unfixable findings), `PolicyGate` (severity threshold + CVE allowlist) producing Pass/Blocked outcomes naming violating CVEs | 9 |
+| `healthcare-compliance-deep` | Real clinical-data HIPAA model: PHI categories with sensitivity weights, per-patient `ConsentScope` (purposes + categories), `evaluate_access` enforcing both purpose authorization and the minimum-necessary rule per access event, `assess_breach` implementing the 2013 Omnibus Rule's encryption/no-access safe harbor plus a severity-weighted risk score | 11 |
+| `omnisystem-security-integration` | Confirmed (like `omnidocker-state-manager` last session) to be a cross-source bridge, not a detector: `SecurityIntegrationBridge` ingests normalized findings from any of the other 5 crates in this cluster, tracks a shared Open→Acknowledged/Waived/Resolved triage lifecycle across sources, computes one aggregate risk-weighted `PostureSummary`; re-ingesting a known finding id refreshes severity/summary but preserves existing triage state | 10 |
+| `secret-management-integration` | Real secret lifecycle model: `SecretMetadata` (version/age/`RotationPolicy`) with `rotation_due`/`days_until_due`, `SecretRegistry::rotate` (bumps version, resets age), `overdue_secrets()` fleet query, `AccessGrant` tracking (read/rotate flags) with grant/revoke and re-grant-replaces-prior semantics. No real secret values anywhere — fixtures use placeholder names like `"prod/db/password"` only as identifiers | 11 |
+| `security-analyzer` | Real static-analysis model, deliberately differentiated from `container-security-platform`: `Rule`-based pattern matching over `SourceFile` content (not container images), built-in rules for hardcoded-password literals/disabled TLS verification/unsafe `eval`, per-file per-line `Finding`s aggregated into an `AnalysisReport` | 9 |
+| `security-console-ui` | Confirmed to be a dashboard data-shaping crate, not a security engine: `summarize()` builds a zero-filled severity histogram + distinct-source list from a generic `SourceEvent` feed (standing in for the other crates' richer finding types), `paginate()` sorts highest-severity-first with deterministic tie-breaking and slices pages, `filter_by_source()` for drill-down views | 10 |
+| **Total** | | **79 real, passing tests** |
+
+**Dedup candidates flagged instead of built out redundantly (2 crates):**
+
+- **`audit-logging-platform`** — read before building anything. Its
+  pre-build-out scaffold (`lib.rs`/`types.rs`) was byte-for-byte identical to
+  `compliance-framework`'s, `rbac-authorization-engine`'s, and three other
+  crates' generic `//! Enterprise Module` scaffold: zero audit-specific
+  logic, nothing distinguishing it from the already-canonical `audit-logging`
+  crate (Phase 4, commit `bcf78fb62`) beyond the name. `audit-logging`
+  already has real `AuditLog`/`AuditOutcome`/`RetentionPolicy`/`AuditQuery`/
+  `ComplianceChecker` types and logic. No "platform" angle (multi-tenant
+  policy config, retention-policy admin surface, cross-source export/
+  reporting) exists anywhere in the scaffold to build out as genuinely
+  distinct. **Recommendation:** reconcile into `audit-logging` the way
+  `audit-system` was reconciled in Phase 4, in a future session with its own
+  reverse-dependency care — do not build a third audit logger.
+- **`medical-compliance`** — diffed against `healthcare-compliance-deep`
+  before starting (`diff -rq` on both `src/` trees): identical except for the
+  CLI binary name. Both were the same generic `Record`/`Manager` CRUD
+  scaffold with zero clinical-domain logic. Built out
+  `healthcare-compliance-deep` for real (see table above; its `lib.rs` doc
+  comment documents this relationship). **Recommendation:** reconcile
+  `medical-compliance` into `healthcare-compliance-deep`, or if a future
+  session determines it should instead carry a genuinely distinct scope
+  (e.g. general medical-org/administrative compliance vs. this crate's
+  per-access clinical-data focus), give it that scope explicitly rather than
+  leaving it as an unbuilt duplicate scaffold.
+
+### Verification
+
+`cargo test -p <crate>` per crate — real passing output:
+
+```
+rbac-authorization-engine:        9 unit + 1 integration = 10 passed, 0 failed
+compliance-framework:             8 unit + 1 integration =  9 passed, 0 failed
+container-security-platform:      8 unit + 1 integration =  9 passed, 0 failed
+healthcare-compliance-deep:      10 unit + 1 integration = 11 passed, 0 failed
+omnisystem-security-integration:  9 unit + 1 integration = 10 passed, 0 failed
+secret-management-integration:   10 unit + 1 integration = 11 passed, 0 failed
+security-analyzer:                8 unit + 1 integration =  9 passed, 0 failed
+security-console-ui:              9 unit + 1 integration = 10 passed, 0 failed
+```
+
+79 tests total, 0 failed. `cargo check --workspace` after all eight changes:
+**0 errors** (repo's standing bar). Remaining warnings are all pre-existing,
+in unrelated crates (`extensions`, `failure-finder`); none introduced by this
+session's work.
+
+Each built-out crate had its `Cargo.toml` dependency list trimmed to just
+`serde` + `thiserror` (dropping unused `tokio`/`chrono`/`uuid`/`tracing`/
+`omnisystem-*` path deps the generic scaffold had declared but never used —
+none of these crates need async runtime, timestamps, UUIDs, or logging for
+the logic they now contain). `healthcare-compliance-deep` additionally had
+its unused `api.rs`/`database.rs` axum/postgres stubs and the old generic
+`manager.rs` deleted, and its `tests/integration.rs` rewritten from the
+generic CRUD scaffold to a real end-to-end clinical scenario.
+
+### Reverse-dependency check (this session's 10 crates, all of them —
+including the 2 flagged, not just the 8 built out)
+
+`grep -rl "\"<crate-name>\"" --include=Cargo.toml` for all 10 crates this
+session considered found **no hits** beyond each crate's own `Cargo.toml`
+self-declaration — none of these 10 are depended on by another crate in the
+workspace, consistent with both prior sessions' findings. This does *not*
+change the priority of the two dedup flags above (a duplicate is worth
+reconciling regardless of caller count, to prevent a real future caller from
+picking the wrong one), but it does mean neither flag is urgent from a
+"something is depending on broken behavior" angle.
+
+### Archival candidates
+
+None among the 8 built out — each had a coherent, non-overlapping purpose
+once actually read, including the two bridge/UI-shaped crates
+(`omnisystem-security-integration`, `security-console-ui`) whose real job
+turned out to be integration/presentation rather than detection, confirmed
+by reading rather than assumed from the name. The 2 dedup candidates above
+are flagged for *reconciliation*, not archival — both scaffolds map to a
+real, wanted concept, just one already covered by another crate.
+
 ## Next steps for a future session
 
-1. **Security/compliance cluster (10 crates)**: `rbac-authorization-engine`,
-   `compliance-framework`, `audit-logging-platform` (note: distinct from the
-   already-canonical `audit-logging` from Phase 4 — needs its own dedup check
-   before being built out, not just built out blind), `secret-management-integration`,
-   `container-security-platform`, etc.
-2. **Do the reverse-dependency pass** for the remaining ~133 untouched
-   SCAFFOLD crates (18 of the original 143 are now built out across the two
-   sessions to date): `grep -rl "\"<crate-name>\""  --include=Cargo.toml` for
-   each, to find any that ARE wired from a real caller (higher priority to
-   build out for real — a caller is depending on real behavior it isn't
-   getting) versus fully standalone (lower urgency, same as both sessions'
-   picks so far).
+1. **Reconcile the 2 dedup candidates flagged this session**:
+   `audit-logging-platform` into `audit-logging`, and `medical-compliance`
+   into `healthcare-compliance-deep` (or give it an explicitly distinct scope
+   first if warranted) — Phase-4-style work, do it with the same
+   reverse-dependency care that reconciliation took, in its own session.
+2. **Do the reverse-dependency pass** for the remaining ~123 untouched
+   SCAFFOLD crates (24 of the original 143 are now built out across three
+   sessions to date, 2 more flagged for reconciliation rather than building):
+   `grep -rl "\"<crate-name>\""  --include=Cargo.toml` for each, to find any
+   that ARE wired from a real caller (higher priority to build out for real —
+   a caller is depending on real behavior it isn't getting) versus fully
+   standalone (lower urgency, same as all three sessions' picks so far).
 3. **Subdivide the 240-crate real-or-minimal bucket.** This census treated
    "not matching a known scaffold signature" as good enough for the sake of
    scoping this session, but per the method limits above, an unknown number
@@ -278,5 +377,7 @@ the other 7 Docker crates once actually read).
    given their size relative to the 5-15-crate increment this backlog item
    is meant to be worked in.
 5. **Storage/distributed/replication/sharding/scale cluster (7 crates)** and
-   **Healthcare/clinical/patient/HIPAA cluster (6 crates)** are mid-sized
-   remaining clusters not yet started.
+   **Healthcare/clinical/patient/HIPAA cluster (6 crates, minus the 2 now
+   addressed here — `healthcare-compliance-deep` built out,
+   `medical-compliance` flagged)** are mid-sized remaining clusters, the
+   healthcare one now partially started.

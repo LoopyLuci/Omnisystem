@@ -1,26 +1,29 @@
-//! CLI demo: create, update, and list records through the in-memory manager.
+//! Demo CLI: evaluate one access event and one breach incident.
 
-use healthcare_compliance_deep::{CreateRequest, Manager, UpdateRequest};
+use healthcare_compliance_deep::{
+    AccessEvent, AccessPurpose, BreachIncident, ComplianceEngine, ConsentScope, PhiCategory,
+};
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let manager = Manager::new();
+fn main() {
+    let mut engine = ComplianceEngine::new();
+    engine.register_consent(
+        ConsentScope::new("patient-001")
+            .allow_purpose(AccessPurpose::Treatment)
+            .allow_category(PhiCategory::Diagnosis),
+    );
 
-    let record = manager.create(CreateRequest {
-        created_by: "demo-user".to_string(),
-    })?;
-    println!("Created record: {}", record.id);
+    let event = AccessEvent {
+        patient_id: "patient-001".into(),
+        purpose: AccessPurpose::Treatment,
+        categories_accessed: vec![PhiCategory::Diagnosis, PhiCategory::MentalHealth],
+    };
+    println!("access decision: {:?}", engine.evaluate_access(&event));
 
-    manager.update(
-        record.id,
-        UpdateRequest {
-            updated_by: "demo-updater".to_string(),
-        },
-    )?;
-    println!("Updated by: demo-updater");
-
-    let items = manager.list();
-    println!("Total records: {}", items.len());
-
-    Ok(())
+    let incident = BreachIncident {
+        categories: vec![PhiCategory::Genetic],
+        affected_individuals: 1200,
+        encrypted: false,
+        acquired_or_viewed: true,
+    };
+    println!("breach risk: {:?}", engine.assess_breach(&incident));
 }

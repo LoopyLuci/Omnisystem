@@ -1,67 +1,63 @@
-use healthcare_compliance_deep::*;
+//! Integration test: consented treatment access alongside an unrelated
+//! minimum-necessary violation and a breach assessment, all against one
+//! shared engine.
+
+use healthcare_compliance_deep::{
+    AccessDecision, AccessEvent, AccessPurpose, BreachIncident, BreachRiskLevel, ComplianceEngine, ConsentScope,
+    PhiCategory,
+};
 
 #[test]
-fn test_integration_crud() {
-    let manager = Manager::new();
+fn clinic_scenario_end_to_end() {
+    let mut engine = ComplianceEngine::new();
+    engine.register_consent(
+        ConsentScope::new("patient-alpha")
+            .allow_purpose(AccessPurpose::Treatment)
+            .allow_purpose(AccessPurpose::Payment)
+            .allow_category(PhiCategory::Diagnosis)
+            .allow_category(PhiCategory::Treatment)
+            .allow_category(PhiCategory::Billing),
+    );
 
-    // Create
-    let req = CreateRequest {
-        created_by: "integration_test".to_string(),
+    // A billing clerk reading only billing data for payment: fine.
+    let billing_access = AccessEvent {
+        patient_id: "patient-alpha".into(),
+        purpose: AccessPurpose::Payment,
+        categories_accessed: vec![PhiCategory::Billing],
     };
-    let record = manager.create(req).expect("Failed to create");
-    let id = record.id;
+    assert!(engine.evaluate_access(&billing_access).is_permitted());
 
-    // Read
-    let result = manager.get(id).expect("Failed to get");
-    assert!(result.is_some());
-
-    // Update
-    let update_req = UpdateRequest {
-        updated_by: "updated".to_string(),
+    // A researcher trying to pull the same record without consent for
+    // research: purpose not consented.
+    let research_access = AccessEvent {
+        patient_id: "patient-alpha".into(),
+        purpose: AccessPurpose::Research,
+        categories_accessed: vec![PhiCategory::Diagnosis],
     };
-    let updated = manager.update(id, update_req).expect("Failed to update");
-    assert_eq!(updated.updated_by, "updated");
+    assert_eq!(engine.evaluate_access(&research_access), AccessDecision::PurposeNotConsented);
 
-    // Delete
-    manager.delete(id).expect("Failed to delete");
-    let result = manager.get(id).expect("Failed to get after delete");
-    assert!(result.is_none());
-}
-
-#[test]
-fn test_integration_list() {
-    let manager = Manager::new();
-
-    for i in 0..10 {
-        let req = CreateRequest {
-            created_by: format!("user{}", i),
-        };
-        manager.create(req).expect("Failed to create");
+    // A treating clinician who also pulls mental-health notes that were
+    // never authorized: minimum-necessary violation, even though the
+    // purpose itself (Treatment) is consented.
+    let overreaching_access = AccessEvent {
+        patient_id: "patient-alpha".into(),
+        purpose: AccessPurpose::Treatment,
+        categories_accessed: vec![PhiCategory::Diagnosis, PhiCategory::MentalHealth],
+    };
+    match engine.evaluate_access(&overreaching_access) {
+        AccessDecision::MinimumNecessaryViolation { unauthorized_categories } => {
+            assert_eq!(unauthorized_categories, vec![PhiCategory::MentalHealth]);
+        }
+        other => panic!("expected minimum-necessary violation, got {other:?}"),
     }
 
-    let items = manager.list();
-    assert_eq!(items.len(), 10);
-}
-
-#[test]
-fn test_integration_concurrent() {
-    let manager = std::sync::Arc::new(Manager::new());
-    let mut handles = vec![];
-
-    for i in 0..5 {
-        let manager_clone = manager.clone();
-        let handle = std::thread::spawn(move || {
-            let req = CreateRequest {
-                created_by: format!("thread{}", i),
-            };
-            manager_clone.create(req).expect("Failed to create in thread");
-        });
-        handles.push(handle);
-    }
-
-    for handle in handles {
-        handle.join().expect("Thread panicked");
-    }
-
-    assert_eq!(manager.count(), 5);
+    // Separately: a lost unencrypted laptop with a large mixed-sensitivity
+    // export is assessed as high risk and would trigger notification.
+    let incident = BreachIncident {
+        categories: vec![PhiCategory::Diagnosis, PhiCategory::SubstanceAbuse],
+        affected_individuals: 600,
+        encrypted: false,
+        acquired_or_viewed: true,
+    };
+    assert_eq!(engine.assess_breach(&incident), BreachRiskLevel::High);
 }

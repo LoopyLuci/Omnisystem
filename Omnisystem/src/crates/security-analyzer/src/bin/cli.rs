@@ -1,17 +1,15 @@
-//! CLI for security-analyzer — exercises the crate's real Service processing/analysis API.
+//! Demo CLI: scan a couple of fixture files with the default rule set.
 
-use security_analyzer::Service;
+use security_analyzer::{Analyzer, SourceFile};
 
-#[tokio::main]
-async fn main() -> security_analyzer::Result<()> {
-    let service = Service::new();
-    let input = std::env::args().nth(1).unwrap_or_else(|| "sample input".to_string());
-
-    let processed = service.process(&input).await?;
-    println!("processed: {processed}");
-
-    let analysis = service.analyze(&input).await?;
-    println!("analysis:  {analysis}");
-
-    Ok(())
+fn main() {
+    let analyzer = Analyzer::with_default_rules();
+    let files = vec![
+        SourceFile { path: "config.py".into(), content: "password = \"placeholder\"".into() },
+        SourceFile { path: "client.py".into(), content: "requests.get(url, verify=False)".into() },
+    ];
+    let report = analyzer.analyze(&files);
+    for f in &report.findings {
+        println!("{}:{} [{:?}] {} ({})", f.file_path, f.line, f.severity, f.message, f.rule_id);
+    }
 }

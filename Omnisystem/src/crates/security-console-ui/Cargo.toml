@@ -7,10 +7,7 @@ license.workspace = true
 
 [dependencies]
 serde = { workspace = true }
-chrono = { workspace = true }
-tracing = { workspace = true }
-tokio = { workspace = true }
-uuid = { workspace = true }
+thiserror = { workspace = true }
 
 [lib]
 name = "security_console_ui"

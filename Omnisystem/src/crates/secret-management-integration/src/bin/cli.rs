@@ -1,14 +1,22 @@
-//! CLI for secret-management-integration — exercises the crate's real Enterprise processing API.
+//! Demo CLI: register a couple of fake secrets and list overdue ones.
 
-use secret_management_integration::Enterprise;
+use secret_management_integration::{RotationPolicy, SecretMetadata, SecretRegistry};
 
-#[tokio::main]
-async fn main() -> secret_management_integration::Result<()> {
-    let module = Enterprise::new();
-    let input = std::env::args().nth(1).unwrap_or_else(|| "sample payload".to_string());
-
-    let processed = module.process(&input).await?;
-    println!("processed: {processed}");
-
-    Ok(())
+fn main() {
+    let mut registry = SecretRegistry::new();
+    registry.register(SecretMetadata {
+        name: "demo/db-password".into(),
+        version: 3,
+        age_days: 95,
+        rotation_policy: RotationPolicy::every_days(90),
+    });
+    registry.register(SecretMetadata {
+        name: "demo/api-key".into(),
+        version: 1,
+        age_days: 10,
+        rotation_policy: RotationPolicy::every_days(90),
+    });
+    for s in registry.overdue_secrets() {
+        println!("overdue: {} (age {} days)", s.name, s.age_days);
+    }
 }

@@ -1,11 +1,20 @@
-//! CLI
+//! Demo CLI: define a small role hierarchy and evaluate a few checks.
 
-use rbac_authorization_engine::Enterprise;
+use rbac_authorization_engine::{Permission, RbacEngine, Role};
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let e = Enterprise::new();
-    let result = e.process("test").await?;
-    println!("Processed: {}", result);
-    Ok(())
+fn main() {
+    let mut engine = RbacEngine::new();
+    engine.define_role(Role::new("viewer"));
+    engine.define_role(Role::new("editor"));
+    engine.grant("viewer", Permission::new("read", "documents")).unwrap();
+    engine.grant("editor", Permission::new("write", "documents")).unwrap();
+    engine.add_parent("editor", "viewer").unwrap();
+    engine.assign_role("alice", "editor").unwrap();
+
+    for (action, resource) in [("read", "documents"), ("write", "documents"), ("delete", "documents")] {
+        println!(
+            "alice can {action} {resource}? {}",
+            engine.is_allowed("alice", action, resource)
+        );
+    }
 }

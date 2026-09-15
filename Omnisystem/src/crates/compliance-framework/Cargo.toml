@@ -6,11 +6,8 @@ authors.workspace = true
 license.workspace = true
 
 [dependencies]
-chrono = { workspace = true }
 serde = { workspace = true }
-tokio = { workspace = true }
-tracing = { workspace = true }
-uuid = { workspace = true }
+thiserror = { workspace = true }
 
 [lib]
 name = "compliance_framework"

@@ -2590,11 +2590,8 @@ dependencies = [
 name = "compliance-framework"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
+ "thiserror 1.0.69",
 ]
 
 [[package]]
@@ -2744,11 +2741,8 @@ dependencies = [
 name = "container-security-platform"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
+ "thiserror 1.0.69",
 ]
 
 [[package]]
@@ -5702,15 +5696,8 @@ dependencies = [
 name = "healthcare-compliance-deep"
 version = "0.1.0"
 dependencies = [
- "arc-swap",
- "async-trait",
- "axum",
- "chrono",
- "dashmap 5.5.3",
  "serde",
  "thiserror 1.0.69",
- "tokio",
- "uuid",
 ]
 
 [[package]]
@@ -8999,11 +8986,8 @@ dependencies = [
 name = "omnisystem-security-integration"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
+ "thiserror 1.0.69",
 ]
 
 [[package]]
@@ -10876,15 +10860,8 @@ dependencies = [
 name = "rbac-authorization-engine"
 version = "0.1.0"
 dependencies = [
- "chrono",
- "omnisystem-async-runtime",
- "omnisystem-collections",
- "omnisystem-observability",
- "omnisystem-serialization",
  "serde",
- "tokio",
- "tracing",
- "uuid",
+ "thiserror 1.0.69",
 ]
 
 [[package]]
@@ -11568,22 +11545,16 @@ dependencies = [
 name = "secret-management-integration"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
+ "thiserror 1.0.69",
 ]
 
 [[package]]
 name = "security-analyzer"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
+ "thiserror 1.0.69",
 ]
 
 [[package]]
@@ -11599,11 +11570,8 @@ dependencies = [
 name = "security-console-ui"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
+ "thiserror 1.0.69",
 ]
 
 [[package]]
