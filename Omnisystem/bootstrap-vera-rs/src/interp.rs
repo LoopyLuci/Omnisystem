@@ -70,7 +70,7 @@ impl Interp {
     /// order, state initialized from each `state` declaration's expr,
     /// computed values populated by `refresh_computed`).
     fn mount(&mut self, def: &Rc<ComponentDef>, prop_values: Vec<Value>, span: Span) -> Result<Rc<ComponentInstance>, Flow> {
-        let env = Scope::new();
+        let env = self.globals.child();
         // Documented simplification: props are matched positionally against
         // the component's declared prop order; a missing prop value simply
         // isn't bound rather than erroring, since Vera has no static

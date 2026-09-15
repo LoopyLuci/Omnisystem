@@ -1,0 +1,18 @@
+// @ expect-stdout: <div class=cart>
+// @ expect-stdout:   <span>
+// @ expect-stdout:     3
+// @ expect-stdout:   </span>
+// @ expect-stdout: </div>
+component Cart(items) {
+  computed count = len(items)
+
+  render {
+    <div class="cart">
+      <span>{count}</span>
+    </div>
+  }
+}
+
+items = ["apple", "banana", "cherry"]
+c = mount(Cart, items)
+puts(render(c))
