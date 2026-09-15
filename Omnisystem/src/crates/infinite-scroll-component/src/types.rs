@@ -1,21 +1,14 @@
-//! Data types
+//! Virtualized list types.
+
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
 
-/// Metadata
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Metadata {
-    /// ID
-    pub id: String,
-    /// Created at
-    pub created_at: DateTime<Utc>,
-}
-
-impl Default for Metadata {
-    fn default() -> Self {
-        Self {
-            id: uuid::Uuid::new_v4().to_string(),
-            created_at: Utc::now(),
-        }
-    }
+/// The computed visible window into a virtualized list.
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+pub struct VisibleRange {
+    /// Index of the first item to render (inclusive).
+    pub start_index: usize,
+    /// Index of the last item to render (inclusive).
+    pub end_index: usize,
+    /// Pixel offset of `start_index`'s top edge from the list's top.
+    pub offset_top: f64,
 }

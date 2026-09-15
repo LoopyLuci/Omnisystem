@@ -1,22 +1,18 @@
-//! CLI demo: render a form component with custom props.
+//! Demo CLI: validate a hard-coded submission against a signup form.
 
-use form_components::{Component, Props};
+use form_components::{Field, Form, Rule};
+use std::collections::HashMap;
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut component = Component::new(Props {
-        id: "signup-form".to_string(),
-        class: "form--inline".to_string(),
-        disabled: false,
-    });
-    println!("{}", component.render());
+fn main() {
+    let form = Form::new(vec![
+        Field::new("username", vec![Rule::Required, Rule::MinLength(3)]),
+        Field::new("email", vec![Rule::Required, Rule::Email]),
+    ]);
+    let mut values = HashMap::new();
+    values.insert("username".to_string(), "al".to_string());
+    values.insert("email".to_string(), "not-an-email".to_string());
 
-    component.update_props(Props {
-        disabled: true,
-        ..component.props().clone()
-    });
-    println!("{}", component.render());
-    println!("Disabled: {}", component.props().disabled);
-
-    Ok(())
+    for err in form.validate(&values) {
+        println!("{}: {}", err.field, err.message);
+    }
 }

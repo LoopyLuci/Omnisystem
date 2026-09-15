@@ -6,11 +6,7 @@ authors.workspace = true
 license.workspace = true
 
 [dependencies]
-tokio = { workspace = true }
 serde = { workspace = true }
-chrono = { workspace = true }
-tracing = { workspace = true }
-uuid = { workspace = true }
 
 [lib]
 name = "animation_library"
@@ -20,4 +16,4 @@ path = "src/lib.rs"
 name = "animation_library_cli"
 path = "src/bin/cli.rs"
 
-
+[dev-dependencies]

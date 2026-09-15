@@ -1,20 +1,21 @@
-//! Error types
+//! Error types for chart-type recommendation.
 
-#[derive(Debug, Clone)]
+/// Errors that can occur while analyzing a dataset for recommendation.
+#[derive(Debug, Clone, PartialEq)]
 pub enum Error {
-    /// Other error
-    Other(String),
+    /// No fields were supplied to analyze.
+    NoFields,
 }
 
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Error::Other(msg) => write!(f, "Error: {}", msg),
+            Error::NoFields => write!(f, "no fields supplied to analyze"),
         }
     }
 }
 
 impl std::error::Error for Error {}
 
-/// Result type
+/// Result type for recommendation operations.
 pub type Result<T> = std::result::Result<T, Error>;

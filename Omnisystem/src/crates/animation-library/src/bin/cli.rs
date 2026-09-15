@@ -1,22 +1,14 @@
-//! CLI demo: render an animation component with custom props.
+//! Demo CLI: bake a two-second ease-in-out fade and print sampled frames.
 
-use animation_library::{Component, Props};
+use animation_library::{Easing, Keyframe, Timeline};
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut component = Component::new(Props {
-        id: "fade-transition".to_string(),
-        class: "anim--fade".to_string(),
-        disabled: false,
-    });
-    println!("{}", component.render());
-
-    component.update_props(Props {
-        disabled: true,
-        ..component.props().clone()
-    });
-    println!("{}", component.render());
-    println!("Disabled: {}", component.props().disabled);
-
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let timeline = Timeline::new(vec![
+        Keyframe::new(0.0, 0.0, Easing::Linear),
+        Keyframe::new(2.0, 1.0, Easing::EaseInOut),
+    ])?;
+    for (t, v) in timeline.bake(5)? {
+        println!("t={t:.2} value={v:.3}");
+    }
     Ok(())
 }

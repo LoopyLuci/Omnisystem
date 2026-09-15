@@ -1,15 +1,20 @@
 # Phase 5 — Shallow-Crate Census & Remediation Increments
 
-Status: census complete, three build-out increments complete (first
+Status: census complete, four build-out increments complete (first
 session: deployment-reliability x6; second session: deployment-reliability
 remainder x2 + Docker-* cluster x8; third session: security/compliance
-cluster x8, with 2 of the cluster's 10 crates flagged as dedup candidates
-rather than built out — see below). 24 of the original 143 SCAFFOLD
-crates built out to date, plus 2 flagged for future reconciliation.
-Continues the backlog item deferred from the roadmap at
-`C:\Users\limpi\.claude\plans\recursive-conjuring-panda.md`, picked up after
-Phase 4 (crate-duplication reconciliation, commit `bcf78fb62`) established
-that de-duplication and "is this crate shallow" are separate questions.
+cluster x8, with 2 of the cluster's 10 crates flagged as dedup candidates;
+fourth session: reconciled those 2 dedup candidates by archival, then built
+out 12 crates from the UI/component cluster). 36 of the original 143
+SCAFFOLD crates built out to date. The 2 flagged dedup candidates
+(`audit-logging-platform`, `medical-compliance`) are now resolved —
+archived to `Omnisystem/_Archive/src-crates-dead/`, dropped from the
+workspace — so the workspace member count is now **372** (374 minus the
+two archived crates). Continues the backlog item deferred from the roadmap
+at `C:\Users\limpi\.claude\plans\recursive-conjuring-panda.md`, picked up
+after Phase 4 (crate-duplication reconciliation, commit `bcf78fb62`)
+established that de-duplication and "is this crate shallow" are separate
+questions.
 
 See `[[feedback-prefer-building-out]]` — this project's standing preference
 is to build shallow/orphaned crates out into real, wired logic rather than
@@ -79,7 +84,9 @@ without hand-reading 374 crates.
 
 ## Current counts
 
-- Total workspace members: **374**
+- Total workspace members: **372** (374 at baseline census time, minus
+  `audit-logging-platform` and `medical-compliance`, archived in the fourth
+  session's reconciliation — see below).
 - SCAFFOLD (shallow/decorative): **143 (38.2%)**
 - real-or-minimal (not yet further subdivided): **240 (64.2%)** — includes
   everything from genuinely deep crates (e.g. `sylva` at 3,106 LOC, `app-menu`
@@ -351,20 +358,117 @@ by reading rather than assumed from the name. The 2 dedup candidates above
 are flagged for *reconciliation*, not archival — both scaffolds map to a
 real, wanted concept, just one already covered by another crate.
 
+## Fourth session — dedup reconciliation + UI/component cluster (12 crates)
+
+### Part 1 — reconciled the 2 flagged dedup candidates
+
+Completed item 1 from the prior session's "Next steps": both crates were
+re-verified (still the same byte-identical/near-identical scaffolds
+identified last session) and reconciled following the exact Phase-4 pattern
+(`bcf78fb62`, the `audit-system` -> `audit-logging` archival):
+
+- **`audit-logging-platform`** — confirmed no real callers
+  (`grep -rl "\"audit-logging-platform\"" --include=Cargo.toml` found only
+  its own `Cargo.toml` self-declaration). Pure scaffold with zero unique
+  logic beyond the already-canonical `audit-logging` crate, so this was a
+  clean removal with nothing to port: `git mv` to
+  `Omnisystem/_Archive/src-crates-dead/audit-logging-platform`, dropped from
+  the root `Cargo.toml` workspace member list.
+- **`medical-compliance`** — confirmed no real callers the same way. Byte-
+  identical to `healthcare-compliance-deep`'s pre-build-out scaffold (only
+  the CLI binary name differed), and `healthcare-compliance-deep` was
+  already built out for real in the third session. Same clean removal:
+  `git mv` to `Omnisystem/_Archive/src-crates-dead/medical-compliance`,
+  dropped from the workspace member list.
+
+`cargo check --workspace` after both removals: **0 errors**. Workspace
+member count confirmed at **372** (374 minus the 2 archived crates,
+verified by counting `"Omnisystem/src/crates/..."` entries in the
+`members = [...]` array of the root `Cargo.toml`).
+
+### Part 2 — UI/component cluster build-out (12 of 29 crates)
+
+Picked a 12-crate sub-slice of the 29-crate UI/component cluster (the
+largest remaining SCAFFOLD group per the domain table above), continuing
+item 4 from the prior session's next steps. All 12 shared the generic
+`//! Component Library` or `//! Web UI Module` / `//! Feature UI Module` /
+`//! Advanced Module` scaffold (same three-signature shape as every prior
+session's picks). Per-crate `diff -q` confirmed the 8 `//! Component
+Library` crates were byte-identical to each other pre-build-out — expected,
+since they share one generator template, not evidence of redundant purpose
+(the same was true of, and distinguished the same way as, the Docker-* and
+security-cluster crates in prior sessions: identical scaffold, different
+real domain once built). Reverse-dependency check
+(`grep -rl "\"<crate-name>\"" --include=Cargo.toml`) for all 12 found no
+hits beyond each crate's own self-declaration, consistent with every prior
+session.
+
+| Crate | Real logic implemented | Tests (unit + integration) |
+|---|---|---|
+| `chart-components` | Chart/series data model, `LinearScale` domain-to-pixel mapping with inversion, D3-style "nice" axis tick generation, pie-slice angle computation (sums exactly to 360°) | 14 |
+| `animation-library` | Keyframe timeline with per-segment easing (linear/ease-in/ease-out/ease-in-out), time-based sampling with before/after clamping, frame-table baking | 13 |
+| `data-table-component` | Multi-column stable sort (with a direction-aware, always-nulls-last comparator), single/multi-column sort, predicate-based filtering, pagination with page-count computation | 13 |
+| `form-components` | Declarative field validation rules (required/min-len/max-len/number-range/email), first-failing-rule-per-field reporting, full-form and single-field validation | 13 |
+| `icon-library` | Name/alias icon registry, nearest-size variant fallback (tie-breaks toward smaller), category browsing, stale-alias cleanup on re-registration | 11 |
+| `infinite-scroll-component` | Prefix-sum-based list virtualizer over variable item heights, visible-range computation with overscan, near-bottom pagination-fetch signal | 11 |
+| `tooltip-popover-library` | Anchor-relative popover placement (top/bottom/left/right), automatic flip-to-opposite-side when the preferred side overflows the viewport, cross-axis centering with edge clamping | 10 |
+| `ui-component-library` | Design-token cascade resolution: local override -> per-component theme override -> theme's own token -> parent theme chain, with cycle-safe traversal | 9 |
+| `visualization-library` | Descriptive statistics (mean/median/stddev/min/max, verified against a known stddev value) and equal-width histogram bucketing | 13 |
+| `dashboard-engine` | Skyline-based grid auto-packer (first-fit, gap-filling), plus a manual-layout overlap/bounds validator and content-height computation | 11 |
+| `documentation-viewer-ui` | Markdown ATX heading extraction (code-fence-aware, emphasis-stripped, slug-disambiguated), nested table-of-contents construction with skipped-level validation, code-excluding reading-time estimation | 12 |
+| `intelligent-dashboard-builder` | Rule-based chart-type recommender over field profiles (categorical/numeric/temporal/identifier), covering line/pie/bar/scatter/histogram/table selection with human-readable reasoning per recommendation | 12 |
+| **Total** | | **142 real, passing tests** |
+
+### Verification
+
+`cargo test -p <crate>` per crate — real passing output:
+
+```
+chart-components:               12 unit + 2 integration = 14 passed, 0 failed
+animation-library:               12 unit + 1 integration = 13 passed, 0 failed
+data-table-component:            12 unit + 1 integration = 13 passed, 0 failed
+form-components:                 11 unit + 2 integration = 13 passed, 0 failed
+icon-library:                    10 unit + 1 integration = 11 passed, 0 failed
+infinite-scroll-component:       10 unit + 1 integration = 11 passed, 0 failed
+tooltip-popover-library:          9 unit + 1 integration = 10 passed, 0 failed
+ui-component-library:             8 unit + 1 integration =  9 passed, 0 failed
+visualization-library:           12 unit + 1 integration = 13 passed, 0 failed
+dashboard-engine:                10 unit + 1 integration = 11 passed, 0 failed
+documentation-viewer-ui:         11 unit + 1 integration = 12 passed, 0 failed
+intelligent-dashboard-builder:   11 unit + 1 integration = 12 passed, 0 failed
+```
+
+142 tests total, 0 failed. `cargo check --workspace` after all twelve
+changes plus the Part 1 reconciliation: **0 errors**. Remaining warnings are
+all pre-existing, in unrelated crates (`extensions`, `failure-finder`,
+`omnisystem-web-framework`); none introduced by this session's work.
+
+Each built-out crate had its `Cargo.toml` dependency list trimmed to just
+`serde` (dropping the unused `omnisystem-*` path deps, `tracing`, `tokio`,
+`chrono`, `uuid` the generic scaffold declared but the new synchronous,
+renderer-agnostic logic never needs).
+
+### Archival candidates
+
+None among the 12 built out — each had a coherent, non-overlapping purpose
+once actually read and implemented (chart math vs. animation timing vs.
+table operations vs. form validation vs. icon lookup vs. list
+virtualization vs. popover geometry vs. theme cascading vs. statistics vs.
+grid packing vs. markdown structure vs. chart-type heuristics — twelve
+genuinely distinct domains sharing only a generator template, not logic).
+
 ## Next steps for a future session
 
-1. **Reconcile the 2 dedup candidates flagged this session**:
-   `audit-logging-platform` into `audit-logging`, and `medical-compliance`
-   into `healthcare-compliance-deep` (or give it an explicitly distinct scope
-   first if warranted) — Phase-4-style work, do it with the same
-   reverse-dependency care that reconciliation took, in its own session.
-2. **Do the reverse-dependency pass** for the remaining ~123 untouched
-   SCAFFOLD crates (24 of the original 143 are now built out across three
-   sessions to date, 2 more flagged for reconciliation rather than building):
-   `grep -rl "\"<crate-name>\""  --include=Cargo.toml` for each, to find any
-   that ARE wired from a real caller (higher priority to build out for real —
-   a caller is depending on real behavior it isn't getting) versus fully
-   standalone (lower urgency, same as all three sessions' picks so far).
+1. **Finish the UI/component cluster**: 17 of the original 29 crates remain
+   (12 done this session). Same domain, same scaffold shapes — a
+   straightforward continuation at the same 10-15-crate increment size.
+2. **Do the reverse-dependency pass** for the remaining ~111 untouched
+   SCAFFOLD crates (36 of the original 143 are now built out across four
+   sessions to date): `grep -rl "\"<crate-name>\"" --include=Cargo.toml` for
+   each, to find any that ARE wired from a real caller (higher priority to
+   build out for real — a caller is depending on real behavior it isn't
+   getting) versus fully standalone (lower urgency, same as every session's
+   picks so far).
 3. **Subdivide the 240-crate real-or-minimal bucket.** This census treated
    "not matching a known scaffold signature" as good enough for the sake of
    scoping this session, but per the method limits above, an unknown number
@@ -372,12 +476,10 @@ real, wanted concept, just one already covered by another crate.
    A cheap next check: grep for other repeated-first-line patterns beyond the
    6 already found (the "374 crates, sorted first-lines, count duplicates"
    trick used in the first session's terminal history surfaces new ones fast).
-4. **UI/component cluster (29 crates)** and **analytics/AI cluster (19
-   crates)** are the two largest remaining groups — worth their own sessions
-   given their size relative to the 5-15-crate increment this backlog item
-   is meant to be worked in.
+4. **Analytics/AI cluster (19 crates)** is now the largest fully-untouched
+   remaining group — worth its own session(s) at the same increment size.
 5. **Storage/distributed/replication/sharding/scale cluster (7 crates)** and
-   **Healthcare/clinical/patient/HIPAA cluster (6 crates, minus the 2 now
-   addressed here — `healthcare-compliance-deep` built out,
-   `medical-compliance` flagged)** are mid-sized remaining clusters, the
-   healthcare one now partially started.
+   **Healthcare/clinical/patient/HIPAA cluster (4 crates remaining — 2
+   already addressed: `healthcare-compliance-deep` built out in session 3,
+   `medical-compliance` archived in session 4)** are the smaller remaining
+   clusters.

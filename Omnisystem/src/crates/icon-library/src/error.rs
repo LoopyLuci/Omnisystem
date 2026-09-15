@@ -1,20 +1,24 @@
-//! Error types
+//! Error types for icon registry lookups.
 
-#[derive(Debug, Clone)]
+/// Errors that can occur when resolving an icon.
+#[derive(Debug, Clone, PartialEq)]
 pub enum Error {
-    /// Other error
-    Other(String),
+    /// No icon is registered under this name or any of its aliases.
+    UnknownIcon(String),
+    /// The requested size variant isn't defined for this icon.
+    UnknownSize(String, u32),
 }
 
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Error::Other(msg) => write!(f, "Error: {}", msg),
+            Error::UnknownIcon(name) => write!(f, "unknown icon: {}", name),
+            Error::UnknownSize(name, size) => write!(f, "icon '{}' has no {}px variant", name, size),
         }
     }
 }
 
 impl std::error::Error for Error {}
 
-/// Result type
+/// Result type for icon lookups.
 pub type Result<T> = std::result::Result<T, Error>;

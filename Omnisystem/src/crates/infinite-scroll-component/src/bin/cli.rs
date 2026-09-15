@@ -1,22 +1,12 @@
-//! CLI demo: render an infinite-scroll component with custom props.
+//! Demo CLI: compute the visible window over a 1000-row uniform list.
 
-use infinite_scroll_component::{Component, Props};
+use infinite_scroll_component::Virtualizer;
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let mut component = Component::new(Props {
-        id: "feed-scroll".to_string(),
-        class: "scroll--vertical".to_string(),
-        disabled: false,
-    });
-    println!("{}", component.render());
-
-    component.update_props(Props {
-        disabled: true,
-        ..component.props().clone()
-    });
-    println!("{}", component.render());
-    println!("Disabled: {}", component.props().disabled);
-
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let heights = vec![24.0; 1000];
+    let v = Virtualizer::new(&heights);
+    let range = v.visible_range(2400.0, 600.0, 3)?;
+    println!("visible: {:?}", range);
+    println!("near bottom? {}", v.near_bottom(2400.0, 600.0, 200.0));
     Ok(())
 }

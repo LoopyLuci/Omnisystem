@@ -6,11 +6,7 @@ authors.workspace = true
 license.workspace = true
 
 [dependencies]
-chrono = { workspace = true }
 serde = { workspace = true }
-tokio = { workspace = true }
-tracing = { workspace = true }
-uuid = { workspace = true }
 
 [lib]
 name = "form_components"
@@ -21,5 +17,3 @@ name = "form_components_cli"
 path = "src/bin/cli.rs"
 
 [dev-dependencies]
-
-
