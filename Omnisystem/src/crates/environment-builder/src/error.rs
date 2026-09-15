@@ -1,20 +1,33 @@
-//! Error types
+//! Error types for environment configuration building.
 
-#[derive(Debug, Clone)]
+/// Errors that can occur while composing or validating an environment.
+#[derive(Debug, Clone, PartialEq)]
 pub enum Error {
-    /// Other error
-    Other(String),
+    /// A variable declared `required` in the schema has no value after
+    /// every layer has been applied.
+    MissingRequiredVar(String),
+    /// A variable's final value failed its schema-declared validator
+    /// (e.g. not one of an allowed set).
+    InvalidVarValue {
+        /// Variable name.
+        name: String,
+        /// The value that failed validation.
+        value: String,
+    },
 }
 
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Error::Other(msg) => write!(f, "Error: {}", msg),
+            Error::MissingRequiredVar(name) => write!(f, "missing required variable: {name}"),
+            Error::InvalidVarValue { name, value } => {
+                write!(f, "invalid value for {name}: {value}")
+            }
         }
     }
 }
 
 impl std::error::Error for Error {}
 
-/// Result type
+/// Result type for environment building.
 pub type Result<T> = std::result::Result<T, Error>;

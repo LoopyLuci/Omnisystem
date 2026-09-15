@@ -7,9 +7,6 @@ license.workspace = true
 
 [dependencies]
 serde = { workspace = true }
-chrono = { workspace = true }
-tracing = { workspace = true }
-uuid = { workspace = true }
 
 [lib]
 name = "deployment_wizard_ui"
@@ -21,6 +18,3 @@ path = "src/bin/cli.rs"
 test = false
 
 [dev-dependencies]
-tokio = { workspace = true }
-
-

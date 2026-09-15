@@ -1,20 +1,25 @@
-//! Error types
+//! Error types for network resource shaping.
 
-#[derive(Debug, Clone)]
+/// Errors that can occur while shaping network state for display.
+#[derive(Debug, Clone, PartialEq)]
 pub enum Error {
-    /// Other error
-    Other(String),
+    /// A route referenced an interface name that isn't in the interface
+    /// list, so it can't be attributed for display.
+    UnknownInterface(String),
+    /// Two interfaces were given the same name.
+    DuplicateInterface(String),
 }
 
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Error::Other(msg) => write!(f, "Error: {}", msg),
+            Error::UnknownInterface(n) => write!(f, "route references unknown interface: {n}"),
+            Error::DuplicateInterface(n) => write!(f, "duplicate interface name: {n}"),
         }
     }
 }
 
 impl std::error::Error for Error {}
 
-/// Result type
+/// Result type for network resource shaping.
 pub type Result<T> = std::result::Result<T, Error>;

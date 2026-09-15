@@ -1,17 +1,13 @@
-//! CLI for monitoring-dashboard-ui — exercises the crate's real UI widget API.
+//! Demo CLI: roll up widget statuses into one dashboard status.
 
-use monitoring_dashboard_ui::UI;
+use monitoring_dashboard_ui::{dashboard_status, unhealthy_widgets, Widget};
 
-fn main() -> monitoring_dashboard_ui::Result<()> {
-    let mut ui = UI::new();
-    println!("initial render: {}", ui.render());
-
-    let content = std::env::args().nth(1).unwrap_or_else(|| "hello from the CLI".to_string());
-    ui.update(content)?;
-    println!("after update:   {}", ui.render());
-
-    ui.toggle();
-    println!("after toggle:   {:?}", ui.render());
-
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let widgets = vec![
+        Widget { name: "cpu".into(), latest_value: Some(45.0), warn_threshold: 70.0, critical_threshold: 90.0 },
+        Widget { name: "disk".into(), latest_value: Some(95.0), warn_threshold: 70.0, critical_threshold: 90.0 },
+    ];
+    println!("dashboard status: {:?}", dashboard_status(&widgets)?);
+    println!("unhealthy: {:?}", unhealthy_widgets(&widgets)?);
     Ok(())
 }

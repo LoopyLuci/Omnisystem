@@ -6,11 +6,7 @@ authors.workspace = true
 license.workspace = true
 
 [dependencies]
-chrono = { workspace = true }
 serde = { workspace = true }
-tokio = { workspace = true }
-tracing = { workspace = true }
-uuid = { workspace = true }
 
 [lib]
 name = "image_management_ui"
@@ -19,7 +15,6 @@ path = "src/lib.rs"
 [[bin]]
 name = "image_management_ui_cli"
 path = "src/bin/cli.rs"
+test = false
 
 [dev-dependencies]
-
-

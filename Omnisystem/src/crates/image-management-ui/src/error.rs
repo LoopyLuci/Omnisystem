@@ -1,20 +1,28 @@
-//! Error types
+//! Error types for image registry management.
 
-#[derive(Debug, Clone)]
+/// Errors produced by this crate.
+#[derive(Debug, Clone, PartialEq)]
 pub enum Error {
-    /// Other error
-    Other(String),
+    /// The same `(repository, tag)` pair appeared more than once.
+    DuplicateTag {
+        /// Repository name.
+        repository: String,
+        /// Tag name.
+        tag: String,
+    },
 }
 
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Error::Other(msg) => write!(f, "Error: {}", msg),
+            Error::DuplicateTag { repository, tag } => {
+                write!(f, "duplicate tag '{repository}:{tag}'")
+            }
         }
     }
 }
 
 impl std::error::Error for Error {}
 
-/// Result type
+/// Result type for this crate.
 pub type Result<T> = std::result::Result<T, Error>;

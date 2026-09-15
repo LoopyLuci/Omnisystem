@@ -6,11 +6,7 @@ authors.workspace = true
 license.workspace = true
 
 [dependencies]
-tokio = { workspace = true }
 serde = { workspace = true }
-chrono = { workspace = true }
-tracing = { workspace = true }
-uuid = { workspace = true }
 
 [lib]
 name = "automation_builder_ui"
@@ -19,5 +15,6 @@ path = "src/lib.rs"
 [[bin]]
 name = "automation_builder_ui_cli"
 path = "src/bin/cli.rs"
+test = false
 
-
+[dev-dependencies]

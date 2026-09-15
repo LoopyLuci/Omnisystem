@@ -1,17 +1,18 @@
-//! CLI for deployment-wizard-ui — exercises the crate's real UI widget API.
+//! Demo CLI: walk a 2-step deployment wizard to completion.
 
-use deployment_wizard_ui::UI;
+use deployment_wizard_ui::{WizardDefinition, WizardState, WizardStep};
 
-fn main() -> deployment_wizard_ui::Result<()> {
-    let mut ui = UI::new();
-    println!("initial render: {}", ui.render());
-
-    let content = std::env::args().nth(1).unwrap_or_else(|| "hello from the CLI".to_string());
-    ui.update(content)?;
-    println!("after update:   {}", ui.render());
-
-    ui.toggle();
-    println!("after toggle:   {:?}", ui.render());
-
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let def = WizardDefinition {
+        steps: vec![
+            WizardStep { name: "target".into(), required_fields: vec!["environment".into()] },
+            WizardStep { name: "review".into(), required_fields: vec![] },
+        ],
+    };
+    let mut wizard = WizardState::new(def)?;
+    println!("step: {} (progress {:.0}%)", wizard.current_step().name, wizard.progress() * 100.0);
+    wizard.set_answer("environment", "production");
+    wizard.advance()?;
+    println!("step: {} (progress {:.0}%)", wizard.current_step().name, wizard.progress() * 100.0);
     Ok(())
 }

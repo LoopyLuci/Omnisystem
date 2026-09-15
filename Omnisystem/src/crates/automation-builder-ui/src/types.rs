@@ -1,21 +1,20 @@
-//! Data types
-use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
+//! Automation builder types: a workflow as a DAG of named steps.
 
-/// Metadata
+use serde::{Deserialize, Serialize};
+
+/// One step in a workflow, depending on zero or more other steps by name.
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Metadata {
-    /// ID
-    pub id: String,
-    /// Created at
-    pub created_at: DateTime<Utc>,
+pub struct Step {
+    /// Unique step name within the workflow.
+    pub name: String,
+    /// Names of steps that must complete before this one runs.
+    pub depends_on: Vec<String>,
 }
 
-impl Default for Metadata {
-    fn default() -> Self {
-        Self {
-            id: uuid::Uuid::new_v4().to_string(),
-            created_at: Utc::now(),
-        }
-    }
+/// A workflow: an ordered collection of [`Step`]s (order as authored, not
+/// necessarily execution order).
+#[derive(Debug, Clone, Serialize, Deserialize, Default)]
+pub struct Workflow {
+    /// The steps that make up the workflow.
+    pub steps: Vec<Step>,
 }

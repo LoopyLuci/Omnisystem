@@ -105,15 +105,7 @@ dependencies = [
 name = "agent-control-ui"
 version = "0.1.0"
 dependencies = [
- "chrono",
- "omnisystem-async-runtime",
- "omnisystem-collections",
- "omnisystem-observability",
- "omnisystem-serialization",
  "serde",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]
@@ -201,11 +193,7 @@ dependencies = [
 name = "alerting-configuration-ui"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]
@@ -284,11 +272,7 @@ dependencies = [
 name = "analytics-viewer-ui"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]
@@ -1231,11 +1215,7 @@ dependencies = [
 name = "automation-builder-ui"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]
@@ -1380,11 +1360,7 @@ dependencies = [
 name = "backup-restore-ui"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]
@@ -2681,11 +2657,7 @@ dependencies = [
 name = "container-management-ui"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]
@@ -3502,11 +3474,7 @@ dependencies = [
 name = "deployment-wizard-ui"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]
@@ -4033,15 +4001,7 @@ dependencies = [
 name = "environment-builder"
 version = "0.1.0"
 dependencies = [
- "chrono",
- "omnisystem-async-runtime",
- "omnisystem-collections",
- "omnisystem-observability",
- "omnisystem-serialization",
  "serde",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]
@@ -4588,11 +4548,7 @@ checksum = "aa9a19cbb55df58761df49b23516a86d432839add4af60fc256da840f66ed35b"
 name = "form-builder"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]
@@ -6238,11 +6194,7 @@ dependencies = [
 name = "image-management-ui"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]
@@ -7978,11 +7930,7 @@ dependencies = [
 name = "monitoring-dashboard-ui"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]
@@ -8235,15 +8183,7 @@ dependencies = [
 name = "network-management-ui"
 version = "0.1.0"
 dependencies = [
- "chrono",
- "omnisystem-async-runtime",
- "omnisystem-collections",
- "omnisystem-observability",
- "omnisystem-serialization",
  "serde",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]
@@ -8354,11 +8294,7 @@ dependencies = [
 name = "notification-ui"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]
@@ -11120,15 +11056,7 @@ dependencies = [
 name = "resource-optimizer-ui"
 version = "0.1.0"
 dependencies = [
- "chrono",
- "omnisystem-async-runtime",
- "omnisystem-collections",
- "omnisystem-observability",
- "omnisystem-serialization",
  "serde",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]
@@ -11739,11 +11667,7 @@ dependencies = [
 name = "settings-configuration-ui"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]
@@ -13669,11 +13593,7 @@ dependencies = [
 name = "volume-management-ui"
 version = "0.1.0"
 dependencies = [
- "chrono",
  "serde",
- "tokio",
- "tracing",
- "uuid",
 ]
 
 [[package]]

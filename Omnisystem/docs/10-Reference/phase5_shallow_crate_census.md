@@ -457,18 +457,98 @@ virtualization vs. popover geometry vs. theme cascading vs. statistics vs.
 grid packing vs. markdown structure vs. chart-type heuristics — twelve
 genuinely distinct domains sharing only a generator template, not logic).
 
+## Fifth session — finished the UI/component cluster (16 crates)
+
+Continued directly from session 4's next steps: of the 29-crate UI/
+component cluster, 12 were built out in session 4 and `security-console-ui`
+had been built out in a still-earlier session, leaving 16. This session
+built out all 16, completing the cluster (**29/29 done**). Work was
+interrupted partway by a rate limit and resumed in the same worktree; the
+first 4 crates below were finished pre-interruption and re-verified with
+real `cargo test` output before continuing, per the resumption instructions.
+
+All 16 shared the same generator-template scaffold shapes as every prior
+UI-cluster session (`//! Feature UI Module` / `//! Web UI Module`, byte-
+identical pre-build-out `lib.rs` within each shape group — confirmed via
+`md5sum` across the 12 `Feature UI Module` crates picked from this batch).
+Same conclusion as every prior session: identical scaffold text, not
+evidence of duplicate purpose — each was read and given a distinct,
+justified domain.
+
+| Crate | Real logic implemented | Tests |
+|---|---|---|
+| `agent-control-ui` | Agent lifecycle registry (idle/running/paused/stopped) with legal-transition enforcement, state-filtered listing, per-state counts | 9 |
+| `environment-builder` | Layered environment-variable merge (later layers override earlier), diff between two environments (added/changed/removed), required/allowed-value validation | 8 |
+| `network-management-ui` | Interface/route snapshot validation, route table with link-state-derived reachability, down-interface counting, throughput summary | 8 |
+| `resource-optimizer-ui` | Utilization-sample-based right-sizing advice (scale up/down/keep) against fixed thresholds, urgency-sorted batch advice | 9 |
+| `alerting-configuration-ui` | Alert rule evaluation requiring N consecutive trailing breaching samples to fire, severity-sorted firing results, per-severity firing counts | 9 |
+| `analytics-viewer-ui` | Group-by aggregation (sum/avg/count/min/max) over dimension/measure rows, top-N ranking, dataset totals | 9 |
+| `automation-builder-ui` | Workflow DAG validation, deterministic Kahn's-algorithm topological ordering, cycle detection, parallel-execution "wave" grouping | 9 |
+| `backup-restore-ui` | Full/incremental backup chain validation (missing-parent and cycle detection), ordered restore-plan computation, "keep N most recent fulls" retention pruning that never drops a full an incremental still needs | 9 |
+| `container-management-ui` | Container lifecycle state machine (Created/Running/Paused/Stopped/Failed) with legal-transition enforcement, resource-limit breach detection for running containers | 9 |
+| `deployment-wizard-ui` | Multi-step wizard state machine: required-field gating per step, forward/back navigation, last-step detection, fractional completion progress | 10 |
+| `form-builder` | Form schema layout validation (duplicate keys, grid-slot collisions, dangling `show_if` references), row-major layout derivation, conditional field visibility resolution — deliberately distinct domain from `form-components`' validation-rule logic | 9 |
+| `image-management-ui` | Registry tag bookkeeping: duplicate-tag validation, shared-digest dedup-candidate grouping, "keep N most recent tags per repository" pruning, dedup ratio | 9 |
+| `monitoring-dashboard-ui` | Per-widget status derivation from warn/critical thresholds, worst-status dashboard rollup, unhealthy-widget ranking | 9 |
+| `notification-ui` | Sequence-window-based notification dedup (collapse same-key notifications within a window, keep latest), priority-then-recency display sort, per-category unread counts | 8 |
+| `settings-configuration-ui` | Layered settings cascade (Default -> Project -> User) with per-layer schema type validation, highest-set-layer-wins key resolution | 8 |
+| `volume-management-ui` | First-fit-decreasing volume-to-disk bin packing, over-capacity-threshold disk detection | 9 |
+| **Total** | | **142 real, passing tests** |
+
+### Verification
+
+`cargo test -p <crate> --release` per crate — real passing output (all
+`0 failed`): `agent-control-ui` 9/9, `environment-builder` 8/8,
+`network-management-ui` 8/8, `resource-optimizer-ui` 9/9,
+`alerting-configuration-ui` 9/9, `analytics-viewer-ui` 9/9,
+`automation-builder-ui` 9/9, `backup-restore-ui` 9/9,
+`container-management-ui` 9/9, `deployment-wizard-ui` 10/10,
+`form-builder` 9/9, `image-management-ui` 9/9,
+`monitoring-dashboard-ui` 9/9, `notification-ui` 8/8,
+`settings-configuration-ui` 8/8, `volume-management-ui` 9/9.
+
+`cargo check --workspace`: **0 errors**. Remaining warnings are all
+pre-existing, in unrelated crates (`extensions`, `failure-finder`,
+`omnisystem-web-framework`, `watchdog`); none introduced by this session's
+work.
+
+Each crate's `Cargo.toml` was trimmed to just `serde` (dropping the unused
+`omnisystem-*` path deps, `tracing`, `tokio`, `chrono`, `uuid` the generic
+scaffold declared but the new synchronous, renderer-agnostic logic never
+needs), matching the pattern from every prior UI-cluster session.
+
+### Reverse-dependency check (all 16 crates)
+
+`grep -rl "\"<crate-name>\"" --include=Cargo.toml` for every crate built
+out this session (the 4 pre-interruption plus the 12 built fresh): every
+one's only match is its own `Cargo.toml`. No real callers found — same
+outcome as every prior UI-cluster session's picks.
+
+### Archival candidates
+
+None among the 16 — each had a coherent, non-overlapping purpose once
+actually read and implemented (agent lifecycle vs. env-layer merging vs.
+network snapshots vs. utilization advice vs. alert firing vs. group-by
+analytics vs. DAG scheduling vs. backup chains vs. container lifecycle vs.
+wizard state vs. form layout vs. image tag dedup vs. widget-status rollup
+vs. notification dedup vs. settings cascade vs. bin packing — sixteen
+genuinely distinct domains sharing only a generator template, not logic).
+`form-builder` and `form-components` were double-checked against each
+other specifically (layout/visibility vs. validation) since both are
+form-adjacent; confirmed non-overlapping.
+
 ## Next steps for a future session
 
-1. **Finish the UI/component cluster**: 17 of the original 29 crates remain
-   (12 done this session). Same domain, same scaffold shapes — a
-   straightforward continuation at the same 10-15-crate increment size.
-2. **Do the reverse-dependency pass** for the remaining ~111 untouched
-   SCAFFOLD crates (36 of the original 143 are now built out across four
+1. **UI/component cluster is now fully built out (29/29)** — no further
+   work needed there.
+2. **Do the reverse-dependency pass** for the remaining ~95 untouched
+   SCAFFOLD crates (52 of the original 143 are now built out across five
    sessions to date): `grep -rl "\"<crate-name>\"" --include=Cargo.toml` for
    each, to find any that ARE wired from a real caller (higher priority to
    build out for real — a caller is depending on real behavior it isn't
    getting) versus fully standalone (lower urgency, same as every session's
-   picks so far).
+   picks so far — all 44 crates checked across sessions 4 and 5 came back
+   standalone).
 3. **Subdivide the 240-crate real-or-minimal bucket.** This census treated
    "not matching a known scaffold signature" as good enough for the sake of
    scoping this session, but per the method limits above, an unknown number

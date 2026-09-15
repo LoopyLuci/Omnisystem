@@ -6,15 +6,7 @@ authors.workspace = true
 license.workspace = true
 
 [dependencies]
-omnisystem-async-runtime = { path = "../../../OmniHarness/crates/omnisystem-async-runtime" }
-omnisystem-serialization = { path = "../../../OmniHarness/crates/omnisystem-serialization" }
-omnisystem-collections = { path = "../../../OmniHarness/crates/omnisystem-collections" }
-omnisystem-observability = { path = "../../../OmniHarness/crates/omnisystem-observability" }
 serde = { workspace = true }
-chrono = { workspace = true }
-tracing = { workspace = true }
-uuid = { workspace = true }
-tokio = { workspace = true }
 
 [lib]
 name = "resource_optimizer_ui"
@@ -23,7 +15,6 @@ path = "src/lib.rs"
 [[bin]]
 name = "resource_optimizer_ui_cli"
 path = "src/bin/cli.rs"
+test = false
 
 [dev-dependencies]
-
-

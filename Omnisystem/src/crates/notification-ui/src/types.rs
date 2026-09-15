@@ -1,21 +1,33 @@
-//! Data types
-use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
+//! Notification UI types: a queue of notifications with priority, category,
+//! and optional dedup keys.
 
-/// Metadata
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Metadata {
-    /// ID
-    pub id: String,
-    /// Created at
-    pub created_at: DateTime<Utc>,
+use serde::{Deserialize, Serialize};
+
+/// Notification priority, ordered least to most urgent.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Serialize, Deserialize)]
+pub enum Priority {
+    /// Low-urgency, informational.
+    Low,
+    /// Normal priority.
+    Normal,
+    /// High priority — surface prominently.
+    High,
 }
 
-impl Default for Metadata {
-    fn default() -> Self {
-        Self {
-            id: uuid::Uuid::new_v4().to_string(),
-            created_at: Utc::now(),
-        }
-    }
+/// One notification.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct Notification {
+    /// Unique id.
+    pub id: String,
+    /// Category, e.g. `billing` or `security`.
+    pub category: String,
+    /// Priority.
+    pub priority: Priority,
+    /// Sequence number (monotonic, deterministic stand-in for a timestamp).
+    pub seq: i64,
+    /// Optional dedup key — later notifications sharing a key within a
+    /// window supersede earlier ones instead of stacking up.
+    pub dedup_key: Option<String>,
+    /// Whether the user has read it.
+    pub read: bool,
 }
