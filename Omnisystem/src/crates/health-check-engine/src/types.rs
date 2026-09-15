@@ -1,38 +1,51 @@
-//! Data types for this component
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
-use chrono::{DateTime, Utc};
 
-/// Base entity trait
-pub trait Entity {
-    fn id(&self) -> Uuid;
-    fn created_at(&self) -> DateTime<Utc>;
+/// Aggregate health of a single check.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub enum HealthStatus {
+    Healthy,
+    Degraded,
+    Unhealthy,
 }
 
-/// Generic metadata structure
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Metadata {
-    pub id: Uuid,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-    pub version: u32,
+/// How many consecutive failures/successes are required to flip status.
+#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+pub struct CheckConfig {
+    pub failure_threshold: u32,
+    pub success_threshold: u32,
 }
 
-impl Metadata {
-    /// Create new metadata
-    pub fn new() -> Self {
-        let now = Utc::now();
+impl CheckConfig {
+    pub fn new(failure_threshold: u32, success_threshold: u32) -> Self {
         Self {
-            id: Uuid::new_v4(),
-            created_at: now,
-            updated_at: now,
-            version: 1,
+            failure_threshold: failure_threshold.max(1),
+            success_threshold: success_threshold.max(1),
         }
     }
 }
 
-impl Default for Metadata {
+impl Default for CheckConfig {
     fn default() -> Self {
-        Self::new()
+        Self::new(3, 2)
+    }
+}
+
+/// Running state for one registered check.
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct CheckState {
+    pub config: CheckConfig,
+    pub status: HealthStatus,
+    pub consecutive_failures: u32,
+    pub consecutive_successes: u32,
+}
+
+impl CheckState {
+    pub fn new(config: CheckConfig) -> Self {
+        Self {
+            config,
+            status: HealthStatus::Healthy,
+            consecutive_failures: 0,
+            consecutive_successes: 0,
+        }
     }
 }

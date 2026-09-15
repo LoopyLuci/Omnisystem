@@ -1,26 +1,22 @@
-//! CLI demo: create, update, and list records through the in-memory manager.
+//! CLI demo: deploy a new version to standby, health-check it, promote it
+//! live, then roll back.
 
-use blue_green_deployment::{CreateRequest, Manager, UpdateRequest};
+use blue_green_deployment::Manager;
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     let manager = Manager::new();
 
-    let record = manager.create(CreateRequest {
-        created_by: "demo-user".to_string(),
-    })?;
-    println!("Created record: {}", record.id);
+    println!("active slot: {:?} ({})", manager.active_environment(), manager.active_state().version);
 
-    manager.update(
-        record.id,
-        UpdateRequest {
-            updated_by: "demo-updater".to_string(),
-        },
-    )?;
-    println!("Updated by: demo-updater");
+    manager.deploy_to_standby("1.1.0".to_string())?;
+    println!("deployed 1.1.0 to standby slot {:?}", manager.standby_state().environment);
 
-    let items = manager.list();
-    println!("Total records: {}", items.len());
+    manager.mark_standby_healthy()?;
+    let event = manager.promote()?;
+    println!("promoted {:?} -> {:?} (version {})", event.from, event.to, event.version);
+
+    let rollback = manager.rollback()?;
+    println!("rolled back {:?} -> {:?}", rollback.from, rollback.to);
 
     Ok(())
 }

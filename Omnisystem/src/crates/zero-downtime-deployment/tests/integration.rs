@@ -1,67 +1,44 @@
 use zero_downtime_deployment::*;
 
 #[test]
-fn test_integration_crud() {
-    let manager = Manager::new();
+fn test_full_drain_and_terminate_cycle() {
+    let m = Manager::new();
+    m.register_instance("web-1");
+    m.mark_ready("web-1").unwrap();
 
-    // Create
-    let req = CreateRequest {
-        created_by: "integration_test".to_string(),
-    };
-    let record = manager.create(req).expect("Failed to create");
-    let id = record.id;
+    for _ in 0..3 {
+        m.record_request_start("web-1").unwrap();
+    }
+    m.begin_drain("web-1").unwrap();
+    assert!(!m.can_terminate("web-1").unwrap());
 
-    // Read
-    let result = manager.get(id).expect("Failed to get");
-    assert!(result.is_some());
-
-    // Update
-    let update_req = UpdateRequest {
-        updated_by: "updated".to_string(),
-    };
-    let updated = manager.update(id, update_req).expect("Failed to update");
-    assert_eq!(updated.updated_by, "updated");
-
-    // Delete
-    manager.delete(id).expect("Failed to delete");
-    let result = manager.get(id).expect("Failed to get after delete");
-    assert!(result.is_none());
+    for _ in 0..3 {
+        m.record_request_end("web-1").unwrap();
+    }
+    assert!(m.can_terminate("web-1").unwrap());
+    m.terminate("web-1").unwrap();
+    assert!(m.state("web-1").is_err());
 }
 
 #[test]
-fn test_integration_list() {
-    let manager = Manager::new();
+fn test_multiple_instances_are_independent() {
+    let m = Manager::new();
+    m.register_instance("a");
+    m.register_instance("b");
+    m.mark_ready("a").unwrap();
+    m.mark_ready("b").unwrap();
+    m.begin_drain("a").unwrap();
 
-    for i in 0..10 {
-        let req = CreateRequest {
-            created_by: format!("user{}", i),
-        };
-        manager.create(req).expect("Failed to create");
-    }
-
-    let items = manager.list();
-    assert_eq!(items.len(), 10);
+    assert!(m.can_terminate("a").unwrap());
+    assert!(!m.can_terminate("b").unwrap()); // b never started draining
 }
 
 #[test]
-fn test_integration_concurrent() {
-    let manager = std::sync::Arc::new(Manager::new());
-    let mut handles = vec![];
-
-    for i in 0..5 {
-        let manager_clone = manager.clone();
-        let handle = std::thread::spawn(move || {
-            let req = CreateRequest {
-                created_by: format!("thread{}", i),
-            };
-            manager_clone.create(req).expect("Failed to create in thread");
-        });
-        handles.push(handle);
-    }
-
-    for handle in handles {
-        handle.join().expect("Thread panicked");
-    }
-
-    assert_eq!(manager.count(), 5);
+fn test_cannot_double_terminate() {
+    let m = Manager::new();
+    m.register_instance("a");
+    m.mark_ready("a").unwrap();
+    m.begin_drain("a").unwrap();
+    m.terminate("a").unwrap();
+    assert!(m.terminate("a").is_err());
 }

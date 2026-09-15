@@ -1,41 +1,47 @@
-use serde::{Deserialize, Serialize};
-use uuid::Uuid;
 use chrono::{DateTime, Utc};
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct Record {
-    pub id: Uuid,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-    pub created_by: String,
-    pub updated_by: String,
+/// Which physical slot ("blue" or "green") is currently serving live traffic.
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub enum Environment {
+    Blue,
+    Green,
 }
 
-impl Record {
-    pub fn new(created_by: String) -> Self {
-        let now = Utc::now();
-        Self {
-            id: Uuid::new_v4(),
-            created_at: now,
-            updated_at: now,
-            created_by: created_by.clone(),
-            updated_by: created_by,
+impl Environment {
+    /// The other slot.
+    pub fn other(self) -> Environment {
+        match self {
+            Environment::Blue => Environment::Green,
+            Environment::Green => Environment::Blue,
         }
     }
 }
 
+/// State of a single deployment slot.
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct CreateRequest {
-    pub created_by: String,
+pub struct EnvironmentState {
+    pub environment: Environment,
+    pub version: String,
+    pub healthy: bool,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct UpdateRequest {
-    pub updated_by: String,
+impl EnvironmentState {
+    pub fn new(environment: Environment) -> Self {
+        Self {
+            environment,
+            version: "unset".to_string(),
+            healthy: false,
+        }
+    }
 }
 
+/// A record of a traffic switch (promotion or rollback).
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct ListResponse {
-    pub items: Vec<Record>,
-    pub count: usize,
+pub struct SwitchEvent {
+    pub from: Environment,
+    pub to: Environment,
+    pub version: String,
+    pub at: DateTime<Utc>,
+    pub is_rollback: bool,
 }

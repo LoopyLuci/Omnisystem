@@ -1,26 +1,20 @@
-//! CLI demo: create, update, and list records through the in-memory manager.
+//! CLI demo: run a canary rollout to completion, then simulate one that
+//! gets rolled back.
 
-use canary_deployment::{CreateRequest, Manager, UpdateRequest};
+use canary_deployment::Manager;
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let manager = Manager::new();
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let m = Manager::new();
+    println!("starting rollout at {}%", m.start()?);
+    for rate in [0.01, 0.02, 0.01, 0.0] {
+        let decision = m.record_error_rate(rate)?;
+        println!("observed error rate {rate:.2} -> {decision:?}");
+    }
 
-    let record = manager.create(CreateRequest {
-        created_by: "demo-user".to_string(),
-    })?;
-    println!("Created record: {}", record.id);
-
-    manager.update(
-        record.id,
-        UpdateRequest {
-            updated_by: "demo-updater".to_string(),
-        },
-    )?;
-    println!("Updated by: demo-updater");
-
-    let items = manager.list();
-    println!("Total records: {}", items.len());
+    let rollback_demo = Manager::new();
+    rollback_demo.start()?;
+    let decision = rollback_demo.record_error_rate(0.5)?;
+    println!("high error rate -> {decision:?}");
 
     Ok(())
 }

@@ -2,8 +2,12 @@
 
 #[derive(Debug, Clone)]
 pub enum Error {
-    /// Record not found
-    NotFound(String),
+    /// Invalid controller configuration.
+    InvalidConfig(String),
+    /// A batch cannot be started right now (paused, or one already in flight).
+    BatchNotStartable(String),
+    /// There is no in-flight batch to complete or roll back.
+    NoBatchInProgress,
     /// Other error
     Other(String),
 }
@@ -11,7 +15,9 @@ pub enum Error {
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Error::NotFound(id) => write!(f, "record not found: {}", id),
+            Error::InvalidConfig(msg) => write!(f, "invalid config: {}", msg),
+            Error::BatchNotStartable(msg) => write!(f, "batch not startable: {}", msg),
+            Error::NoBatchInProgress => write!(f, "no batch is currently in progress"),
             Error::Other(msg) => write!(f, "Error: {}", msg),
         }
     }

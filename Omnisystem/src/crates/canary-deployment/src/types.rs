@@ -1,41 +1,22 @@
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
-use chrono::{DateTime, Utc};
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct Record {
-    pub id: Uuid,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-    pub created_by: String,
-    pub updated_by: String,
+/// Outcome of feeding a new error-rate sample into the controller.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub enum CanaryDecision {
+    /// Error rate was acceptable; rollout advanced to this traffic percent.
+    Advanced(u8),
+    /// Error rate exceeded the threshold; rollout was aborted and traffic
+    /// reverted to 0% canary.
+    RolledBack,
+    /// The final stage's error rate was acceptable; the canary now serves
+    /// 100% of traffic and the rollout is finished.
+    Completed,
 }
 
-impl Record {
-    pub fn new(created_by: String) -> Self {
-        let now = Utc::now();
-        Self {
-            id: Uuid::new_v4(),
-            created_at: now,
-            updated_at: now,
-            created_by: created_by.clone(),
-            updated_by: created_by,
-        }
-    }
-}
-
+/// A single recorded observation during the rollout.
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct CreateRequest {
-    pub created_by: String,
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct UpdateRequest {
-    pub updated_by: String,
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct ListResponse {
-    pub items: Vec<Record>,
-    pub count: usize,
+pub struct StageObservation {
+    pub stage_percent: u8,
+    pub error_rate: f64,
+    pub decision: CanaryDecision,
 }

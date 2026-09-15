@@ -1,41 +1,21 @@
 use serde::{Deserialize, Serialize};
-use uuid::Uuid;
-use chrono::{DateTime, Utc};
 
+/// Lifecycle state of one service instance being replaced.
 #[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct Record {
-    pub id: Uuid,
-    pub created_at: DateTime<Utc>,
-    pub updated_at: DateTime<Utc>,
-    pub created_by: String,
-    pub updated_by: String,
+pub struct InstanceState {
+    pub name: String,
+    pub ready: bool,
+    pub draining: bool,
+    pub in_flight_requests: u32,
 }
 
-impl Record {
-    pub fn new(created_by: String) -> Self {
-        let now = Utc::now();
+impl InstanceState {
+    pub fn new(name: String) -> Self {
         Self {
-            id: Uuid::new_v4(),
-            created_at: now,
-            updated_at: now,
-            created_by: created_by.clone(),
-            updated_by: created_by,
+            name,
+            ready: false,
+            draining: false,
+            in_flight_requests: 0,
         }
     }
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct CreateRequest {
-    pub created_by: String,
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct UpdateRequest {
-    pub updated_by: String,
-}
-
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct ListResponse {
-    pub items: Vec<Record>,
-    pub count: usize,
 }

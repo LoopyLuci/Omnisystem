@@ -1,26 +1,20 @@
-//! CLI demo: create, update, and list records through the in-memory manager.
+//! CLI demo: bring an instance up, drain it under load, and terminate it
+//! once safe.
 
-use zero_downtime_deployment::{CreateRequest, Manager, UpdateRequest};
+use zero_downtime_deployment::Manager;
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let manager = Manager::new();
+fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let m = Manager::new();
+    m.register_instance("web-1");
+    m.mark_ready("web-1")?;
+    m.record_request_start("web-1")?;
+    m.begin_drain("web-1")?;
+    println!("draining web-1, can_terminate={}", m.can_terminate("web-1")?);
 
-    let record = manager.create(CreateRequest {
-        created_by: "demo-user".to_string(),
-    })?;
-    println!("Created record: {}", record.id);
-
-    manager.update(
-        record.id,
-        UpdateRequest {
-            updated_by: "demo-updater".to_string(),
-        },
-    )?;
-    println!("Updated by: demo-updater");
-
-    let items = manager.list();
-    println!("Total records: {}", items.len());
+    m.record_request_end("web-1")?;
+    println!("request finished, can_terminate={}", m.can_terminate("web-1")?);
+    m.terminate("web-1")?;
+    println!("web-1 terminated");
 
     Ok(())
 }

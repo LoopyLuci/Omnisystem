@@ -1,8 +1,13 @@
-//! CLI demo: initialize the health-check-engine module.
+//! CLI demo: register a check, feed it some failures, then recover it.
 
-#[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    health_check_engine::init().await?;
-    println!("health-check-engine initialized");
-    Ok(())
+use health_check_engine::{CheckConfig, Manager};
+
+fn main() {
+    let m = Manager::new();
+    m.register("db", CheckConfig::new(3, 2));
+
+    for ok in [true, false, false, false, true, true] {
+        let status = m.record_result("db", ok).unwrap();
+        println!("probe ok={ok} -> {status:?}");
+    }
 }

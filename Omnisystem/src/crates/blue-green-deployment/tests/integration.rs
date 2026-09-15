@@ -1,67 +1,50 @@
 use blue_green_deployment::*;
 
 #[test]
-fn test_integration_crud() {
+fn test_full_release_cycle() {
     let manager = Manager::new();
+    assert_eq!(manager.active_environment(), Environment::Blue);
 
-    // Create
-    let req = CreateRequest {
-        created_by: "integration_test".to_string(),
-    };
-    let record = manager.create(req).expect("Failed to create");
-    let id = record.id;
+    manager.deploy_to_standby("2.0.0".to_string()).expect("deploy failed");
+    assert_eq!(manager.standby_state().version, "2.0.0");
+    assert!(!manager.standby_state().healthy);
 
-    // Read
-    let result = manager.get(id).expect("Failed to get");
-    assert!(result.is_some());
+    manager.mark_standby_healthy().expect("mark healthy failed");
+    let promote_event = manager.promote().expect("promote failed");
+    assert_eq!(promote_event.to, Environment::Green);
+    assert_eq!(manager.active_environment(), Environment::Green);
+    assert_eq!(manager.active_state().version, "2.0.0");
 
-    // Update
-    let update_req = UpdateRequest {
-        updated_by: "updated".to_string(),
-    };
-    let updated = manager.update(id, update_req).expect("Failed to update");
-    assert_eq!(updated.updated_by, "updated");
-
-    // Delete
-    manager.delete(id).expect("Failed to delete");
-    let result = manager.get(id).expect("Failed to get after delete");
-    assert!(result.is_none());
+    let rollback_event = manager.rollback().expect("rollback failed");
+    assert!(rollback_event.is_rollback);
+    assert_eq!(manager.active_environment(), Environment::Blue);
 }
 
 #[test]
-fn test_integration_list() {
+fn test_promotion_requires_healthy_standby() {
     let manager = Manager::new();
-
-    for i in 0..10 {
-        let req = CreateRequest {
-            created_by: format!("user{}", i),
-        };
-        manager.create(req).expect("Failed to create");
-    }
-
-    let items = manager.list();
-    assert_eq!(items.len(), 10);
+    manager.deploy_to_standby("2.0.0".to_string()).unwrap();
+    let err = manager.promote().expect_err("promote should require a healthy standby");
+    assert!(matches!(err, Error::StandbyNotHealthy));
 }
 
 #[test]
-fn test_integration_concurrent() {
+fn test_concurrent_health_checks_are_safe() {
     let manager = std::sync::Arc::new(Manager::new());
+    manager.deploy_to_standby("2.0.0".to_string()).unwrap();
+
     let mut handles = vec![];
-
-    for i in 0..5 {
-        let manager_clone = manager.clone();
-        let handle = std::thread::spawn(move || {
-            let req = CreateRequest {
-                created_by: format!("thread{}", i),
-            };
-            manager_clone.create(req).expect("Failed to create in thread");
-        });
-        handles.push(handle);
+    for _ in 0..8 {
+        let m = manager.clone();
+        handles.push(std::thread::spawn(move || {
+            let _ = m.mark_standby_healthy();
+        }));
+    }
+    for h in handles {
+        h.join().expect("thread panicked");
     }
 
-    for handle in handles {
-        handle.join().expect("Thread panicked");
-    }
-
-    assert_eq!(manager.count(), 5);
+    assert!(manager.standby_state().healthy);
+    let event = manager.promote().expect("promote failed after concurrent health checks");
+    assert_eq!(event.version, "2.0.0");
 }

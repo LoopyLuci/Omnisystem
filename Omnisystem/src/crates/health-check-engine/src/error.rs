@@ -2,6 +2,8 @@
 
 #[derive(Debug, Clone)]
 pub enum Error {
+    /// No check is registered under this name.
+    UnknownCheck(String),
     /// Other error
     Other(String),
 }
@@ -9,6 +11,7 @@ pub enum Error {
 impl std::fmt::Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
+            Error::UnknownCheck(name) => write!(f, "no health check registered as '{}'", name),
             Error::Other(msg) => write!(f, "Error: {}", msg),
         }
     }

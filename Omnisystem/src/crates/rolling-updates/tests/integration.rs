@@ -1,67 +1,40 @@
 use rolling_updates::*;
 
 #[test]
-fn test_integration_crud() {
-    let manager = Manager::new();
-
-    // Create
-    let req = CreateRequest {
-        created_by: "integration_test".to_string(),
-    };
-    let record = manager.create(req).expect("Failed to create");
-    let id = record.id;
-
-    // Read
-    let result = manager.get(id).expect("Failed to get");
-    assert!(result.is_some());
-
-    // Update
-    let update_req = UpdateRequest {
-        updated_by: "updated".to_string(),
-    };
-    let updated = manager.update(id, update_req).expect("Failed to update");
-    assert_eq!(updated.updated_by, "updated");
-
-    // Delete
-    manager.delete(id).expect("Failed to delete");
-    let result = manager.get(id).expect("Failed to get after delete");
-    assert!(result.is_none());
-}
-
-#[test]
-fn test_integration_list() {
-    let manager = Manager::new();
-
-    for i in 0..10 {
-        let req = CreateRequest {
-            created_by: format!("user{}", i),
+fn test_full_rollout_uneven_batches() {
+    let m = Manager::new(11, 4).unwrap();
+    let mut total = 0;
+    loop {
+        let size = match m.start_batch() {
+            Ok(s) => s,
+            Err(_) => break,
         };
-        manager.create(req).expect("Failed to create");
+        total += size;
+        if m.complete_batch().unwrap() == BatchResult::Done {
+            break;
+        }
     }
-
-    let items = manager.list();
-    assert_eq!(items.len(), 10);
+    assert_eq!(total, 11);
+    assert!(m.is_complete());
 }
 
 #[test]
-fn test_integration_concurrent() {
-    let manager = std::sync::Arc::new(Manager::new());
-    let mut handles = vec![];
+fn test_pause_then_resume_mid_rollout() {
+    let m = Manager::new(6, 2).unwrap();
+    m.start_batch().unwrap();
+    m.complete_batch().unwrap();
+    m.pause();
+    assert!(m.start_batch().is_err());
+    m.resume();
+    assert_eq!(m.start_batch().unwrap(), 2);
+}
 
-    for i in 0..5 {
-        let manager_clone = manager.clone();
-        let handle = std::thread::spawn(move || {
-            let req = CreateRequest {
-                created_by: format!("thread{}", i),
-            };
-            manager_clone.create(req).expect("Failed to create in thread");
-        });
-        handles.push(handle);
-    }
-
-    for handle in handles {
-        handle.join().expect("Thread panicked");
-    }
-
-    assert_eq!(manager.count(), 5);
+#[test]
+fn test_failed_batch_is_retried_without_progress() {
+    let m = Manager::new(4, 2).unwrap();
+    m.start_batch().unwrap();
+    m.rollback_batch().unwrap();
+    assert_eq!(m.updated_count(), 0);
+    m.start_batch().unwrap();
+    assert_eq!(m.complete_batch().unwrap(), BatchResult::Remaining(2));
 }

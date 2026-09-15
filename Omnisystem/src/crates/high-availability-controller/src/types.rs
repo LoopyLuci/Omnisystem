@@ -1,21 +1,16 @@
-//! Data types
 use serde::{Deserialize, Serialize};
-use chrono::{DateTime, Utc};
 
-/// Metadata
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Metadata {
-    /// ID
-    pub id: String,
-    /// Created at
-    pub created_at: DateTime<Utc>,
+/// Per-node bookkeeping: the tick at which it last sent a heartbeat.
+#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+pub struct NodeState {
+    pub last_heartbeat_tick: u64,
 }
 
-impl Default for Metadata {
-    fn default() -> Self {
-        Self {
-            id: uuid::Uuid::new_v4().to_string(),
-            created_at: Utc::now(),
-        }
-    }
+/// Snapshot of cluster health at a given tick.
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+pub struct ClusterStatus {
+    pub total_nodes: usize,
+    pub alive_nodes: usize,
+    pub has_quorum: bool,
+    pub leader: Option<String>,
 }
