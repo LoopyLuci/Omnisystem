@@ -58,7 +58,7 @@ libp2p           = { version = "0.56", features = [
 ] }
 
 # WASM sandbox
-wasmtime         = "48"
+wasmtime         = "49"
 wasmtime-wasi    = "48"
 
 # Logging
