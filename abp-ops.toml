@@ -1,0 +1,7270 @@
+# What this project can do, as ABP operations (abp_modkit). Edit freely: adopting it again
+# (`python -m abp_modkit adopt .`) keeps edited summaries, settings and ops you added, and picks up new
+# routes and commands.
+
+[service]
+id = "omnisystem"
+name = "Omnisystem"
+description = "Omnisystem is a complete, production-grade software ecosystem designed to handle ANY situation, ANY context, ANYTHING that could be encountered over the next 100+ years of computing."
+base_url = "http://127.0.0.1:9000"
+health = "/health"
+start = ["{target}/release/launcher-web{exe}"]
+env = { PORT = "9000" }
+
+[[op]]
+id = "sylva_cli.run"
+kind = "cmd"
+summary = "Run `sylva_cli` with the given arguments"
+argv = ["{target}/release/sylva_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "agent_control_ui_cli.run"
+kind = "cmd"
+summary = "Run `agent_control_ui_cli` with the given arguments"
+argv = ["{target}/release/agent_control_ui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_2"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "anomaly_detection_advanced_cli.run"
+kind = "cmd"
+summary = "Run `anomaly_detection_advanced_cli` with the given arguments"
+argv = ["{target}/release/anomaly_detection_advanced_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_3"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "anomaly_detection_engine_cli.run"
+kind = "cmd"
+summary = "Run `anomaly_detection_engine_cli` with the given arguments"
+argv = ["{target}/release/anomaly_detection_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_4"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "api_gateway_enterprise_cli.run"
+kind = "cmd"
+summary = "Run `api_gateway_enterprise_cli` with the given arguments"
+argv = ["{target}/release/api_gateway_enterprise_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_5"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_menu_cli.list"
+kind = "cmd"
+summary = "List all available applications"
+argv = ["{target}/release/app_menu_cli{exe}", "list"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_menu_cli.run"
+kind = "cmd"
+summary = "Launch an application"
+argv = ["{target}/release/app_menu_cli{exe}", "run"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_menu_cli.search"
+kind = "cmd"
+summary = "Search for applications"
+argv = ["{target}/release/app_menu_cli{exe}", "search"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_menu_cli.status"
+kind = "cmd"
+summary = "Show system status"
+argv = ["{target}/release/app_menu_cli{exe}", "status"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_menu_cli.instances"
+kind = "cmd"
+summary = "List running application instances"
+argv = ["{target}/release/app_menu_cli{exe}", "instances"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_menu_cli.terminate"
+kind = "cmd"
+summary = "Terminate a running application"
+argv = ["{target}/release/app_menu_cli{exe}", "terminate"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_menu_cli.show"
+kind = "cmd"
+summary = "Show application details"
+argv = ["{target}/release/app_menu_cli{exe}", "show"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_6"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "launcher_web.run"
+kind = "cmd"
+summary = "Run `launcher-web` with the given arguments"
+argv = ["{target}/release/launcher-web{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "web_server.run"
+kind = "cmd"
+summary = "Run `web-server` with the given arguments"
+argv = ["{target}/release/web-server{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "chart_components_cli.run"
+kind = "cmd"
+summary = "Run `chart_components_cli` with the given arguments"
+argv = ["{target}/release/chart_components_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_7"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "ci_cd_integration_cli.run"
+kind = "cmd"
+summary = "Run `ci_cd_integration_cli` with the given arguments"
+argv = ["{target}/release/ci_cd_integration_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_8"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "claude_natural_language_interface_cli.run"
+kind = "cmd"
+summary = "Run `claude_natural_language_interface_cli` with the given arguments"
+argv = ["{target}/release/claude_natural_language_interface_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_9"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "code_generation_assistant_cli.run"
+kind = "cmd"
+summary = "Run `code_generation_assistant_cli` with the given arguments"
+argv = ["{target}/release/code_generation_assistant_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_10"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "configuration_manager_cli.run"
+kind = "cmd"
+summary = "Run `configuration-manager-cli` with the given arguments"
+argv = ["{target}/release/configuration-manager-cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_11"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "data_serialization_cli.run"
+kind = "cmd"
+summary = "Run `data_serialization_cli` with the given arguments"
+argv = ["{target}/release/data_serialization_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_12"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "diagnostic_ai_cli.run"
+kind = "cmd"
+summary = "Run `diagnostic_ai_cli` with the given arguments"
+argv = ["{target}/release/diagnostic_ai_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_13"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "documentation_viewer_ui_cli.run"
+kind = "cmd"
+summary = "Run `documentation_viewer_ui_cli` with the given arguments"
+argv = ["{target}/release/documentation_viewer_ui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_14"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "environment_builder_cli.run"
+kind = "cmd"
+summary = "Run `environment_builder_cli` with the given arguments"
+argv = ["{target}/release/environment_builder_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_15"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "event_processing_engine_cli.run"
+kind = "cmd"
+summary = "Run `event_processing_engine_cli` with the given arguments"
+argv = ["{target}/release/event_processing_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_16"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "global_failover_cli.run"
+kind = "cmd"
+summary = "Run `global_failover_cli` with the given arguments"
+argv = ["{target}/release/global_failover_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_17"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "healthcare_ai_engine_cli.run"
+kind = "cmd"
+summary = "Run `healthcare_ai_engine_cli` with the given arguments"
+argv = ["{target}/release/healthcare_ai_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_18"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "infrastructure_core_cli.run"
+kind = "cmd"
+summary = "Run `infrastructure_core_cli` with the given arguments"
+argv = ["{target}/release/infrastructure_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_19"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "infrastructure_database_cli.run"
+kind = "cmd"
+summary = "Run `infrastructure_database_cli` with the given arguments"
+argv = ["{target}/release/infrastructure_database_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_20"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "intelligent_dashboard_builder_cli.run"
+kind = "cmd"
+summary = "Run `intelligent_dashboard_builder_cli` with the given arguments"
+argv = ["{target}/release/intelligent_dashboard_builder_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_21"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "intelligent_resource_advisor_cli.run"
+kind = "cmd"
+summary = "Run `intelligent_resource_advisor_cli` with the given arguments"
+argv = ["{target}/release/intelligent_resource_advisor_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_22"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "intelligent_troubleshooting_engine_cli.run"
+kind = "cmd"
+summary = "Run `intelligent_troubleshooting_engine_cli` with the given arguments"
+argv = ["{target}/release/intelligent_troubleshooting_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_23"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "inventory_analytics_cli.run"
+kind = "cmd"
+summary = "Run `inventory_analytics_cli` with the given arguments"
+argv = ["{target}/release/inventory_analytics_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_24"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "network_management_ui_cli.run"
+kind = "cmd"
+summary = "Run `network_management_ui_cli` with the given arguments"
+argv = ["{target}/release/network_management_ui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_25"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "orchestration_engine_cli.run"
+kind = "cmd"
+summary = "Run `orchestration_engine_cli` with the given arguments"
+argv = ["{target}/release/orchestration_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_26"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "rate_limiting_cli.run"
+kind = "cmd"
+summary = "Run `rate_limiting_cli` with the given arguments"
+argv = ["{target}/release/rate_limiting_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_27"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "rbac_authorization_engine_cli.run"
+kind = "cmd"
+summary = "Run `rbac_authorization_engine_cli` with the given arguments"
+argv = ["{target}/release/rbac_authorization_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_28"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "reinforcement_learning_optimizer_cli.run"
+kind = "cmd"
+summary = "Run `reinforcement_learning_optimizer_cli` with the given arguments"
+argv = ["{target}/release/reinforcement_learning_optimizer_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_29"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "resource_optimizer_ui_cli.run"
+kind = "cmd"
+summary = "Run `resource_optimizer_ui_cli` with the given arguments"
+argv = ["{target}/release/resource_optimizer_ui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_30"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "rolling_updates_cli.run"
+kind = "cmd"
+summary = "Run `rolling_updates_cli` with the given arguments"
+argv = ["{target}/release/rolling_updates_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_31"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "android_bridge_cli.run"
+kind = "cmd"
+summary = "Run `android_bridge_cli` with the given arguments"
+argv = ["{target}/release/android_bridge_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_32"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_api.run"
+kind = "cmd"
+summary = "Run `app-manager-api` with the given arguments"
+argv = ["{target}/release/app-manager-api{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_api_cli.run"
+kind = "cmd"
+summary = "Run `app_manager_api_cli` with the given arguments"
+argv = ["{target}/release/app_manager_api_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_33"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_core_cli.run"
+kind = "cmd"
+summary = "Run `app_manager_core_cli` with the given arguments"
+argv = ["{target}/release/app_manager_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_34"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_installer_cli.run"
+kind = "cmd"
+summary = "Run `app_manager_installer_cli` with the given arguments"
+argv = ["{target}/release/app_manager_installer_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_35"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_repository_cli.run"
+kind = "cmd"
+summary = "Run `app_manager_repository_cli` with the given arguments"
+argv = ["{target}/release/app_manager_repository_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_36"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_security_cli.run"
+kind = "cmd"
+summary = "Run `app_manager_security_cli` with the given arguments"
+argv = ["{target}/release/app_manager_security_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_37"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_omnisystem_integration_cli.run"
+kind = "cmd"
+summary = "Run `app_manager_omnisystem_integration_cli` with the given arguments"
+argv = ["{target}/release/app_manager_omnisystem_integration_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_38"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_cli_cli.install"
+kind = "cmd"
+summary = "Install an application"
+argv = ["{target}/release/app_manager_cli_cli{exe}", "install"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_cli_cli.uninstall"
+kind = "cmd"
+summary = "Uninstall an application"
+argv = ["{target}/release/app_manager_cli_cli{exe}", "uninstall"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_cli_cli.list"
+kind = "cmd"
+summary = "List installed applications"
+argv = ["{target}/release/app_manager_cli_cli{exe}", "list"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_cli_cli.status"
+kind = "cmd"
+summary = "Show application status"
+argv = ["{target}/release/app_manager_cli_cli{exe}", "status"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_cli_cli.start"
+kind = "cmd"
+summary = "Start an application"
+argv = ["{target}/release/app_manager_cli_cli{exe}", "start"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_cli_cli.stop"
+kind = "cmd"
+summary = "Stop an application"
+argv = ["{target}/release/app_manager_cli_cli{exe}", "stop"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_cli_cli.update"
+kind = "cmd"
+summary = "Update an application"
+argv = ["{target}/release/app_manager_cli_cli{exe}", "update"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_cli_cli.config"
+kind = "cmd"
+summary = "Configure an application (real, persisted to a JSON file per app id)"
+argv = ["{target}/release/app_manager_cli_cli{exe}", "config"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_cli_cli.search"
+kind = "cmd"
+summary = "Search marketplace (not yet implemented)"
+argv = ["{target}/release/app_manager_cli_cli{exe}", "search"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_cli_cli.logs"
+kind = "cmd"
+summary = "Show application logs (not yet implemented)"
+argv = ["{target}/release/app_manager_cli_cli{exe}", "logs"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_cli_cli.verify"
+kind = "cmd"
+summary = "Verify application integrity (not yet implemented)"
+argv = ["{target}/release/app_manager_cli_cli{exe}", "verify"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_cli_cli.rollback"
+kind = "cmd"
+summary = "Rollback to previous version (real, via Installer::rollback)"
+argv = ["{target}/release/app_manager_cli_cli{exe}", "rollback"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_cli_cli.health"
+kind = "cmd"
+summary = "System health check"
+argv = ["{target}/release/app_manager_cli_cli{exe}", "health"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_39"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "p2p_cli.run"
+kind = "cmd"
+summary = "Run `p2p_cli` with the given arguments"
+argv = ["{target}/release/p2p_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_40"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "dns_router_core_cli.run"
+kind = "cmd"
+summary = "Run `dns_router_core_cli` with the given arguments"
+argv = ["{target}/release/dns_router_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_41"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "infrastructure_storage_cli.run"
+kind = "cmd"
+summary = "Run `infrastructure_storage_cli` with the given arguments"
+argv = ["{target}/release/infrastructure_storage_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_42"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "adaptive_protocols_cli.run"
+kind = "cmd"
+summary = "Run `adaptive_protocols_cli` with the given arguments"
+argv = ["{target}/release/adaptive_protocols_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_43"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "clustering_analysis_engine_cli.run"
+kind = "cmd"
+summary = "Run `clustering_analysis_engine_cli` with the given arguments"
+argv = ["{target}/release/clustering_analysis_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_44"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "deployment_lifecycle_cli.run"
+kind = "cmd"
+summary = "Run `deployment_lifecycle_cli` with the given arguments"
+argv = ["{target}/release/deployment_lifecycle_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_45"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "intelligent_automation_engine_cli.run"
+kind = "cmd"
+summary = "Run `intelligent_automation_engine_cli` with the given arguments"
+argv = ["{target}/release/intelligent_automation_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_46"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_47"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "abp_omni.run"
+kind = "cmd"
+summary = "Run `abp-omni` with the given arguments"
+argv = ["{target}/release/abp-omni{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "observability_aggregator_cli.run"
+kind = "cmd"
+summary = "Run `observability_aggregator_cli` with the given arguments"
+argv = ["{target}/release/observability_aggregator_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_48"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_observability_bridge_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_observability_bridge_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_observability_bridge_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_49"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "real_time_at_scale_cli.run"
+kind = "cmd"
+summary = "Run `real_time_at_scale_cli` with the given arguments"
+argv = ["{target}/release/real_time_at_scale_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_50"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "accessibility_framework_cli.run"
+kind = "cmd"
+summary = "Run `accessibility_framework_cli` with the given arguments"
+argv = ["{target}/release/accessibility_framework_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_51"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "advanced_launcher_cli.run"
+kind = "cmd"
+summary = "Run `advanced_launcher_cli` with the given arguments"
+argv = ["{target}/release/advanced_launcher_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_52"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "advanced_monitoring_cli.run"
+kind = "cmd"
+summary = "Run `advanced_monitoring_cli` with the given arguments"
+argv = ["{target}/release/advanced_monitoring_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_53"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "ai_conversation_memory_cli.run"
+kind = "cmd"
+summary = "Run `ai_conversation_memory_cli` with the given arguments"
+argv = ["{target}/release/ai_conversation_memory_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_54"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "ai_powered_help_system_cli.run"
+kind = "cmd"
+summary = "Run `ai_powered_help_system_cli` with the given arguments"
+argv = ["{target}/release/ai_powered_help_system_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_55"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "ai_scheduling_optimizer_cli.run"
+kind = "cmd"
+summary = "Run `ai_scheduling_optimizer_cli` with the given arguments"
+argv = ["{target}/release/ai_scheduling_optimizer_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_56"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "alerting_configuration_ui_cli.run"
+kind = "cmd"
+summary = "Run `alerting_configuration_ui_cli` with the given arguments"
+argv = ["{target}/release/alerting_configuration_ui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_57"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "analytics_viewer_ui_cli.run"
+kind = "cmd"
+summary = "Run `analytics_viewer_ui_cli` with the given arguments"
+argv = ["{target}/release/analytics_viewer_ui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_58"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "animation_library_cli.run"
+kind = "cmd"
+summary = "Run `animation_library_cli` with the given arguments"
+argv = ["{target}/release/animation_library_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_59"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "auth_system_cli.run"
+kind = "cmd"
+summary = "Run `auth_system_cli` with the given arguments"
+argv = ["{target}/release/auth_system_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_60"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "automated_optimization_agent_cli.run"
+kind = "cmd"
+summary = "Run `automated_optimization_agent_cli` with the given arguments"
+argv = ["{target}/release/automated_optimization_agent_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_61"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "automation_builder_ui_cli.run"
+kind = "cmd"
+summary = "Run `automation_builder_ui_cli` with the given arguments"
+argv = ["{target}/release/automation_builder_ui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_62"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "backup_restoration_engine_cli.run"
+kind = "cmd"
+summary = "Run `backup_restoration_engine_cli` with the given arguments"
+argv = ["{target}/release/backup_restoration_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_63"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "backup_restore_ui_cli.run"
+kind = "cmd"
+summary = "Run `backup_restore_ui_cli` with the given arguments"
+argv = ["{target}/release/backup_restore_ui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_64"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "billing_metering_engine_cli.run"
+kind = "cmd"
+summary = "Run `billing_metering_engine_cli` with the given arguments"
+argv = ["{target}/release/billing_metering_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_65"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "blue_green_deployment_cli.run"
+kind = "cmd"
+summary = "Run `blue_green_deployment_cli` with the given arguments"
+argv = ["{target}/release/blue_green_deployment_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_66"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "canary_deployment_cli.run"
+kind = "cmd"
+summary = "Run `canary_deployment_cli` with the given arguments"
+argv = ["{target}/release/canary_deployment_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_67"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "circuit_breaker_cli.run"
+kind = "cmd"
+summary = "Run `circuit_breaker_cli` with the given arguments"
+argv = ["{target}/release/circuit_breaker_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_68"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "clinical_decision_support_cli.run"
+kind = "cmd"
+summary = "Run `clinical_decision_support_cli` with the given arguments"
+argv = ["{target}/release/clinical_decision_support_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_69"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "command_executor_cli.run"
+kind = "cmd"
+summary = "Run `command_executor_cli` with the given arguments"
+argv = ["{target}/release/command_executor_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_70"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "compliance_framework_cli.run"
+kind = "cmd"
+summary = "Run `compliance_framework_cli` with the given arguments"
+argv = ["{target}/release/compliance_framework_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_71"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "config_management_cli.run"
+kind = "cmd"
+summary = "Run `config_management_cli` with the given arguments"
+argv = ["{target}/release/config_management_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_72"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "configuration_engine_cli.run"
+kind = "cmd"
+summary = "Run `configuration_engine_cli` with the given arguments"
+argv = ["{target}/release/configuration_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_73"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "container_management_ui_cli.run"
+kind = "cmd"
+summary = "Run `container_management_ui_cli` with the given arguments"
+argv = ["{target}/release/container_management_ui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_74"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "container_performance_profiler_cli.run"
+kind = "cmd"
+summary = "Run `container_performance_profiler_cli` with the given arguments"
+argv = ["{target}/release/container_performance_profiler_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_75"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "container_runtime_cli.run"
+kind = "cmd"
+summary = "Run `container_runtime_cli` with the given arguments"
+argv = ["{target}/release/container_runtime_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_76"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "container_security_platform_cli.run"
+kind = "cmd"
+summary = "Run `container_security_platform_cli` with the given arguments"
+argv = ["{target}/release/container_security_platform_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_77"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "continuous_learning_framework_cli.run"
+kind = "cmd"
+summary = "Run `continuous_learning_framework_cli` with the given arguments"
+argv = ["{target}/release/continuous_learning_framework_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_78"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "correlation_analysis_engine_cli.run"
+kind = "cmd"
+summary = "Run `correlation_analysis_engine_cli` with the given arguments"
+argv = ["{target}/release/correlation_analysis_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_79"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cost_optimization_engine_cli.run"
+kind = "cmd"
+summary = "Run `cost_optimization_engine_cli` with the given arguments"
+argv = ["{target}/release/cost_optimization_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_80"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "dashboard_engine_cli.run"
+kind = "cmd"
+summary = "Run `dashboard_engine_cli` with the given arguments"
+argv = ["{target}/release/dashboard_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_81"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "data_privacy_cli.run"
+kind = "cmd"
+summary = "Run `data_privacy_cli` with the given arguments"
+argv = ["{target}/release/data_privacy_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_82"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "data_sharding_cli.run"
+kind = "cmd"
+summary = "Run `data_sharding_cli` with the given arguments"
+argv = ["{target}/release/data_sharding_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_83"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "data_table_component_cli.run"
+kind = "cmd"
+summary = "Run `data_table_component_cli` with the given arguments"
+argv = ["{target}/release/data_table_component_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_84"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "decision_tree_explainer_cli.run"
+kind = "cmd"
+summary = "Run `decision_tree_explainer_cli` with the given arguments"
+argv = ["{target}/release/decision_tree_explainer_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_85"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "deployment_manager_cli.run"
+kind = "cmd"
+summary = "Run `deployment_manager_cli` with the given arguments"
+argv = ["{target}/release/deployment_manager_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_86"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "deployment_wizard_ui_cli.run"
+kind = "cmd"
+summary = "Run `deployment_wizard_ui_cli` with the given arguments"
+argv = ["{target}/release/deployment_wizard_ui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_87"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "developer_tools_cli.run"
+kind = "cmd"
+summary = "Run `developer_tools_cli` with the given arguments"
+argv = ["{target}/release/developer_tools_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_88"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "disaster_recovery_platform_cli.run"
+kind = "cmd"
+summary = "Run `disaster_recovery_platform_cli` with the given arguments"
+argv = ["{target}/release/disaster_recovery_platform_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_89"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "distributed_storage_cli.run"
+kind = "cmd"
+summary = "Run `distributed_storage_cli` with the given arguments"
+argv = ["{target}/release/distributed_storage_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_90"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "docker_compose_advanced_cli.run"
+kind = "cmd"
+summary = "Run `docker_compose_advanced_cli` with the given arguments"
+argv = ["{target}/release/docker_compose_advanced_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_91"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "docker_container_lifecycle_cli.run"
+kind = "cmd"
+summary = "Run `docker_container_lifecycle_cli` with the given arguments"
+argv = ["{target}/release/docker_container_lifecycle_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_92"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "docker_image_manager_cli.run"
+kind = "cmd"
+summary = "Run `docker_image_manager_cli` with the given arguments"
+argv = ["{target}/release/docker_image_manager_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_93"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "docker_network_manager_cli.run"
+kind = "cmd"
+summary = "Run `docker_network_manager_cli` with the given arguments"
+argv = ["{target}/release/docker_network_manager_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_94"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "docker_registry_integration_cli.run"
+kind = "cmd"
+summary = "Run `docker_registry_integration_cli` with the given arguments"
+argv = ["{target}/release/docker_registry_integration_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_95"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "docker_volume_manager_cli.run"
+kind = "cmd"
+summary = "Run `docker_volume_manager_cli` with the given arguments"
+argv = ["{target}/release/docker_volume_manager_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_96"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "dockerfile_optimizer_cli.run"
+kind = "cmd"
+summary = "Run `dockerfile_optimizer_cli` with the given arguments"
+argv = ["{target}/release/dockerfile_optimizer_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_97"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "drag_drop_framework_cli.run"
+kind = "cmd"
+summary = "Run `drag_drop_framework_cli` with the given arguments"
+argv = ["{target}/release/drag_drop_framework_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_98"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "encryption_manager_cli.run"
+kind = "cmd"
+summary = "Run `encryption_manager_cli` with the given arguments"
+argv = ["{target}/release/encryption_manager_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_99"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "error_boundary_system_cli.run"
+kind = "cmd"
+summary = "Run `error_boundary_system_cli` with the given arguments"
+argv = ["{target}/release/error_boundary_system_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_100"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "event_broker_cli.run"
+kind = "cmd"
+summary = "Run `event_broker_cli` with the given arguments"
+argv = ["{target}/release/event_broker_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_101"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "event_driven_architecture_cli.run"
+kind = "cmd"
+summary = "Run `event_driven_architecture_cli` with the given arguments"
+argv = ["{target}/release/event_driven_architecture_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_102"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "event_processor_cli.run"
+kind = "cmd"
+summary = "Run `event_processor_cli` with the given arguments"
+argv = ["{target}/release/event_processor_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_103"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "event_streaming_cli.run"
+kind = "cmd"
+summary = "Run `event_streaming_cli` with the given arguments"
+argv = ["{target}/release/event_streaming_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_104"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "event_system_cli.run"
+kind = "cmd"
+summary = "Run `event_system_cli` with the given arguments"
+argv = ["{target}/release/event_system_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_105"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "forecasting_engine_advanced_cli.run"
+kind = "cmd"
+summary = "Run `forecasting_engine_advanced_cli` with the given arguments"
+argv = ["{target}/release/forecasting_engine_advanced_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_106"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "form_builder_cli.run"
+kind = "cmd"
+summary = "Run `form_builder_cli` with the given arguments"
+argv = ["{target}/release/form_builder_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_107"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "form_components_cli.run"
+kind = "cmd"
+summary = "Run `form_components_cli` with the given arguments"
+argv = ["{target}/release/form_components_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_108"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "ftp_sftp_core_cli.run"
+kind = "cmd"
+summary = "Run `ftp_sftp_core_cli` with the given arguments"
+argv = ["{target}/release/ftp_sftp_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_109"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "geo_replication_cli.run"
+kind = "cmd"
+summary = "Run `geo_replication_cli` with the given arguments"
+argv = ["{target}/release/geo_replication_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_110"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "git_integration_cli.run"
+kind = "cmd"
+summary = "Run `git_integration_cli` with the given arguments"
+argv = ["{target}/release/git_integration_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_111"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "global_distribution_engine_cli.run"
+kind = "cmd"
+summary = "Run `global_distribution_engine_cli` with the given arguments"
+argv = ["{target}/release/global_distribution_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_112"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "health_check_engine_cli.run"
+kind = "cmd"
+summary = "Run `health_check_engine_cli` with the given arguments"
+argv = ["{target}/release/health_check_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_113"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "healthcare_compliance_deep_cli.run"
+kind = "cmd"
+summary = "Run `healthcare_compliance_deep_cli` with the given arguments"
+argv = ["{target}/release/healthcare_compliance_deep_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_114"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "high_availability_controller_cli.run"
+kind = "cmd"
+summary = "Run `high_availability_controller_cli` with the given arguments"
+argv = ["{target}/release/high_availability_controller_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_115"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "high_throughput_processing_cli.run"
+kind = "cmd"
+summary = "Run `high_throughput_processing_cli` with the given arguments"
+argv = ["{target}/release/high_throughput_processing_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_116"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "hipaa_engine_cli.run"
+kind = "cmd"
+summary = "Run `hipaa_engine_cli` with the given arguments"
+argv = ["{target}/release/hipaa_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_117"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "icon_library_cli.run"
+kind = "cmd"
+summary = "Run `icon_library_cli` with the given arguments"
+argv = ["{target}/release/icon_library_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_118"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "image_management_ui_cli.run"
+kind = "cmd"
+summary = "Run `image_management_ui_cli` with the given arguments"
+argv = ["{target}/release/image_management_ui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_119"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "infinite_scroll_component_cli.run"
+kind = "cmd"
+summary = "Run `infinite_scroll_component_cli` with the given arguments"
+argv = ["{target}/release/infinite_scroll_component_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_120"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "infrastructure_as_code_engine_cli.run"
+kind = "cmd"
+summary = "Run `infrastructure_as_code_engine_cli` with the given arguments"
+argv = ["{target}/release/infrastructure_as_code_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_121"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "intelligent_command_parser_cli.run"
+kind = "cmd"
+summary = "Run `intelligent_command_parser_cli` with the given arguments"
+argv = ["{target}/release/intelligent_command_parser_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_122"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "intelligent_recommendation_system_cli.run"
+kind = "cmd"
+summary = "Run `intelligent_recommendation_system_cli` with the given arguments"
+argv = ["{target}/release/intelligent_recommendation_system_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_123"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "keyboard_shortcuts_system_cli.run"
+kind = "cmd"
+summary = "Run `keyboard_shortcuts_system_cli` with the given arguments"
+argv = ["{target}/release/keyboard_shortcuts_system_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_124"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "kubernetes_integration_layer_cli.run"
+kind = "cmd"
+summary = "Run `kubernetes_integration_layer_cli` with the given arguments"
+argv = ["{target}/release/kubernetes_integration_layer_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_125"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "launcher_cli.run"
+kind = "cmd"
+summary = "Run `launcher_cli` with the given arguments"
+argv = ["{target}/release/launcher_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_126"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "launcher_core_cli.run"
+kind = "cmd"
+summary = "Run `launcher_core_cli` with the given arguments"
+argv = ["{target}/release/launcher_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_127"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "layout_components_cli.run"
+kind = "cmd"
+summary = "Run `layout_components_cli` with the given arguments"
+argv = ["{target}/release/layout_components_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_128"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "license_management_system_cli.run"
+kind = "cmd"
+summary = "Run `license_management_system_cli` with the given arguments"
+argv = ["{target}/release/license_management_system_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_129"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "log_aggregation_integration_cli.run"
+kind = "cmd"
+summary = "Run `log_aggregation_integration_cli` with the given arguments"
+argv = ["{target}/release/log_aggregation_integration_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_130"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "logging_aggregator_cli.run"
+kind = "cmd"
+summary = "Run `logging_aggregator_cli` with the given arguments"
+argv = ["{target}/release/logging_aggregator_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_131"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "logistics_analytics_cli.run"
+kind = "cmd"
+summary = "Run `logistics_analytics_cli` with the given arguments"
+argv = ["{target}/release/logistics_analytics_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_132"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "low_latency_engine_cli.run"
+kind = "cmd"
+summary = "Run `low_latency_engine_cli` with the given arguments"
+argv = ["{target}/release/low_latency_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_133"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "massive_parallelism_cli.run"
+kind = "cmd"
+summary = "Run `massive_parallelism_cli` with the given arguments"
+argv = ["{target}/release/massive_parallelism_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_134"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "modal_component_library_cli.run"
+kind = "cmd"
+summary = "Run `modal_component_library_cli` with the given arguments"
+argv = ["{target}/release/modal_component_library_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_135"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "monitoring_dashboard_ui_cli.run"
+kind = "cmd"
+summary = "Run `monitoring_dashboard_ui_cli` with the given arguments"
+argv = ["{target}/release/monitoring_dashboard_ui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_136"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "monitoring_integration_layer_cli.run"
+kind = "cmd"
+summary = "Run `monitoring_integration_layer_cli` with the given arguments"
+argv = ["{target}/release/monitoring_integration_layer_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_137"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "multi_tenancy_engine_cli.run"
+kind = "cmd"
+summary = "Run `multi_tenancy_engine_cli` with the given arguments"
+argv = ["{target}/release/multi_tenancy_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_138"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "multi_tenant_cli.run"
+kind = "cmd"
+summary = "Run `multi_tenant_cli` with the given arguments"
+argv = ["{target}/release/multi_tenant_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_139"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "natural_language_processing_engine_cli.run"
+kind = "cmd"
+summary = "Run `natural_language_processing_engine_cli` with the given arguments"
+argv = ["{target}/release/natural_language_processing_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_140"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "navigation_components_cli.run"
+kind = "cmd"
+summary = "Run `navigation_components_cli` with the given arguments"
+argv = ["{target}/release/navigation_components_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_141"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "navigation_system_cli.run"
+kind = "cmd"
+summary = "Run `navigation_system_cli` with the given arguments"
+argv = ["{target}/release/navigation_system_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_142"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "network_policy_manager_cli.run"
+kind = "cmd"
+summary = "Run `network_policy_manager_cli` with the given arguments"
+argv = ["{target}/release/network_policy_manager_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_143"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "notification_dispatcher_cli.run"
+kind = "cmd"
+summary = "Run `notification_dispatcher_cli` with the given arguments"
+argv = ["{target}/release/notification_dispatcher_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_144"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "notification_ui_cli.run"
+kind = "cmd"
+summary = "Run `notification_ui_cli` with the given arguments"
+argv = ["{target}/release/notification_ui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_145"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnidocker_state_manager_cli.run"
+kind = "cmd"
+summary = "Run `omnidocker_state_manager_cli` with the given arguments"
+argv = ["{target}/release/omnidocker_state_manager_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_146"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_9_complete_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_9_complete_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_9_complete_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_147"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_cicd_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_cicd_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_cicd_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_148"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_connector_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_connector_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_connector_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_149"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_data_sync_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_data_sync_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_data_sync_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_150"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_deployment_bridge_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_deployment_bridge_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_deployment_bridge_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_151"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_event_bus_integration_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_event_bus_integration_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_event_bus_integration_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_152"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_monitoring_integration_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_monitoring_integration_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_monitoring_integration_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_153"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_security_integration_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_security_integration_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_security_integration_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_154"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_workflow_engine_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_workflow_engine_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_workflow_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_155"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "patient_privacy_cli.run"
+kind = "cmd"
+summary = "Run `patient_privacy_cli` with the given arguments"
+argv = ["{target}/release/patient_privacy_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_156"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "performance_optimizer_cli.run"
+kind = "cmd"
+summary = "Run `performance_optimizer_cli` with the given arguments"
+argv = ["{target}/release/performance_optimizer_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_157"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "performance_tuning_advisor_cli.run"
+kind = "cmd"
+summary = "Run `performance_tuning_advisor_cli` with the given arguments"
+argv = ["{target}/release/performance_tuning_advisor_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_158"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "petabyte_scale_engine_cli.run"
+kind = "cmd"
+summary = "Run `petabyte_scale_engine_cli` with the given arguments"
+argv = ["{target}/release/petabyte_scale_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_159"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "pre_launcher_cli.run"
+kind = "cmd"
+summary = "Run `pre_launcher_cli` with the given arguments"
+argv = ["{target}/release/pre_launcher_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_160"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "pre_launcher.run"
+kind = "cmd"
+summary = "Run `pre-launcher` with the given arguments"
+argv = ["{target}/release/pre-launcher{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "predictive_alerting_system_cli.run"
+kind = "cmd"
+summary = "Run `predictive_alerting_system_cli` with the given arguments"
+argv = ["{target}/release/predictive_alerting_system_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_161"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "predictive_analytics_engine_cli.run"
+kind = "cmd"
+summary = "Run `predictive_analytics_engine_cli` with the given arguments"
+argv = ["{target}/release/predictive_analytics_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_162"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "procurement_analytics_cli.run"
+kind = "cmd"
+summary = "Run `procurement_analytics_cli` with the given arguments"
+argv = ["{target}/release/procurement_analytics_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_163"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "request_hedging_cli.run"
+kind = "cmd"
+summary = "Run `request_hedging_cli` with the given arguments"
+argv = ["{target}/release/request_hedging_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_164"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "resilience_patterns_cli.run"
+kind = "cmd"
+summary = "Run `resilience_patterns_cli` with the given arguments"
+argv = ["{target}/release/resilience_patterns_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_165"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "resource_monitor_cli.run"
+kind = "cmd"
+summary = "Run `resource_monitor_cli` with the given arguments"
+argv = ["{target}/release/resource_monitor_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_166"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "responsive_design_framework_cli.run"
+kind = "cmd"
+summary = "Run `responsive_design_framework_cli` with the given arguments"
+argv = ["{target}/release/responsive_design_framework_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_167"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "secret_management_integration_cli.run"
+kind = "cmd"
+summary = "Run `secret_management_integration_cli` with the given arguments"
+argv = ["{target}/release/secret_management_integration_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_168"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "security_analyzer_cli.run"
+kind = "cmd"
+summary = "Run `security_analyzer_cli` with the given arguments"
+argv = ["{target}/release/security_analyzer_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_169"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "security_console_ui_cli.run"
+kind = "cmd"
+summary = "Run `security_console_ui_cli` with the given arguments"
+argv = ["{target}/release/security_console_ui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_170"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "service_coordination_cli.run"
+kind = "cmd"
+summary = "Run `service_coordination_cli` with the given arguments"
+argv = ["{target}/release/service_coordination_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_171"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "settings_configuration_ui_cli.run"
+kind = "cmd"
+summary = "Run `settings_configuration_ui_cli` with the given arguments"
+argv = ["{target}/release/settings_configuration_ui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_172"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "state_management_framework_cli.run"
+kind = "cmd"
+summary = "Run `state_management_framework_cli` with the given arguments"
+argv = ["{target}/release/state_management_framework_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_173"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "streaming_at_scale_cli.run"
+kind = "cmd"
+summary = "Run `streaming_at_scale_cli` with the given arguments"
+argv = ["{target}/release/streaming_at_scale_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_174"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "supply_chain_analytics_cli.run"
+kind = "cmd"
+summary = "Run `supply_chain_analytics_cli` with the given arguments"
+argv = ["{target}/release/supply_chain_analytics_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_175"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "tooltip_popover_library_cli.run"
+kind = "cmd"
+summary = "Run `tooltip_popover_library_cli` with the given arguments"
+argv = ["{target}/release/tooltip_popover_library_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_176"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "treatment_ai_cli.run"
+kind = "cmd"
+summary = "Run `treatment_ai_cli` with the given arguments"
+argv = ["{target}/release/treatment_ai_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_177"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "ui_component_library_cli.run"
+kind = "cmd"
+summary = "Run `ui_component_library_cli` with the given arguments"
+argv = ["{target}/release/ui_component_library_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_178"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "visualization_library_cli.run"
+kind = "cmd"
+summary = "Run `visualization_library_cli` with the given arguments"
+argv = ["{target}/release/visualization_library_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_179"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "volume_management_ui_cli.run"
+kind = "cmd"
+summary = "Run `volume_management_ui_cli` with the given arguments"
+argv = ["{target}/release/volume_management_ui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_180"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "web_hosting_core_cli.run"
+kind = "cmd"
+summary = "Run `web_hosting_core_cli` with the given arguments"
+argv = ["{target}/release/web_hosting_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_181"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "web_hosting_integration_cli.run"
+kind = "cmd"
+summary = "Run `web_hosting_integration_cli` with the given arguments"
+argv = ["{target}/release/web_hosting_integration_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_182"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "web_server_core_cli.run"
+kind = "cmd"
+summary = "Run `web_server_core_cli` with the given arguments"
+argv = ["{target}/release/web_server_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_183"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "zero_downtime_deployment_cli.run"
+kind = "cmd"
+summary = "Run `zero_downtime_deployment_cli` with the given arguments"
+argv = ["{target}/release/zero_downtime_deployment_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_184"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_185"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "audit_log_cli.run"
+kind = "cmd"
+summary = "Run `audit_log_cli` with the given arguments"
+argv = ["{target}/release/audit_log_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_186"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_187"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_188"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_189"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_190"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_191"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_192"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_193"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_194"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_195"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_196"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_197"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_198"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "iot_control_cli.run"
+kind = "cmd"
+summary = "Run `iot_control_cli` with the given arguments"
+argv = ["{target}/release/iot_control_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_199"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "ir_cli.run"
+kind = "cmd"
+summary = "Run `ir_cli` with the given arguments"
+argv = ["{target}/release/ir_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnicc.run"
+kind = "cmd"
+summary = "Run `omnicc` with the given arguments"
+argv = ["{target}/release/omnicc{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_200"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_201"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_202"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_203"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_204"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_205"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_206"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_207"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "profiler_cli.run"
+kind = "cmd"
+summary = "Run `profiler_cli` with the given arguments"
+argv = ["{target}/release/profiler_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_208"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_209"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "remote_desktop_cli.run"
+kind = "cmd"
+summary = "Run `remote_desktop_cli` with the given arguments"
+argv = ["{target}/release/remote_desktop_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_210"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "sandbox_cli.init"
+kind = "cmd"
+summary = "Initialize a new Enclave project"
+argv = ["{target}/release/sandbox_cli{exe}", "init"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "sandbox_cli.add"
+kind = "cmd"
+summary = "Add a dependency"
+argv = ["{target}/release/sandbox_cli{exe}", "add"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "sandbox_cli.lock"
+kind = "cmd"
+summary = "Resolve and lock dependencies deterministically"
+argv = ["{target}/release/sandbox_cli{exe}", "lock"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "sandbox_cli.install"
+kind = "cmd"
+summary = "Install all locked dependencies"
+argv = ["{target}/release/sandbox_cli{exe}", "install"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "sandbox_cli.shell"
+kind = "cmd"
+summary = "Create an isolated shell environment"
+argv = ["{target}/release/sandbox_cli{exe}", "shell"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "sandbox_cli.run"
+kind = "cmd"
+summary = "Run a command in the isolated environment"
+argv = ["{target}/release/sandbox_cli{exe}", "run"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "sandbox_cli.runtime"
+kind = "cmd"
+summary = "Manage language runtimes"
+argv = ["{target}/release/sandbox_cli{exe}", "runtime"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "sandbox_cli.cache"
+kind = "cmd"
+summary = "Manage the content-addressed cache"
+argv = ["{target}/release/sandbox_cli{exe}", "cache"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_211"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "main.run"
+kind = "cmd"
+summary = "Run `main` with the given arguments"
+argv = ["{target}/release/main{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "orchestrator.run"
+kind = "cmd"
+summary = "Run `orchestrator` with the given arguments"
+argv = ["{target}/release/orchestrator{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_212"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_213"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_214"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_215"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_216"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "oar.run"
+kind = "cmd"
+summary = "Run `oar` with the given arguments"
+argv = ["{target}/release/oar{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "main.run_2"
+kind = "cmd"
+summary = "Run `main` with the given arguments"
+argv = ["{target}/release/main{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_core_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_core_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_217"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_storage_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_storage_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_storage_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_218"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_events_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_events_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_events_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_219"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_router_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_router_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_router_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_220"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_auth_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_auth_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_auth_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_221"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_orchestrator_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_orchestrator_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_orchestrator_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_222"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_ratelimit_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_ratelimit_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_ratelimit_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_223"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_billing_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_billing_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_billing_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_224"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_dashboard_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_dashboard_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_dashboard_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_225"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_providers_base_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_providers_base_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_providers_base_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_226"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_provider_groq_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_provider_groq_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_provider_groq_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_227"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_provider_openai_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_provider_openai_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_provider_openai_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_228"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_provider_anthropic_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_provider_anthropic_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_provider_anthropic_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_229"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_provider_mistral_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_provider_mistral_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_provider_mistral_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_230"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_provider_gemini_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_provider_gemini_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_provider_gemini_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_231"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_provider_cohere_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_provider_cohere_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_provider_cohere_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_232"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "freellmapi_provider_huggingface_cli.run"
+kind = "cmd"
+summary = "Run `freellmapi_provider_huggingface_cli` with the given arguments"
+argv = ["{target}/release/freellmapi_provider_huggingface_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_233"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_cluster_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_cluster_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_cluster_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_234"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "kef_cli.run"
+kind = "cmd"
+summary = "Run `kef_cli` with the given arguments"
+argv = ["{target}/release/kef_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_235"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "model_converter_cli.convert"
+kind = "cmd"
+summary = "Convert between model formats"
+argv = ["{target}/release/model_converter_cli{exe}", "convert"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "model_converter_cli.batch"
+kind = "cmd"
+summary = "Convert multiple models in batch"
+argv = ["{target}/release/model_converter_cli{exe}", "batch"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "model_converter_cli.validate"
+kind = "cmd"
+summary = "Validate a model file"
+argv = ["{target}/release/model_converter_cli{exe}", "validate"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "model_converter_cli.formats"
+kind = "cmd"
+summary = "List supported formats"
+argv = ["{target}/release/model_converter_cli{exe}", "formats"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_236"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "ai_advisor_cli.run"
+kind = "cmd"
+summary = "Run `ai_advisor_cli` with the given arguments"
+argv = ["{target}/release/ai_advisor_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_237"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "usee_search_cli.run"
+kind = "cmd"
+summary = "Run `usee_search_cli` with the given arguments"
+argv = ["{target}/release/usee_search_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_238"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "mobile_ffi_cli.run"
+kind = "cmd"
+summary = "Run `mobile_ffi_cli` with the given arguments"
+argv = ["{target}/release/mobile_ffi_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_239"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_aether_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_aether_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_aether_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_240"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_integration_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_integration_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_integration_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_241"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_kernel_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_kernel_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_kernel_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_242"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "mesh_network_cli.run"
+kind = "cmd"
+summary = "Run `mesh_network_cli` with the given arguments"
+argv = ["{target}/release/mesh_network_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_243"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "network_firmware_cli.run"
+kind = "cmd"
+summary = "Run `network_firmware_cli` with the given arguments"
+argv = ["{target}/release/network_firmware_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_244"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "aion_agents_cli.run"
+kind = "cmd"
+summary = "Run `aion_agents_cli` with the given arguments"
+argv = ["{target}/release/aion_agents_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_245"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "etl_cli.run"
+kind = "cmd"
+summary = "Run `etl_cli` with the given arguments"
+argv = ["{target}/release/etl_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "etl_daemon.run"
+kind = "cmd"
+summary = "Run `etl_daemon` with the given arguments"
+argv = ["{target}/release/etl_daemon{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_246"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "daemon.run"
+kind = "cmd"
+summary = "Run `daemon` with the given arguments"
+argv = ["{target}/release/daemon{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "fabrication_control_cli.run"
+kind = "cmd"
+summary = "Run `fabrication_control_cli` with the given arguments"
+argv = ["{target}/release/fabrication_control_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_247"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_ums_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_ums_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_ums_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_248"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "pathfinder_core_cli.run"
+kind = "cmd"
+summary = "Run `pathfinder_core_cli` with the given arguments"
+argv = ["{target}/release/pathfinder_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_249"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "icds_cli.run"
+kind = "cmd"
+summary = "Run `icds_cli` with the given arguments"
+argv = ["{target}/release/icds_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_250"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "universal_cache_cli.run"
+kind = "cmd"
+summary = "Run `universal_cache_cli` with the given arguments"
+argv = ["{target}/release/universal_cache_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_251"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "service_mesh_core_cli.run"
+kind = "cmd"
+summary = "Run `service_mesh_core_cli` with the given arguments"
+argv = ["{target}/release/service_mesh_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_252"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "watchdog.run"
+kind = "cmd"
+summary = "Run `watchdog` with the given arguments"
+argv = ["{target}/release/watchdog{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "watchdog_cli.run"
+kind = "cmd"
+summary = "Run `watchdog_cli` with the given arguments"
+argv = ["{target}/release/watchdog_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_253"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "bmn_common_cli.run"
+kind = "cmd"
+summary = "Run `bmn_common_cli` with the given arguments"
+argv = ["{target}/release/bmn_common_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_254"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "bmn_sources_cli.run"
+kind = "cmd"
+summary = "Run `bmn_sources_cli` with the given arguments"
+argv = ["{target}/release/bmn_sources_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_255"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "bmn_compositor_cli.run"
+kind = "cmd"
+summary = "Run `bmn_compositor_cli` with the given arguments"
+argv = ["{target}/release/bmn_compositor_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_256"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "bmcs_gateway_cli.run"
+kind = "cmd"
+summary = "Run `bmcs_gateway_cli` with the given arguments"
+argv = ["{target}/release/bmcs_gateway_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_257"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "array_cli.run"
+kind = "cmd"
+summary = "Run `array_cli` with the given arguments"
+argv = ["{target}/release/array_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_258"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "observability_core_cli.run"
+kind = "cmd"
+summary = "Run `observability_core_cli` with the given arguments"
+argv = ["{target}/release/observability_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_259"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "coverage_cli.run"
+kind = "cmd"
+summary = "Run `coverage_cli` with the given arguments"
+argv = ["{target}/release/coverage_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_260"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnibot_cli.run"
+kind = "cmd"
+summary = "Run `omnibot_cli` with the given arguments"
+argv = ["{target}/release/omnibot_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_261"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_linux_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_linux_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_linux_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_262"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_ffi_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_ffi_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_ffi_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_263"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "creator_cli.run"
+kind = "cmd"
+summary = "Run `creator_cli` with the given arguments"
+argv = ["{target}/release/creator_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_264"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "ui_widgets_cli.run"
+kind = "cmd"
+summary = "Run `ui_widgets_cli` with the given arguments"
+argv = ["{target}/release/ui_widgets_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_265"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "api_bridge.run"
+kind = "cmd"
+summary = "Run `api-bridge` with the given arguments"
+argv = ["{target}/release/api-bridge{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "api_bridge_cli.run"
+kind = "cmd"
+summary = "Run `api_bridge_cli` with the given arguments"
+argv = ["{target}/release/api_bridge_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_266"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_printer_core_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_printer_core_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_printer_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_267"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "resilience_cli.run"
+kind = "cmd"
+summary = "Run `resilience_cli` with the given arguments"
+argv = ["{target}/release/resilience_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_268"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "observability_cli.run"
+kind = "cmd"
+summary = "Run `observability_cli` with the given arguments"
+argv = ["{target}/release/observability_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_269"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "bkp_cli.run"
+kind = "cmd"
+summary = "Run `bkp_cli` with the given arguments"
+argv = ["{target}/release/bkp_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_270"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "service_manager_debug.run"
+kind = "cmd"
+summary = "Run `service_manager_debug` with the given arguments"
+argv = ["{target}/release/service_manager_debug{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "debug.run"
+kind = "cmd"
+summary = "Run `debug` with the given arguments"
+argv = ["{target}/release/debug{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "dataframe_cli.run"
+kind = "cmd"
+summary = "Run `dataframe_cli` with the given arguments"
+argv = ["{target}/release/dataframe_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_271"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "extension_converter_cli.run"
+kind = "cmd"
+summary = "Run `extension_converter_cli` with the given arguments"
+argv = ["{target}/release/extension_converter_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_272"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "tdl_cli.run"
+kind = "cmd"
+summary = "Run `tdl_cli` with the given arguments"
+argv = ["{target}/release/tdl_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_273"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "compile_time_repair_cli.run"
+kind = "cmd"
+summary = "Run `compile_time_repair_cli` with the given arguments"
+argv = ["{target}/release/compile_time_repair_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "repair_cli.run"
+kind = "cmd"
+summary = "Run `repair_cli` with the given arguments"
+argv = ["{target}/release/repair_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "model_registry_cli.run"
+kind = "cmd"
+summary = "Run `model_registry_cli` with the given arguments"
+argv = ["{target}/release/model_registry_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_274"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_connector_core_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_connector_core_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_connector_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_275"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "crm_platform_cli.run"
+kind = "cmd"
+summary = "Run `crm_platform_cli` with the given arguments"
+argv = ["{target}/release/crm_platform_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_276"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "collaboration_cli.run"
+kind = "cmd"
+summary = "Run `collaboration_cli` with the given arguments"
+argv = ["{target}/release/collaboration_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_277"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "test_orchestrator_cli.run"
+kind = "cmd"
+summary = "Run `test_orchestrator_cli` with the given arguments"
+argv = ["{target}/release/test_orchestrator_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_278"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "model_workshop.run"
+kind = "cmd"
+summary = "Run `model-workshop` with the given arguments"
+argv = ["{target}/release/model-workshop{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "model_workshop_cli.run"
+kind = "cmd"
+summary = "Run `model_workshop_cli` with the given arguments"
+argv = ["{target}/release/model_workshop_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_279"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "backend_cli.run"
+kind = "cmd"
+summary = "Run `backend_cli` with the given arguments"
+argv = ["{target}/release/backend_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_280"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "bwe_core_cli.run"
+kind = "cmd"
+summary = "Run `bwe_core_cli` with the given arguments"
+argv = ["{target}/release/bwe_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_281"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "root_cli.run"
+kind = "cmd"
+summary = "Run `root_cli` with the given arguments"
+argv = ["{target}/release/root_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_282"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "relay_cli.run"
+kind = "cmd"
+summary = "Run `relay_cli` with the given arguments"
+argv = ["{target}/release/relay_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_283"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "eternal_workshop.run"
+kind = "cmd"
+summary = "Run `eternal-workshop` with the given arguments"
+argv = ["{target}/release/eternal-workshop{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "eternal_workshop_cli.run"
+kind = "cmd"
+summary = "Run `eternal_workshop_cli` with the given arguments"
+argv = ["{target}/release/eternal_workshop_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_284"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "kdb_sync_cli.run"
+kind = "cmd"
+summary = "Run `kdb_sync_cli` with the given arguments"
+argv = ["{target}/release/kdb_sync_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_285"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "app_manager_config_cli.run"
+kind = "cmd"
+summary = "Run `app_manager_config_cli` with the given arguments"
+argv = ["{target}/release/app_manager_config_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_286"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "titan_core_cli.run"
+kind = "cmd"
+summary = "Run `titan_core_cli` with the given arguments"
+argv = ["{target}/release/titan_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_287"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "transfer_client_cli.run"
+kind = "cmd"
+summary = "Run `transfer_client_cli` with the given arguments"
+argv = ["{target}/release/transfer_client_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_288"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "container_cli.run"
+kind = "cmd"
+summary = "Run `container_cli` with the given arguments"
+argv = ["{target}/release/container_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_289"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "indexing_system_cli.run"
+kind = "cmd"
+summary = "Run `indexing_system_cli` with the given arguments"
+argv = ["{target}/release/indexing_system_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_290"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "bedf_fuzzing_cli.run"
+kind = "cmd"
+summary = "Run `bedf_fuzzing_cli` with the given arguments"
+argv = ["{target}/release/bedf_fuzzing_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_291"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "service_discovery_cli.run"
+kind = "cmd"
+summary = "Run `service_discovery_cli` with the given arguments"
+argv = ["{target}/release/service_discovery_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_292"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "data_pipeline_cli.run"
+kind = "cmd"
+summary = "Run `data_pipeline_cli` with the given arguments"
+argv = ["{target}/release/data_pipeline_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_293"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_async_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_async_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_async_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_294"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "kernel_snapshot_cli.run"
+kind = "cmd"
+summary = "Run `kernel_snapshot_cli` with the given arguments"
+argv = ["{target}/release/kernel_snapshot_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_295"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "api_gateway_cli.run"
+kind = "cmd"
+summary = "Run `api_gateway_cli` with the given arguments"
+argv = ["{target}/release/api_gateway_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_296"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "bmn_encoder_cli.run"
+kind = "cmd"
+summary = "Run `bmn_encoder_cli` with the given arguments"
+argv = ["{target}/release/bmn_encoder_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_297"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "buddy_cli.run"
+kind = "cmd"
+summary = "Run `buddy_cli` with the given arguments"
+argv = ["{target}/release/buddy_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_298"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnifile_explorer_cli.run"
+kind = "cmd"
+summary = "Run `omnifile_explorer_cli` with the given arguments"
+argv = ["{target}/release/omnifile_explorer_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_299"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "model_trainer_cli.run"
+kind = "cmd"
+summary = "Run `model_trainer_cli` with the given arguments"
+argv = ["{target}/release/model_trainer_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_300"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "mcp_manager.run"
+kind = "cmd"
+summary = "Run `mcp_manager` with the given arguments"
+argv = ["{target}/release/mcp_manager{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "mcp_manager_cli.run"
+kind = "cmd"
+summary = "Run `mcp_manager_cli` with the given arguments"
+argv = ["{target}/release/mcp_manager_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_301"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "bedf_sanitizers_cli.run"
+kind = "cmd"
+summary = "Run `bedf_sanitizers_cli` with the given arguments"
+argv = ["{target}/release/bedf_sanitizers_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_302"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "remote_access_support_cli.run"
+kind = "cmd"
+summary = "Run `remote_access_support_cli` with the given arguments"
+argv = ["{target}/release/remote_access_support_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_303"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_runtime_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_runtime_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_runtime_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_304"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "bedf_concurrency_cli.run"
+kind = "cmd"
+summary = "Run `bedf_concurrency_cli` with the given arguments"
+argv = ["{target}/release/bedf_concurrency_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_305"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "security_auditor_cli.run"
+kind = "cmd"
+summary = "Run `security_auditor_cli` with the given arguments"
+argv = ["{target}/release/security_auditor_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_306"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "performance_profiler_cli.run"
+kind = "cmd"
+summary = "Run `performance_profiler_cli` with the given arguments"
+argv = ["{target}/release/performance_profiler_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_307"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "pathfinder_test_framework_cli.run"
+kind = "cmd"
+summary = "Run `pathfinder_test_framework_cli` with the given arguments"
+argv = ["{target}/release/pathfinder_test_framework_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_308"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnilingual_cli.run"
+kind = "cmd"
+summary = "Run `omnilingual_cli` with the given arguments"
+argv = ["{target}/release/omnilingual_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_309"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "pathfinder_user_service_cli.run"
+kind = "cmd"
+summary = "Run `pathfinder_user_service_cli` with the given arguments"
+argv = ["{target}/release/pathfinder_user_service_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_310"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_analytics_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_analytics_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_analytics_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_311"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_catalog_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_catalog_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_catalog_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_312"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "bedf_property_cli.run"
+kind = "cmd"
+summary = "Run `bedf_property_cli` with the given arguments"
+argv = ["{target}/release/bedf_property_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_313"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "bmn_transport_cli.run"
+kind = "cmd"
+summary = "Run `bmn_transport_cli` with the given arguments"
+argv = ["{target}/release/bmn_transport_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_314"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "p2p_identity_cli.run"
+kind = "cmd"
+summary = "Run `p2p_identity_cli` with the given arguments"
+argv = ["{target}/release/p2p_identity_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_315"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_network_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_network_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_network_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_316"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "memory_optimizer_cli.run"
+kind = "cmd"
+summary = "Run `memory_optimizer_cli` with the given arguments"
+argv = ["{target}/release/memory_optimizer_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_317"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "analytics_engine_cli.run"
+kind = "cmd"
+summary = "Run `analytics_engine_cli` with the given arguments"
+argv = ["{target}/release/analytics_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_318"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "performance_monitor_cli.run"
+kind = "cmd"
+summary = "Run `performance_monitor_cli` with the given arguments"
+argv = ["{target}/release/performance_monitor_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_319"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "bedf_triage_cli.run"
+kind = "cmd"
+summary = "Run `bedf_triage_cli` with the given arguments"
+argv = ["{target}/release/bedf_triage_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_320"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "auto_scaler_cli.run"
+kind = "cmd"
+summary = "Run `auto_scaler_cli` with the given arguments"
+argv = ["{target}/release/auto_scaler_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_321"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "titan_opencv_cli.run"
+kind = "cmd"
+summary = "Run `titan_opencv_cli` with the given arguments"
+argv = ["{target}/release/titan_opencv_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_322"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cost_analyzer_cli.run"
+kind = "cmd"
+summary = "Run `cost_analyzer_cli` with the given arguments"
+argv = ["{target}/release/cost_analyzer_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_323"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "chargeback_system_cli.run"
+kind = "cmd"
+summary = "Run `chargeback_system_cli` with the given arguments"
+argv = ["{target}/release/chargeback_system_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_324"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "resource_quotas_cli.run"
+kind = "cmd"
+summary = "Run `resource_quotas_cli` with the given arguments"
+argv = ["{target}/release/resource_quotas_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_325"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "real_time_aggregation_cli.run"
+kind = "cmd"
+summary = "Run `real_time_aggregation_cli` with the given arguments"
+argv = ["{target}/release/real_time_aggregation_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_326"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "analytics_pipeline_cli.run"
+kind = "cmd"
+summary = "Run `analytics_pipeline_cli` with the given arguments"
+argv = ["{target}/release/analytics_pipeline_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_327"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "feature_store_cli.run"
+kind = "cmd"
+summary = "Run `feature_store_cli` with the given arguments"
+argv = ["{target}/release/feature_store_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_328"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "model_monitoring_cli.run"
+kind = "cmd"
+summary = "Run `model_monitoring_cli` with the given arguments"
+argv = ["{target}/release/model_monitoring_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_329"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "distributed_cache_cli.run"
+kind = "cmd"
+summary = "Run `distributed_cache_cli` with the given arguments"
+argv = ["{target}/release/distributed_cache_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_330"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "distributed_database_cli.run"
+kind = "cmd"
+summary = "Run `distributed_database_cli` with the given arguments"
+argv = ["{target}/release/distributed_database_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_331"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "knowledge_graph_cli.run"
+kind = "cmd"
+summary = "Run `knowledge_graph_cli` with the given arguments"
+argv = ["{target}/release/knowledge_graph_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_332"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "compliance_automation_cli.run"
+kind = "cmd"
+summary = "Run `compliance_automation_cli` with the given arguments"
+argv = ["{target}/release/compliance_automation_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_333"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "transfer_ai_cli.run"
+kind = "cmd"
+summary = "Run `transfer_ai_cli` with the given arguments"
+argv = ["{target}/release/transfer_ai_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_334"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "recovery_orchestration_cli.run"
+kind = "cmd"
+summary = "Run `recovery_orchestration_cli` with the given arguments"
+argv = ["{target}/release/recovery_orchestration_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_335"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "alerting_system_cli.run"
+kind = "cmd"
+summary = "Run `alerting_system_cli` with the given arguments"
+argv = ["{target}/release/alerting_system_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_336"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cpu_scheduler_cli.run"
+kind = "cmd"
+summary = "Run `cpu_scheduler_cli` with the given arguments"
+argv = ["{target}/release/cpu_scheduler_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_337"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "security_hardening_cli.run"
+kind = "cmd"
+summary = "Run `security_hardening_cli` with the given arguments"
+argv = ["{target}/release/security_hardening_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_338"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "dashboarding_service_cli.run"
+kind = "cmd"
+summary = "Run `dashboarding_service_cli` with the given arguments"
+argv = ["{target}/release/dashboarding_service_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_339"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "continuity_planning_cli.run"
+kind = "cmd"
+summary = "Run `continuity_planning_cli` with the given arguments"
+argv = ["{target}/release/continuity_planning_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_340"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "stream_processor_cli.run"
+kind = "cmd"
+summary = "Run `stream_processor_cli` with the given arguments"
+argv = ["{target}/release/stream_processor_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_341"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "message_queue_core_cli.run"
+kind = "cmd"
+summary = "Run `message_queue_core_cli` with the given arguments"
+argv = ["{target}/release/message_queue_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_342"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "hotreload_cli.run"
+kind = "cmd"
+summary = "Run `hotreload_cli` with the given arguments"
+argv = ["{target}/release/hotreload_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_343"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "buse_core_cli.run"
+kind = "cmd"
+summary = "Run `buse_core_cli` with the given arguments"
+argv = ["{target}/release/buse_core_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_344"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "query_engine_cli.run"
+kind = "cmd"
+summary = "Run `query_engine_cli` with the given arguments"
+argv = ["{target}/release/query_engine_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_345"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "event_sourcing_cli.run"
+kind = "cmd"
+summary = "Run `event_sourcing_cli` with the given arguments"
+argv = ["{target}/release/event_sourcing_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_346"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "complex_event_processing_cli.run"
+kind = "cmd"
+summary = "Run `complex_event_processing_cli` with the given arguments"
+argv = ["{target}/release/complex_event_processing_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_347"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "backup_manager_cli.run"
+kind = "cmd"
+summary = "Run `backup_manager_cli` with the given arguments"
+argv = ["{target}/release/backup_manager_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_348"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "threat_detection_cli.run"
+kind = "cmd"
+summary = "Run `threat_detection_cli` with the given arguments"
+argv = ["{target}/release/threat_detection_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_349"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "experiment_tracking_cli.run"
+kind = "cmd"
+summary = "Run `experiment_tracking_cli` with the given arguments"
+argv = ["{target}/release/experiment_tracking_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_350"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "ml_pipeline_orchestration_cli.run"
+kind = "cmd"
+summary = "Run `ml_pipeline_orchestration_cli` with the given arguments"
+argv = ["{target}/release/ml_pipeline_orchestration_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_351"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "audit_logging_cli.run"
+kind = "cmd"
+summary = "Run `audit_logging_cli` with the given arguments"
+argv = ["{target}/release/audit_logging_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_352"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "replication_manager_cli.run"
+kind = "cmd"
+summary = "Run `replication_manager_cli` with the given arguments"
+argv = ["{target}/release/replication_manager_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_353"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "bedf_enhancements_cli.run"
+kind = "cmd"
+summary = "Run `bedf_enhancements_cli` with the given arguments"
+argv = ["{target}/release/bedf_enhancements_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_354"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "network_policies_cli.run"
+kind = "cmd"
+summary = "Run `network_policies_cli` with the given arguments"
+argv = ["{target}/release/network_policies_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_355"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "omnisystem_submodule_cli.run"
+kind = "cmd"
+summary = "Run `omnisystem_submodule_cli` with the given arguments"
+argv = ["{target}/release/omnisystem_submodule_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_356"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "bat_cli.run"
+kind = "cmd"
+summary = "Run `bat_cli` with the given arguments"
+argv = ["{target}/release/bat_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_357"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "traffic_management_cli.run"
+kind = "cmd"
+summary = "Run `traffic_management_cli` with the given arguments"
+argv = ["{target}/release/traffic_management_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_358"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "storage_backend_cli.run"
+kind = "cmd"
+summary = "Run `storage_backend_cli` with the given arguments"
+argv = ["{target}/release/storage_backend_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_359"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "buir_cli.run"
+kind = "cmd"
+summary = "Run `buir_cli` with the given arguments"
+argv = ["{target}/release/buir_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_360"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "tui.run"
+kind = "cmd"
+summary = "Run `tui` with the given arguments"
+argv = ["{target}/release/tui{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "tui_cli.run"
+kind = "cmd"
+summary = "Run `tui_cli` with the given arguments"
+argv = ["{target}/release/tui_cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "cli.run_361"
+kind = "cmd"
+summary = "Run `cli` with the given arguments"
+argv = ["{target}/release/cli{exe}"]
+timeout_s = 600
+extra_args = true
+
+[[op]]
+id = "root.delete"
+kind = "http"
+summary = "DELETE /"
+method = "DELETE"
+path = "/"
+
+[[op]]
+id = "root.get"
+kind = "http"
+summary = "GET /"
+method = "GET"
+path = "/"
+
+[[op]]
+id = "root.get_by_id"
+kind = "http"
+summary = "GET /:id"
+method = "GET"
+path = "/:id"
+
+[[op]]
+id = "root.get_by_task_id_progress"
+kind = "http"
+summary = "GET /:task_id/progress"
+method = "GET"
+path = "/:task_id/progress"
+
+[[op]]
+id = "classroom.get_by_classroom_id_stats"
+kind = "http"
+summary = "GET /classroom/{classroom_id}/stats"
+method = "GET"
+path = "/classroom/{classroom_id}/stats"
+
+[[op]]
+id = "user.get_by_user_id"
+kind = "http"
+summary = "GET /user/{user_id}"
+method = "GET"
+path = "/user/{user_id}"
+
+[[op]]
+id = "user.get_by_user_id_metrics"
+kind = "http"
+summary = "GET /user/{user_id}/metrics"
+method = "GET"
+path = "/user/{user_id}/metrics"
+
+[[op]]
+id = "user.get_by_user_id_recommendations"
+kind = "http"
+summary = "GET /user/{user_id}/recommendations"
+method = "GET"
+path = "/user/{user_id}/recommendations"
+
+[[op]]
+id = "user.get_by_user_id_skill_by_skill_id"
+kind = "http"
+summary = "GET /user/{user_id}/skill/{skill_id}"
+method = "GET"
+path = "/user/{user_id}/skill/{skill_id}"
+
+[[op]]
+id = "root.get_by_id_2"
+kind = "http"
+summary = "GET /{id}"
+method = "GET"
+path = "/{id}"
+
+[[op]]
+id = "root.post"
+kind = "http"
+summary = "POST /"
+method = "POST"
+path = "/"
+
+[[op]]
+id = "attempts.post"
+kind = "http"
+summary = "POST /attempts"
+method = "POST"
+path = "/attempts"
+
+[[op]]
+id = "login.post"
+kind = "http"
+summary = "POST /login"
+method = "POST"
+path = "/login"
+
+[[op]]
+id = "register.post"
+kind = "http"
+summary = "POST /register"
+method = "POST"
+path = "/register"
+
+[[op]]
+id = "user.post_by_user_id_skill_by_skill_id_difficulty"
+kind = "http"
+summary = "POST /user/{user_id}/skill/{skill_id}/difficulty"
+method = "POST"
+path = "/user/{user_id}/skill/{skill_id}/difficulty"
+
+[[op]]
+id = "make.help"
+kind = "cmd"
+summary = "`make help`"
+argv = ["make", "help"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.build"
+kind = "cmd"
+summary = "`make build`"
+argv = ["make", "build"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.build_release"
+kind = "cmd"
+summary = "`make build-release`"
+argv = ["make", "build-release"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.test"
+kind = "cmd"
+summary = "`make test`"
+argv = ["make", "test"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.test_release"
+kind = "cmd"
+summary = "`make test-release`"
+argv = ["make", "test-release"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.bench"
+kind = "cmd"
+summary = "`make bench`"
+argv = ["make", "bench"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.clean"
+kind = "cmd"
+summary = "`make clean`"
+argv = ["make", "clean"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.lint"
+kind = "cmd"
+summary = "`make lint`"
+argv = ["make", "lint"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.format"
+kind = "cmd"
+summary = "`make format`"
+argv = ["make", "format"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.check_format"
+kind = "cmd"
+summary = "`make check-format`"
+argv = ["make", "check-format"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.audit"
+kind = "cmd"
+summary = "`make audit`"
+argv = ["make", "audit"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.run"
+kind = "cmd"
+summary = "`make run`"
+argv = ["make", "run"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.run_release"
+kind = "cmd"
+summary = "`make run-release`"
+argv = ["make", "run-release"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.install"
+kind = "cmd"
+summary = "`make install`"
+argv = ["make", "install"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.uninstall"
+kind = "cmd"
+summary = "`make uninstall`"
+argv = ["make", "uninstall"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.docs"
+kind = "cmd"
+summary = "`make docs`"
+argv = ["make", "docs"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.docs_test"
+kind = "cmd"
+summary = "`make docs-test`"
+argv = ["make", "docs-test"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.docker_build"
+kind = "cmd"
+summary = "`make docker-build`"
+argv = ["make", "docker-build"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.docker_run"
+kind = "cmd"
+summary = "`make docker-run`"
+argv = ["make", "docker-run"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.docker_push"
+kind = "cmd"
+summary = "`make docker-push`"
+argv = ["make", "docker-push"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.docker_clean"
+kind = "cmd"
+summary = "`make docker-clean`"
+argv = ["make", "docker-clean"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.setup_dev"
+kind = "cmd"
+summary = "`make setup-dev`"
+argv = ["make", "setup-dev"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.ci"
+kind = "cmd"
+summary = "`make ci`"
+argv = ["make", "ci"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.all"
+kind = "cmd"
+summary = "`make all`"
+argv = ["make", "all"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "make.version"
+kind = "cmd"
+summary = "`make version`"
+argv = ["make", "version"]
+timeout_s = 3600
+background = true
+
+[[op]]
+id = "compose.up"
+kind = "cmd"
+summary = "Start its containers (docker compose up -d)"
+argv = ["docker", "compose", "-f", "docker-compose.yml", "up", "-d", "--build"]
+timeout_s = 3600
+background = true
+mutating = true
+
+[[op]]
+id = "compose.down"
+kind = "cmd"
+summary = "Stop and remove its containers"
+argv = ["docker", "compose", "-f", "docker-compose.yml", "down"]
+timeout_s = 120
+mutating = true
+
+[[op]]
+id = "compose.ps"
+kind = "cmd"
+summary = "Its containers and their state"
+argv = ["docker", "compose", "-f", "docker-compose.yml", "ps", "--format", "json"]
+timeout_s = 120
+mutating = false
+
+[[op]]
+id = "compose.logs"
+kind = "cmd"
+summary = "Its containers' recent logs"
+argv = ["docker", "compose", "-f", "docker-compose.yml", "logs", "--tail", "200"]
+timeout_s = 120
+mutating = false
+
+[[op]]
+id = "omnicc_bootstrap.start"
+kind = "cmd"
+summary = "`npm run start`: node src/cli.ts"
+argv = ["npm", "run", "start"]
+cwd = "Omnisystem/bootstrap"
+timeout_s = 86400
+background = true
+extra_args = true
+
+[[op]]
+id = "omnicc_bootstrap.test"
+kind = "cmd"
+summary = "`npm run test`: node src/cli.ts test tests"
+argv = ["npm", "run", "test"]
+cwd = "Omnisystem/bootstrap"
+timeout_s = 3600
+background = true
+extra_args = true
+
+[[op]]
+id = "omnicc_bootstrap.check_omni_integration"
+kind = "cmd"
+summary = "`npm run check:omni-integration`: node src/cli.ts check ../OmniHarness/omni-integration/SubstrateCore.titan && node src/cli.ts check ../OmniHarness/omni-i"
+argv = ["npm", "run", "check:omni-integration"]
+cwd = "Omnisystem/bootstrap"
+timeout_s = 3600
+extra_args = true
+
+[[op]]
+id = "omniharness_gui.dev"
+kind = "cmd"
+summary = "`npm run dev`: shadow-cljs watch app"
+argv = ["npm", "run", "dev"]
+cwd = "Omnisystem/OmniHarness/gui"
+timeout_s = 86400
+background = true
+extra_args = true
+
+[[op]]
+id = "omniharness_gui.build"
+kind = "cmd"
+summary = "`npm run build`: shadow-cljs release app"
+argv = ["npm", "run", "build"]
+cwd = "Omnisystem/OmniHarness/gui"
+timeout_s = 3600
+background = true
+extra_args = true
+
+[[op]]
+id = "omniharness_gui.clean"
+kind = "cmd"
+summary = "`npm run clean`: shadow-cljs stop && rm -rf .shadow-cljs public/js"
+argv = ["npm", "run", "clean"]
+cwd = "Omnisystem/OmniHarness/gui"
+timeout_s = 3600
+extra_args = true
+
+[[op]]
+id = "omniharness.chat"
+kind = "cmd"
+summary = "`omniharness chat`"
+argv = ["{venv_bin}/omniharness{exe}", "chat"]
+timeout_s = 900
+extra_args = true
+
+[[op]]
+id = "omniharness.agent"
+kind = "cmd"
+summary = "`omniharness agent`"
+argv = ["{venv_bin}/omniharness{exe}", "agent"]
+timeout_s = 900
+extra_args = true
+
+[[op]]
+id = "omniharness.models"
+kind = "cmd"
+summary = "`omniharness models`"
+argv = ["{venv_bin}/omniharness{exe}", "models"]
+timeout_s = 900
+extra_args = true
+
+[[op]]
+id = "omniharness.health"
+kind = "cmd"
+summary = "`omniharness health`"
+argv = ["{venv_bin}/omniharness{exe}", "health"]
+timeout_s = 900
+extra_args = true
+
+[[op]]
+id = "omniharness.serve"
+kind = "cmd"
+summary = "`omniharness serve`"
+argv = ["{venv_bin}/omniharness{exe}", "serve"]
+timeout_s = 900
+extra_args = true
+
+[[op]]
+id = "omniharness.remember"
+kind = "cmd"
+summary = "`omniharness remember`"
+argv = ["{venv_bin}/omniharness{exe}", "remember"]
+timeout_s = 900
+extra_args = true
+
+[[op]]
+id = "omniharness.recall"
+kind = "cmd"
+summary = "`omniharness recall`"
+argv = ["{venv_bin}/omniharness{exe}", "recall"]
+timeout_s = 900
+extra_args = true
+
+[[op]]
+id = "omniharness.chat_2"
+kind = "cmd"
+summary = "`omniharness chat`"
+argv = ["{venv_bin}/omniharness{exe}", "chat"]
+timeout_s = 900
+extra_args = true
+
+[[op]]
+id = "omniharness.agent_2"
+kind = "cmd"
+summary = "`omniharness agent`"
+argv = ["{venv_bin}/omniharness{exe}", "agent"]
+timeout_s = 900
+extra_args = true
+
+[[op]]
+id = "omniharness.models_2"
+kind = "cmd"
+summary = "`omniharness models`"
+argv = ["{venv_bin}/omniharness{exe}", "models"]
+timeout_s = 900
+extra_args = true
+
+[[op]]
+id = "omniharness.health_2"
+kind = "cmd"
+summary = "`omniharness health`"
+argv = ["{venv_bin}/omniharness{exe}", "health"]
+timeout_s = 900
+extra_args = true
+
+[[op]]
+id = "omniharness.serve_2"
+kind = "cmd"
+summary = "`omniharness serve`"
+argv = ["{venv_bin}/omniharness{exe}", "serve"]
+timeout_s = 900
+extra_args = true
+
+[[op]]
+id = "omniharness.remember_2"
+kind = "cmd"
+summary = "`omniharness remember`"
+argv = ["{venv_bin}/omniharness{exe}", "remember"]
+timeout_s = 900
+extra_args = true
+
+[[op]]
+id = "omniharness.recall_2"
+kind = "cmd"
+summary = "`omniharness recall`"
+argv = ["{venv_bin}/omniharness{exe}", "recall"]
+timeout_s = 900
+extra_args = true
+
+[[op]]
+id = "omnisystem.vscode_prepublish"
+kind = "cmd"
+summary = "`npm run vscode:prepublish`: npm run compile"
+argv = ["npm", "run", "vscode:prepublish"]
+cwd = "Omnisystem/vscode-omnisystem"
+timeout_s = 3600
+extra_args = true
+
+[[op]]
+id = "omnisystem.compile"
+kind = "cmd"
+summary = "`npm run compile`: tsc -p ./"
+argv = ["npm", "run", "compile"]
+cwd = "Omnisystem/vscode-omnisystem"
+timeout_s = 3600
+extra_args = true
+
+[[op]]
+id = "omnisystem.watch"
+kind = "cmd"
+summary = "`npm run watch`: tsc -watch -p ./"
+argv = ["npm", "run", "watch"]
+cwd = "Omnisystem/vscode-omnisystem"
+timeout_s = 86400
+background = true
+extra_args = true
+
+[[op]]
+id = "omnisystem.package"
+kind = "cmd"
+summary = "`npm run package`: vsce package"
+argv = ["npm", "run", "package"]
+cwd = "Omnisystem/vscode-omnisystem"
+timeout_s = 3600
+extra_args = true
+
+[[op]]
+id = "omnisystem.publish"
+kind = "cmd"
+summary = "`npm run publish`: vsce publish"
+argv = ["npm", "run", "publish"]
+cwd = "Omnisystem/vscode-omnisystem"
+timeout_s = 3600
+extra_args = true
+
+[[op]]
+id = "omnisystem.lint"
+kind = "cmd"
+summary = "`npm run lint`: eslint src --ext ts"
+argv = ["npm", "run", "lint"]
+cwd = "Omnisystem/vscode-omnisystem"
+timeout_s = 3600
+extra_args = true
+
+[[op]]
+id = "omnisystem.lint_fix"
+kind = "cmd"
+summary = "`npm run lint:fix`: eslint src --ext ts --fix"
+argv = ["npm", "run", "lint:fix"]
+cwd = "Omnisystem/vscode-omnisystem"
+timeout_s = 3600
+extra_args = true
+
+[[op]]
+id = "omnisystem.typecheck"
+kind = "cmd"
+summary = "`npm run typecheck`: tsc --noEmit"
+argv = ["npm", "run", "typecheck"]
+cwd = "Omnisystem/vscode-omnisystem"
+timeout_s = 3600
+extra_args = true
+
+[[op]]
+id = "omnisystem.test"
+kind = "cmd"
+summary = "`npm run test`: vitest run"
+argv = ["npm", "run", "test"]
+cwd = "Omnisystem/vscode-omnisystem"
+timeout_s = 3600
+background = true
+extra_args = true
+
+[[op]]
+id = "sessions.delete_by_session_id"
+kind = "http"
+summary = "DELETE /api/sessions/{session_id}"
+method = "DELETE"
+path = "/api/sessions/{session_id}"
+
+[[op]]
+id = "notifications.delete_delete"
+kind = "http"
+summary = "DELETE /v1/notifications/delete"
+method = "DELETE"
+path = "/v1/notifications/delete"
+
+[[op]]
+id = "users.delete_me"
+kind = "http"
+summary = "DELETE /v1/users/me"
+method = "DELETE"
+path = "/v1/users/me"
+
+[[op]]
+id = "graph.get"
+kind = "http"
+summary = "GET /api/graph"
+method = "GET"
+path = "/api/graph"
+
+[[op]]
+id = "graph.get_export"
+kind = "http"
+summary = "GET /api/graph/export"
+method = "GET"
+path = "/api/graph/export"
+
+[[op]]
+id = "health.get"
+kind = "http"
+summary = "GET /api/health"
+method = "GET"
+path = "/api/health"
+
+[[op]]
+id = "memory.get_collections"
+kind = "http"
+summary = "GET /api/memory/collections"
+method = "GET"
+path = "/api/memory/collections"
+
+[[op]]
+id = "models.get"
+kind = "http"
+summary = "GET /api/models"
+method = "GET"
+path = "/api/models"
+
+[[op]]
+id = "sessions.get"
+kind = "http"
+summary = "GET /api/sessions"
+method = "GET"
+path = "/api/sessions"
+
+[[op]]
+id = "sessions.get_by_session_id"
+kind = "http"
+summary = "GET /api/sessions/{session_id}"
+method = "GET"
+path = "/api/sessions/{session_id}"
+
+[[op]]
+id = "tools.get"
+kind = "http"
+summary = "GET /api/tools"
+method = "GET"
+path = "/api/tools"
+
+[[op]]
+id = "classrooms.get"
+kind = "http"
+summary = "GET /classrooms"
+method = "GET"
+path = "/classrooms"
+
+[[op]]
+id = "exercises.get"
+kind = "http"
+summary = "GET /exercises"
+method = "GET"
+path = "/exercises"
+
+[[op]]
+id = "health.get_2"
+kind = "http"
+summary = "GET /health"
+method = "GET"
+path = "/health"
+
+[[op]]
+id = "search.get"
+kind = "http"
+summary = "GET /search"
+method = "GET"
+path = "/search"
+
+[[op]]
+id = "skills.get"
+kind = "http"
+summary = "GET /skills"
+method = "GET"
+path = "/skills"
+
+[[op]]
+id = "achievements.get"
+kind = "http"
+summary = "GET /v1/achievements"
+method = "GET"
+path = "/v1/achievements"
+
+[[op]]
+id = "achievements.get_unlock"
+kind = "http"
+summary = "GET /v1/achievements/unlock"
+method = "GET"
+path = "/v1/achievements/unlock"
+
+[[op]]
+id = "analytics.get_cohort_by_classroom_id_metrics"
+kind = "http"
+summary = "GET /v1/analytics/cohort/:classroom_id/metrics"
+method = "GET"
+path = "/v1/analytics/cohort/:classroom_id/metrics"
+
+[[op]]
+id = "analytics.get_skills_by_skill_id_exercises"
+kind = "http"
+summary = "GET /v1/analytics/skills/:skill_id/exercises"
+method = "GET"
+path = "/v1/analytics/skills/:skill_id/exercises"
+
+[[op]]
+id = "badges.get"
+kind = "http"
+summary = "GET /v1/badges"
+method = "GET"
+path = "/v1/badges"
+
+[[op]]
+id = "curriculum_paths.get"
+kind = "http"
+summary = "GET /v1/curriculum-paths"
+method = "GET"
+path = "/v1/curriculum-paths"
+
+[[op]]
+id = "curriculum_paths.get_by_path_id"
+kind = "http"
+summary = "GET /v1/curriculum-paths/:path_id"
+method = "GET"
+path = "/v1/curriculum-paths/:path_id"
+
+[[op]]
+id = "exercises.get_by_exercise_id"
+kind = "http"
+summary = "GET /v1/exercises/:exercise_id"
+method = "GET"
+path = "/v1/exercises/:exercise_id"
+
+[[op]]
+id = "gamification.get_stats"
+kind = "http"
+summary = "GET /v1/gamification/stats"
+method = "GET"
+path = "/v1/gamification/stats"
+
+[[op]]
+id = "goals.get"
+kind = "http"
+summary = "GET /v1/goals"
+method = "GET"
+path = "/v1/goals"
+
+[[op]]
+id = "goals.get_delete"
+kind = "http"
+summary = "GET /v1/goals/delete"
+method = "GET"
+path = "/v1/goals/delete"
+
+[[op]]
+id = "goals.get_update"
+kind = "http"
+summary = "GET /v1/goals/update"
+method = "GET"
+path = "/v1/goals/update"
+
+[[op]]
+id = "insights.get_analytics"
+kind = "http"
+summary = "GET /v1/insights/analytics"
+method = "GET"
+path = "/v1/insights/analytics"
+
+[[op]]
+id = "insights.get_learning_style"
+kind = "http"
+summary = "GET /v1/insights/learning-style"
+method = "GET"
+path = "/v1/insights/learning-style"
+
+[[op]]
+id = "insights.get_performance"
+kind = "http"
+summary = "GET /v1/insights/performance"
+method = "GET"
+path = "/v1/insights/performance"
+
+[[op]]
+id = "insights.get_recommendations"
+kind = "http"
+summary = "GET /v1/insights/recommendations"
+method = "GET"
+path = "/v1/insights/recommendations"
+
+[[op]]
+id = "insights.get_recommendations_generate"
+kind = "http"
+summary = "GET /v1/insights/recommendations/generate"
+method = "GET"
+path = "/v1/insights/recommendations/generate"
+
+[[op]]
+id = "insights.get_study_plan"
+kind = "http"
+summary = "GET /v1/insights/study-plan"
+method = "GET"
+path = "/v1/insights/study-plan"
+
+[[op]]
+id = "insights.get_study_plan_update"
+kind = "http"
+summary = "GET /v1/insights/study-plan/update"
+method = "GET"
+path = "/v1/insights/study-plan/update"
+
+[[op]]
+id = "leaderboard.get"
+kind = "http"
+summary = "GET /v1/leaderboard"
+method = "GET"
+path = "/v1/leaderboard"
+
+[[op]]
+id = "leaderboard.get_rank"
+kind = "http"
+summary = "GET /v1/leaderboard/rank"
+method = "GET"
+path = "/v1/leaderboard/rank"
+
+[[op]]
+id = "learners.get_by_user_id_daily_metrics"
+kind = "http"
+summary = "GET /v1/learners/:user_id/daily-metrics"
+method = "GET"
+path = "/v1/learners/:user_id/daily-metrics"
+
+[[op]]
+id = "learners.get_by_user_id_monthly_metrics"
+kind = "http"
+summary = "GET /v1/learners/:user_id/monthly-metrics"
+method = "GET"
+path = "/v1/learners/:user_id/monthly-metrics"
+
+[[op]]
+id = "learners.get_by_user_id_next_skills"
+kind = "http"
+summary = "GET /v1/learners/:user_id/next-skills"
+method = "GET"
+path = "/v1/learners/:user_id/next-skills"
+
+[[op]]
+id = "learners.get_by_user_id_progress"
+kind = "http"
+summary = "GET /v1/learners/:user_id/progress"
+method = "GET"
+path = "/v1/learners/:user_id/progress"
+
+[[op]]
+id = "learners.get_by_user_id_skills"
+kind = "http"
+summary = "GET /v1/learners/:user_id/skills"
+method = "GET"
+path = "/v1/learners/:user_id/skills"
+
+[[op]]
+id = "learners.get_by_user_id_skills_by_skill_id_learning_curve"
+kind = "http"
+summary = "GET /v1/learners/:user_id/skills/:skill_id/learning-curve"
+method = "GET"
+path = "/v1/learners/:user_id/skills/:skill_id/learning-curve"
+
+[[op]]
+id = "lessons.get_by_lesson_id"
+kind = "http"
+summary = "GET /v1/lessons/:lesson_id"
+method = "GET"
+path = "/v1/lessons/:lesson_id"
+
+[[op]]
+id = "notifications.get"
+kind = "http"
+summary = "GET /v1/notifications"
+method = "GET"
+path = "/v1/notifications"
+
+[[op]]
+id = "notifications.get_batch"
+kind = "http"
+summary = "GET /v1/notifications/batch"
+method = "GET"
+path = "/v1/notifications/batch"
+
+[[op]]
+id = "notifications.get_delete"
+kind = "http"
+summary = "GET /v1/notifications/delete"
+method = "GET"
+path = "/v1/notifications/delete"
+
+[[op]]
+id = "notifications.get_mark_opened"
+kind = "http"
+summary = "GET /v1/notifications/mark-opened"
+method = "GET"
+path = "/v1/notifications/mark-opened"
+
+[[op]]
+id = "notifications.get_preferences"
+kind = "http"
+summary = "GET /v1/notifications/preferences"
+method = "GET"
+path = "/v1/notifications/preferences"
+
+[[op]]
+id = "notifications.get_send"
+kind = "http"
+summary = "GET /v1/notifications/send"
+method = "GET"
+path = "/v1/notifications/send"
+
+[[op]]
+id = "parents.get_children"
+kind = "http"
+summary = "GET /v1/parents/children"
+method = "GET"
+path = "/v1/parents/children"
+
+[[op]]
+id = "parents.get_children_by_id_progress"
+kind = "http"
+summary = "GET /v1/parents/children/{id}/progress"
+method = "GET"
+path = "/v1/parents/children/{id}/progress"
+
+[[op]]
+id = "parents.get_link_child"
+kind = "http"
+summary = "GET /v1/parents/link-child"
+method = "GET"
+path = "/v1/parents/link-child"
+
+[[op]]
+id = "search.get_2"
+kind = "http"
+summary = "GET /v1/search"
+method = "GET"
+path = "/v1/search"
+
+[[op]]
+id = "skills.get_2"
+kind = "http"
+summary = "GET /v1/skills"
+method = "GET"
+path = "/v1/skills"
+
+[[op]]
+id = "skills.get_by_skill_id"
+kind = "http"
+summary = "GET /v1/skills/:skill_id"
+method = "GET"
+path = "/v1/skills/:skill_id"
+
+[[op]]
+id = "skills.get_by_skill_id_exercises"
+kind = "http"
+summary = "GET /v1/skills/:skill_id/exercises"
+method = "GET"
+path = "/v1/skills/:skill_id/exercises"
+
+[[op]]
+id = "skills.get_by_skill_id_lessons"
+kind = "http"
+summary = "GET /v1/skills/:skill_id/lessons"
+method = "GET"
+path = "/v1/skills/:skill_id/lessons"
+
+[[op]]
+id = "teachers.get_classrooms"
+kind = "http"
+summary = "GET /v1/teachers/classrooms"
+method = "GET"
+path = "/v1/teachers/classrooms"
+
+[[op]]
+id = "teachers.get_classrooms_by_id"
+kind = "http"
+summary = "GET /v1/teachers/classrooms/{id}"
+method = "GET"
+path = "/v1/teachers/classrooms/{id}"
+
+[[op]]
+id = "teachers.get_classrooms_by_id_progress"
+kind = "http"
+summary = "GET /v1/teachers/classrooms/{id}/progress"
+method = "GET"
+path = "/v1/teachers/classrooms/{id}/progress"
+
+[[op]]
+id = "teachers.get_classrooms_by_id_students"
+kind = "http"
+summary = "GET /v1/teachers/classrooms/{id}/students"
+method = "GET"
+path = "/v1/teachers/classrooms/{id}/students"
+
+[[op]]
+id = "teachers.get_classrooms_by_id_students_by_uid"
+kind = "http"
+summary = "GET /v1/teachers/classrooms/{id}/students/{uid}"
+method = "GET"
+path = "/v1/teachers/classrooms/{id}/students/{uid}"
+
+[[op]]
+id = "users.get_me"
+kind = "http"
+summary = "GET /v1/users/me"
+method = "GET"
+path = "/v1/users/me"
+
+[[op]]
+id = "agent.post_run"
+kind = "http"
+summary = "POST /api/agent/run"
+method = "POST"
+path = "/api/agent/run"
+
+[[op]]
+id = "chat.post"
+kind = "http"
+summary = "POST /api/chat"
+method = "POST"
+path = "/api/chat"
+
+[[op]]
+id = "chat.post_stream"
+kind = "http"
+summary = "POST /api/chat/stream"
+method = "POST"
+path = "/api/chat/stream"
+
+[[op]]
+id = "distill.post_build"
+kind = "http"
+summary = "POST /api/distill/build"
+method = "POST"
+path = "/api/distill/build"
+
+[[op]]
+id = "ensemble.post_run"
+kind = "http"
+summary = "POST /api/ensemble/run"
+method = "POST"
+path = "/api/ensemble/run"
+
+[[op]]
+id = "graph.post_extract"
+kind = "http"
+summary = "POST /api/graph/extract"
+method = "POST"
+path = "/api/graph/extract"
+
+[[op]]
+id = "memory.post_search"
+kind = "http"
+summary = "POST /api/memory/search"
+method = "POST"
+path = "/api/memory/search"
+
+[[op]]
+id = "memory.post_store"
+kind = "http"
+summary = "POST /api/memory/store"
+method = "POST"
+path = "/api/memory/store"
+
+[[op]]
+id = "planner.post_execute"
+kind = "http"
+summary = "POST /api/planner/execute"
+method = "POST"
+path = "/api/planner/execute"
+
+[[op]]
+id = "planner.post_plan"
+kind = "http"
+summary = "POST /api/planner/plan"
+method = "POST"
+path = "/api/planner/plan"
+
+[[op]]
+id = "planner.post_policy_check"
+kind = "http"
+summary = "POST /api/planner/policy-check"
+method = "POST"
+path = "/api/planner/policy-check"
+
+[[op]]
+id = "rag.post_ingest"
+kind = "http"
+summary = "POST /api/rag/ingest"
+method = "POST"
+path = "/api/rag/ingest"
+
+[[op]]
+id = "rag.post_query"
+kind = "http"
+summary = "POST /api/rag/query"
+method = "POST"
+path = "/api/rag/query"
+
+[[op]]
+id = "sessions.post"
+kind = "http"
+summary = "POST /api/sessions"
+method = "POST"
+path = "/api/sessions"
+
+[[op]]
+id = "sessions.post_by_session_id_messages"
+kind = "http"
+summary = "POST /api/sessions/{session_id}/messages"
+method = "POST"
+path = "/api/sessions/{session_id}/messages"
+
+[[op]]
+id = "swarm.post_run"
+kind = "http"
+summary = "POST /api/swarm/run"
+method = "POST"
+path = "/api/swarm/run"
+
+[[op]]
+id = "tools.post_execute"
+kind = "http"
+summary = "POST /api/tools/execute"
+method = "POST"
+path = "/api/tools/execute"
+
+[[op]]
+id = "auth.post_login"
+kind = "http"
+summary = "POST /auth/login"
+method = "POST"
+path = "/auth/login"
+
+[[op]]
+id = "auth.post_register"
+kind = "http"
+summary = "POST /auth/register"
+method = "POST"
+path = "/auth/register"
+
+[[op]]
+id = "classrooms.post"
+kind = "http"
+summary = "POST /classrooms"
+method = "POST"
+path = "/classrooms"
+
+[[op]]
+id = "exercises.post"
+kind = "http"
+summary = "POST /exercises"
+method = "POST"
+path = "/exercises"
+
+[[op]]
+id = "exercises.post_attempts"
+kind = "http"
+summary = "POST /exercises/attempts"
+method = "POST"
+path = "/exercises/attempts"
+
+[[op]]
+id = "skills.post"
+kind = "http"
+summary = "POST /skills"
+method = "POST"
+path = "/skills"
+
+[[op]]
+id = "auth.post_login_2"
+kind = "http"
+summary = "POST /v1/auth/login"
+method = "POST"
+path = "/v1/auth/login"
+
+[[op]]
+id = "auth.post_logout"
+kind = "http"
+summary = "POST /v1/auth/logout"
+method = "POST"
+path = "/v1/auth/logout"
+
+[[op]]
+id = "auth.post_register_2"
+kind = "http"
+summary = "POST /v1/auth/register"
+method = "POST"
+path = "/v1/auth/register"
+
+[[op]]
+id = "goals.post"
+kind = "http"
+summary = "POST /v1/goals"
+method = "POST"
+path = "/v1/goals"
+
+[[op]]
+id = "insights.post_recommendations_generate"
+kind = "http"
+summary = "POST /v1/insights/recommendations/generate"
+method = "POST"
+path = "/v1/insights/recommendations/generate"
+
+[[op]]
+id = "insights.post_study_plan"
+kind = "http"
+summary = "POST /v1/insights/study-plan"
+method = "POST"
+path = "/v1/insights/study-plan"
+
+[[op]]
+id = "learners.post_by_user_id_exercises_by_exercise_id_attempt"
+kind = "http"
+summary = "POST /v1/learners/:user_id/exercises/:exercise_id/attempt"
+method = "POST"
+path = "/v1/learners/:user_id/exercises/:exercise_id/attempt"
+
+[[op]]
+id = "notifications.post_batch"
+kind = "http"
+summary = "POST /v1/notifications/batch"
+method = "POST"
+path = "/v1/notifications/batch"
+
+[[op]]
+id = "notifications.post_mark_opened"
+kind = "http"
+summary = "POST /v1/notifications/mark-opened"
+method = "POST"
+path = "/v1/notifications/mark-opened"
+
+[[op]]
+id = "notifications.post_preferences"
+kind = "http"
+summary = "POST /v1/notifications/preferences"
+method = "POST"
+path = "/v1/notifications/preferences"
+
+[[op]]
+id = "notifications.post_send"
+kind = "http"
+summary = "POST /v1/notifications/send"
+method = "POST"
+path = "/v1/notifications/send"
+
+[[op]]
+id = "teachers.post_classrooms"
+kind = "http"
+summary = "POST /v1/teachers/classrooms"
+method = "POST"
+path = "/v1/teachers/classrooms"
+
+[[op]]
+id = "users.post_me_export_data"
+kind = "http"
+summary = "POST /v1/users/me/export-data"
+method = "POST"
+path = "/v1/users/me/export-data"
+
+[[op]]
+id = "users.put_me"
+kind = "http"
+summary = "PUT /v1/users/me"
+method = "PUT"
+path = "/v1/users/me"

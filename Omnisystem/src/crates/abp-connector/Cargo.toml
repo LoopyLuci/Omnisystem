@@ -1,0 +1,24 @@
+[package]
+name = "abp-connector"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+description = "AgenticBotPlatform (ABP) inside Omnisystem: a ModuleInterface module and the abp-omni CLI over ABP's API"
+
+[lib]
+name = "abp_connector"
+path = "src/lib.rs"
+
+[[bin]]
+name = "abp-omni"
+path = "src/main.rs"
+
+[dependencies]
+module-interfaces = { path = "../module-interfaces" }
+async-trait = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+tokio = { workspace = true }
+reqwest = { workspace = true }
+thiserror = { workspace = true }

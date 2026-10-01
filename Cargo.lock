@@ -3,6 +3,19 @@
 version = 4
 
 [[package]]
+name = "abp-connector"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "module-interfaces",
+ "reqwest",
+ "serde",
+ "serde_json",
+ "thiserror 1.0.69",
+ "tokio",
+]
+
+[[package]]
 name = "accessibility-framework"
 version = "0.1.0"
 dependencies = [

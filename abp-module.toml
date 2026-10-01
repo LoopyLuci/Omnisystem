@@ -1,0 +1,46 @@
+# How AgenticBotPlatform (ABP) builds, runs and drives Omnisystem as a module. Operations: abp-ops.toml.
+# (Kept by hand: `python -m abp_modkit adopt` leaves this file alone.)
+#
+# The two use each other:
+#   Omnisystem -> ABP  the abp-connector crate (Omnisystem/src/crates/abp-connector): ABP as an Omnisystem
+#                      ModuleInterface module and the abp-omni CLI, over ABP's API with an integration key of the
+#                      "omnisystem" preset (ABP_URL, ABP_KEY)
+#   ABP -> Omnisystem  this module: its launcher web UI as the service, its CLIs and tests as operations
+# The build is the integration binaries only, 4 jobs at most (the full workspace is 333 crates).
+
+[module]
+id = "omnisystem"
+name = "Omnisystem"
+repo = "https://github.com/LoopyLuci/Omnisystem"
+branch = "main"
+api = 1
+area = "platform"
+description = "Omnisystem is a complete, production-grade software ecosystem designed to handle ANY situation, ANY context, ANYTHING that could be encountered over the next 100+ years of computing."
+
+[checkout]
+marker = ["abp-module.toml", "abp-ops.toml"]
+
+[toolchain]
+require = [{ tool = "cargo", min = "1.75", url = "https://rustup.rs" }, { tool = "node", min = "20", url = "https://nodejs.org" }, { tool = "python", min = "3.10", url = "https://www.python.org/downloads/" }]
+
+[build]
+steps = [
+  ["cargo", "build", "--release", "-j", "4", "-p", "abp-connector", "-p", "app-menu", "-p", "app-manager-api", "-p", "module-interfaces"],
+]
+env = { CARGO_BUILD_JOBS = "4" }
+outputs = ["{target}/release/sylva_cli{exe}", "{target}/release/cli{exe}", "{target}/release/agent_control_ui_cli{exe}", "{target}/release/anomaly_detection_advanced_cli{exe}", "{target}/release/anomaly_detection_engine_cli{exe}", "{target}/release/api_gateway_enterprise_cli{exe}"]
+env = { CARGO_TARGET_DIR = "{target}" }
+
+[hub]
+# abp_modkit's hub: the operations in abp-ops.toml (routes, commands, the project's server)
+start = ["{abp_python}", "-m", "abp_modkit", "serve", "--spec", "{repo}/abp-ops.toml", "--project", "{repo}", "--home", "{data}", "--var", "target={target}"]
+control_file = "{data}/control.json"
+start_timeout_s = 30
+
+[mcp]
+stdio = ["{abp_python}", "-m", "abp_modkit", "mcp", "--home", "{data}"]
+
+[ui]
+tui = ["{target}/release/tui{exe}"]
+gui = ["{target}/release/remote_desktop_cli{exe}"]
+panel = "operations"

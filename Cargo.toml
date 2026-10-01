@@ -49,6 +49,7 @@ members = [
     "Omnisystem/src/crates/deployment-lifecycle",
     "Omnisystem/src/crates/intelligent-automation-engine",
     "Omnisystem/src/crates/module-interfaces",
+    "Omnisystem/src/crates/abp-connector",
     "Omnisystem/src/crates/observability-aggregator",
     "Omnisystem/src/crates/omnisystem-observability-bridge",
     "Omnisystem/src/crates/real-time-at-scale",
