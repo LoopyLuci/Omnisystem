@@ -8,7 +8,7 @@ name = "Omnisystem"
 description = "Omnisystem is a complete, production-grade software ecosystem designed to handle ANY situation, ANY context, ANYTHING that could be encountered over the next 100+ years of computing."
 base_url = "http://127.0.0.1:9000"
 health = "/health"
-start = ["{target}/release/launcher-web{exe}"]
+start = ["{target}/release/launcher-web{exe}", "--port", "9000", "--host", "127.0.0.1"]
 env = { PORT = "9000" }
 
 [[op]]
