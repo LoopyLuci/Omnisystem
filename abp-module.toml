@@ -27,9 +27,8 @@ require = [{ tool = "cargo", min = "1.75", url = "https://rustup.rs" }, { tool =
 steps = [
   ["cargo", "build", "--release", "-j", "4", "-p", "abp-connector", "-p", "app-menu", "-p", "app-manager-api", "-p", "module-interfaces"],
 ]
-env = { CARGO_BUILD_JOBS = "4" }
-outputs = ["{target}/release/sylva_cli{exe}", "{target}/release/cli{exe}", "{target}/release/agent_control_ui_cli{exe}", "{target}/release/anomaly_detection_advanced_cli{exe}", "{target}/release/anomaly_detection_engine_cli{exe}", "{target}/release/api_gateway_enterprise_cli{exe}"]
-env = { CARGO_TARGET_DIR = "{target}" }
+outputs = ["{target}/release/abp-omni{exe}", "{target}/release/launcher-web{exe}", "{target}/release/app_menu_cli{exe}", "{target}/release/app_manager_api_cli{exe}"]
+env = { CARGO_BUILD_JOBS = "4", CARGO_TARGET_DIR = "{target}" }
 
 [hub]
 # abp_modkit's hub: the operations in abp-ops.toml (routes, commands, the project's server)
@@ -41,6 +40,5 @@ start_timeout_s = 30
 stdio = ["{abp_python}", "-m", "abp_modkit", "mcp", "--home", "{data}"]
 
 [ui]
-tui = ["{target}/release/tui{exe}"]
-gui = ["{target}/release/remote_desktop_cli{exe}"]
 panel = "operations"
+web = "service"  # the launcher web UI (abp-ops.toml service), shown in a pane once it runs
