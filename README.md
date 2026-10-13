@@ -25,13 +25,13 @@ It consists of:
 
 | Language | Purpose | LOC | Functions | Status |
 |----------|---------|-----|-----------|--------|
-| **TITAN** | Systems & I/O | 1,850+ | 2,000+ | ✅ Complete |
-| **SYLVA** | ML & Data Science | 1,900+ | 950+ | ✅ Complete |
-| **AETHER** | Distributed Systems | 1,950+ | 500+ | ✅ Complete |
-| **VERA** | Web Development | 200+ | 200+ | ✅ Complete |
-| **HELIX** | Graphics & Physics | 250+ | 250+ | ✅ Complete |
-| **NEXUS** | Mobile & IoT | 220+ | 220+ | ✅ Complete |
-| **AXIOM** | Formal Verification | 1,000+ | 400+ | ✅ Complete |
+| **TITAN** | Systems & I/O | 1,850+ | 2,000+ | ✅ EXPERIMENTAL |
+| **SYLVA** | ML & Data Science | 1,900+ | 950+ | ✅ EXPERIMENTAL |
+| **AETHER** | Distributed Systems | 1,950+ | 500+ | ✅ EXPERIMENTAL |
+| **VERA** | Web Development | 200+ | 200+ | ✅ EXPERIMENTAL |
+| **HELIX** | Graphics & Physics | 250+ | 250+ | ✅ EXPERIMENTAL |
+| **NEXUS** | Mobile & IoT | 220+ | 220+ | ✅ EXPERIMENTAL |
+| **AXIOM** | Formal Verification | 1,000+ | 400+ | ✅ EXPERIMENTAL |
 
 ---
 
