@@ -44,7 +44,7 @@ bytes            = "1"
 
 # Concurrency
 dashmap          = "6"
-parking_lot      = "0.12"
+parking_lot      = "0.13"
 
 # Web server (REST/WebSocket sidecar)
 axum             = { version = "0.8",  features = ["ws"] }
